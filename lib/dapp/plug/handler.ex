@@ -1,14 +1,5 @@
 defmodule Dapp.Plug.Handler do
   import Plug.Conn
-  alias Dapp.Plug.Request
-
-  # Execute a use case.
-  def execute(conn, use_case) do
-    conn
-    |> Request.args()
-    |> use_case.execute()
-    |> respond(conn)
-  end
 
   # Not found error helper.
   def not_found(conn) do
@@ -22,13 +13,26 @@ defmodule Dapp.Plug.Handler do
     |> halt
   end
 
+  # Execute a use case.
+  def execute(conn, use_case) do
+    conn
+    |> args()
+    |> use_case.execute()
+    |> reply(conn)
+  end
+
+  # Create an args map for use cases.
+  defp args(conn) do
+    %{user: conn.assigns.user, role: conn.assigns.role}
+  end
+
   # Use case success.
-  defp respond({:ok, msg}, conn) do
+  defp reply({:ok, msg}, conn) do
     encode_send_json(conn, 200, %{ok: msg})
   end
 
   # Use case failure.
-  defp respond({:error, msg, status}, conn) do
+  defp reply({:error, msg, status}, conn) do
     encode_send_json(conn, status, %{error: msg})
   end
 
