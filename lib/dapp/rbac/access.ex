@@ -4,7 +4,7 @@ defmodule Dapp.Rbac.Access do
   """
   import Plug.Conn
   alias Dapp.Data.Query
-  alias Dapp.Plug.Handler
+  alias Dapp.Plug.Resp
 
   @admin_role "Admin"
 
@@ -15,7 +15,7 @@ defmodule Dapp.Rbac.Access do
     if Map.has_key?(conn.assigns, :user) do
       check_user_access(conn)
     else
-      Handler.unauthorized(conn)
+      Resp.unauthorized(conn)
     end
   end
 
@@ -24,7 +24,7 @@ defmodule Dapp.Rbac.Access do
     role = Query.get_user_role(conn.assigns.user)
 
     if is_nil(role) do
-      Handler.unauthorized(conn)
+      Resp.unauthorized(conn)
     else
       conn |> assign(:role, role)
     end
@@ -37,7 +37,7 @@ defmodule Dapp.Rbac.Access do
     if role == @admin_role do
       route.()
     else
-      Handler.unauthorized(conn)
+      Resp.unauthorized(conn)
     end
   end
 end

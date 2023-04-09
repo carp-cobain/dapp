@@ -4,7 +4,7 @@ defmodule Dapp.Plug do
     all other known request handling.
   """
   use Plug.Router
-  alias Dapp.Plug.Handler
+  alias Dapp.Plug.Resp
 
   if Mix.env() == :dev do
     use Plug.Debugger
@@ -24,6 +24,6 @@ defmodule Dapp.Plug do
 
   # Respond with 404.
   match _ do
-    conn |> Handler.not_found()
+    conn |> Resp.not_found()
   end
 end

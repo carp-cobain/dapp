@@ -4,7 +4,7 @@ defmodule Dapp.Rbac.Auth do
   """
   import Plug.Conn
   alias Dapp.Data.Query
-  alias Dapp.Plug.Handler
+  alias Dapp.Plug.Resp
   alias Dapp.Rbac.Header
 
   def init(opts), do: opts
@@ -19,7 +19,7 @@ defmodule Dapp.Rbac.Auth do
   # Authorize user unless we got a nil address.
   defp authorize(addr, conn) do
     if is_nil(addr) do
-      Handler.unauthorized(conn)
+      Resp.unauthorized(conn)
     else
       get_user(conn, addr)
     end
@@ -28,7 +28,7 @@ defmodule Dapp.Rbac.Auth do
   # Pull user from the repo and assign it for use in subsequent plugs.
   defp get_user(conn, addr) do
     case Query.get_user(addr) do
-      nil -> Handler.unauthorized(conn)
+      nil -> Resp.unauthorized(conn)
       user -> conn |> assign(:user, user)
     end
   end

@@ -3,15 +3,14 @@ defmodule Dapp.Plug.Router do
     Handles business logic requests. 
   """
   use Plug.Router
-  alias Dapp.Plug.Handler
-  alias Dapp.Rbac.Access
-  alias Dapp.Rbac.Auth
-  alias Dapp.UseCase.GetResource
-  alias Dapp.UseCase.GetSecret
+  alias Dapp.Plug.{Handler, Resp}
+  alias Dapp.Rbac.{Access, Auth}
+  alias Dapp.UseCase.{GetResource, GetSecret}
 
   plug(:match)
   plug(Auth)
   plug(Access)
+  plug(Plug.Parsers, parsers: [:urlencoded, {:multipart, length: 1_000_000}, :json], json_decoder: Jason)
   plug(:dispatch)
 
   # Only allow authorized users.
@@ -28,6 +27,6 @@ defmodule Dapp.Plug.Router do
 
   # Respond with 404.
   match _ do
-    Handler.not_found(conn)
+    Resp.not_found(conn)
   end
 end
