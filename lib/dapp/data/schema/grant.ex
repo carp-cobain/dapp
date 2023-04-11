@@ -8,5 +8,6 @@ defmodule Dapp.Data.Schema.Grant do
   schema "grants" do
     belongs_to(:user, User)
     belongs_to(:role, Role)
+    timestamps()
   end
 end

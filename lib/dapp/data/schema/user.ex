@@ -8,5 +8,6 @@ defmodule Dapp.Data.Schema.User do
     field(:blockchain_address, :string)
     field(:email, :string)
     field(:name, :string)
+    timestamps()
   end
 end

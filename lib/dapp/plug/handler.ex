@@ -16,11 +16,11 @@ defmodule Dapp.Plug.Handler do
 
   # Use case success.
   defp reply({:ok, dto}, conn) do
-    Resp.encode_send_json(conn, 200, %{ok: dto})
+    Resp.send_json(conn, %{ok: dto})
   end
 
   # Use case failure.
   defp reply({:error, details, status}, conn) do
-    Resp.encode_send_json(conn, status, %{error: details})
+    Resp.send_json(conn, %{error: details}, status)
   end
 end

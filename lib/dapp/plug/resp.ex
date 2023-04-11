@@ -3,25 +3,21 @@ defmodule Dapp.Plug.Resp do
 
   # Not found error helper.
   def not_found(conn) do
-    encode_send_json(conn, 404, %{error: "Not found"})
+    conn
+    |> send_json(%{error: "Not found"}, 404)
   end
 
   # Unauthorized error helper.
   def unauthorized(conn) do
     conn
-    |> encode_send_json(401, %{error: "Unauthorized"})
+    |> send_json(%{error: "Unauthorized"}, 401)
     |> halt
   end
 
   # Encode data to json and send in a http response.
-  def encode_send_json(conn, status, data) do
-    send_json(conn, status, Jason.encode!(data))
-  end
-
-  # Send a JSON http response.
-  def send_json(conn, status, json) do
+  def send_json(conn, data, status \\ 200) do
     conn
     |> put_resp_content_type("application/json")
-    |> send_resp(status, json)
+    |> send_resp(status, Jason.encode!(data))
   end
 end

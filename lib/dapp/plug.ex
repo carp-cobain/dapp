@@ -24,6 +24,6 @@ defmodule Dapp.Plug do
 
   # Respond with 404.
   match _ do
-    conn |> Resp.not_found()
+    Resp.not_found(conn)
   end
 end
