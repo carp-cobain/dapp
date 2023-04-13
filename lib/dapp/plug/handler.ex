@@ -2,16 +2,16 @@ defmodule Dapp.Plug.Handler do
   alias Dapp.Plug.Resp
 
   # Execute a use case.
-  def execute(conn, use_case) do
+  def execute(conn, use_case, params \\ %{}) do
     conn
-    |> args()
+    |> args(params)
     |> use_case.execute()
     |> reply(conn)
   end
 
   # Create an args map for use cases.
-  defp args(conn) do
-    %{user: conn.assigns.user, role: conn.assigns.role}
+  defp args(conn, params) do
+    Map.merge(%{user: conn.assigns.user, role: conn.assigns.role}, params)
   end
 
   # Use case success.

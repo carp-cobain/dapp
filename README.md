@@ -39,30 +39,30 @@ iex -S mix
 An authorized viewer
 
 ```sh
-curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskv" http://localhost:8080/dapp/v1/protected/resource
+curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskv" http://localhost:8888/dapp/secure/api/v1/resource
 ```
 
 An authorized admin
 
 ```sh
-curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kska" http://localhost:8080/dapp/v1/protected/secret
+curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kska" http://localhost:8888/dapp/secure/api/v1/secret
 ```
 ## Unauthorized Access
 
 Viewer unauthorized to access secret route.
 
 ```sh
-curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskv" http://localhost:8080/dapp/v1/protected/secret
+curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskv" http://localhost:8888/dapp/secure/api/v1/secret
 ```
 
 Unknown caller is unauthorized
 
 ```sh
-curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskt" http://localhost:8080/dapp/v1/protected/resource
+curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskt" http://localhost:8888/dapp/secure/api/v1/resource
 ```
 
 Unauthorized caller
 
 ```sh
-curl -is -XGET http://localhost:8080/dapp/v1/protected/resource
+curl -is -XGET http://localhost:8888/dapp/secure/api/v1/resource
 ```

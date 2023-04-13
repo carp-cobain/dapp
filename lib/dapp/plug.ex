@@ -15,7 +15,7 @@ defmodule Dapp.Plug do
   plug(:dispatch)
 
   # Forward to plug router.
-  forward("/dapp/v1/protected", to: Dapp.Plug.Router)
+  forward("/dapp/secure/api/v1", to: Dapp.Plug.Router)
 
   # Status route.
   get "/status" do

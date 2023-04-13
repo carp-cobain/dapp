@@ -3,7 +3,7 @@ defmodule Dapp.Rbac.Auth do
     Authorizes requests with a blockchain address header.
   """
   import Plug.Conn
-  alias Dapp.Data.Query
+  alias Dapp.Data.Repo.UserRepo, as: Repo
   alias Dapp.Plug.Resp
   alias Dapp.Rbac.Header
 
@@ -21,13 +21,13 @@ defmodule Dapp.Rbac.Auth do
     if is_nil(addr) do
       Resp.unauthorized(conn)
     else
-      get_user(conn, addr)
+      assign_user(conn, addr)
     end
   end
 
   # Pull user from the repo and assign it for use in subsequent plugs.
-  defp get_user(conn, addr) do
-    case Query.get_user(addr) do
+  defp assign_user(conn, addr) do
+    case Repo.get(addr) do
       nil -> Resp.unauthorized(conn)
       user -> conn |> assign(:user, user)
     end

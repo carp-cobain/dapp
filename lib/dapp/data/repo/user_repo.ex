@@ -1,13 +1,13 @@
-defmodule Dapp.Data.Query do
+defmodule Dapp.Data.Repo.UserRepo do
   @moduledoc """
-    Database queries for dApp.
+    User queries for dApp.
   """
   import Ecto.Query
   alias Dapp.Data.Repo
   alias Dapp.Data.Schema.User
 
   # Query for the user with the given blockchain address.
-  def get_user(address) do
+  def get(address) do
     unless is_nil(address) do
       Repo.one(
         from(u in User,
@@ -19,16 +19,16 @@ defmodule Dapp.Data.Query do
   end
 
   # Get the role name for a user.
-  def get_user_role(user) do
-    role = user_role(user)
+  def role(user) do
+    role = query_role(user)
 
     unless is_nil(role) do
       Map.get(role, :name)
     end
   end
 
-  # Get the role for a user.
-  defp user_role(user) do
+  # Query for a user's role.
+  defp query_role(user) do
     unless is_nil(user) do
       Repo.one(
         from(r in "roles",

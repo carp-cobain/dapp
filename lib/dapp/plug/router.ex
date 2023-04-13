@@ -1,6 +1,6 @@
 defmodule Dapp.Plug.Router do
   @moduledoc """
-    Handles business logic requests. 
+  HTTP request interface 
   """
   use Plug.Router
   alias Dapp.Plug.{Handler, Resp}
@@ -10,7 +10,7 @@ defmodule Dapp.Plug.Router do
   plug(:match)
   plug(Auth)
   plug(Access)
-  plug(Plug.Parsers, parsers: [:urlencoded, {:multipart, length: 1_000_000}, :json], json_decoder: Jason)
+  plug(Plug.Parsers, parsers: [:json], json_decoder: Jason)
   plug(:dispatch)
 
   # Only allow authorized users.

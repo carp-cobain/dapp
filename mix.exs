@@ -37,7 +37,7 @@ defmodule Dapp.MixProject do
     [
       setup: ["deps.get", "ecto.setup"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      "ecto.setup": ["ecto.create", "ecto.migrate"],
+      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       test: ["ecto.create --quiet", "ecto.migrate", "test"]
     ]
   end
