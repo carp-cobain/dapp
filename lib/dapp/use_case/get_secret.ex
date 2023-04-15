@@ -1,4 +1,7 @@
 defmodule Dapp.UseCase.GetSecret do
+  @moduledoc """
+  Example secret resource (admin only access).
+  """
   @behaviour Dapp.UseCase
 
   def execute(args) do

@@ -1,4 +1,7 @@
 defmodule Dapp.Plug.Handler do
+  @moduledoc """
+  HTTP request handler 
+  """
   alias Dapp.Plug.Resp
 
   # Execute a use case.

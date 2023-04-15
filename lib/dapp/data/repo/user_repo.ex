@@ -1,6 +1,6 @@
 defmodule Dapp.Data.Repo.UserRepo do
   @moduledoc """
-    User queries for dApp.
+  User queries for dApp.
   """
   import Ecto.Query
   alias Dapp.Data.Repo

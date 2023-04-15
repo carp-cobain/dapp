@@ -1,4 +1,7 @@
 defmodule Dapp.Plug.Resp do
+  @moduledoc """
+  HTTP response helpers 
+  """
   import Plug.Conn
 
   # Not found error helper.

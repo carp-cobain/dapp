@@ -1,6 +1,6 @@
 defmodule Dapp.Data.Schema.Grant do
   @moduledoc """
-    Schema data mapper for the grants table.
+  Schema data mapper for the grants table.
   """
   use Ecto.Schema
   alias Dapp.Data.Schema.{Role, User}

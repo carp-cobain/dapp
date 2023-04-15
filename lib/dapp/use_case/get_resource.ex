@@ -1,4 +1,7 @@
 defmodule Dapp.UseCase.GetResource do
+  @moduledoc """
+  Example protected resource.
+  """
   @behaviour Dapp.UseCase
 
   def execute(args) do

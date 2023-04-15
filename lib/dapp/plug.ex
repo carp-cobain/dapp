@@ -1,7 +1,6 @@
 defmodule Dapp.Plug do
   @moduledoc """
-    Top-level plug: handles status requests and forwards to core router for
-    all other known request handling.
+  Top-level plug: handles status requests and forwards to internal router.
   """
   use Plug.Router
   alias Dapp.Plug.Resp

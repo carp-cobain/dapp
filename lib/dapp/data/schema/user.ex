@@ -1,6 +1,6 @@
 defmodule Dapp.Data.Schema.User do
   @moduledoc """
-    Schema data mapper for the users table.
+  Schema data mapper for the users table.
   """
   use Ecto.Schema
 

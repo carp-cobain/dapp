@@ -1,6 +1,6 @@
 defmodule Dapp.Rbac.Access do
   @moduledoc """
-    Controls access to protected routes.
+  Controls access to protected routes.
   """
   import Plug.Conn
   alias Dapp.Data.Repo.UserRepo, as: Repo
