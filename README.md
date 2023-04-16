@@ -16,16 +16,10 @@ Run a PostgreSQL database container.
 docker run --rm --name my-postgres -p 5432:5432 -e POSTGRES_PASSWORD=password1 -e POSTGRES_USER=postgres -d postgres
 ```
 
-Get deps, create the db, and run migrations.
+Get deps, create the db, run migrations, and seed the database with sample data.
 
 ```shell
 mix setup
-```
-
-Seed the database with sample data.
-
-```shell
-mix run priv/repo/seeds.exs
 ```
 
 Drop into an interactive shell + start the application.
