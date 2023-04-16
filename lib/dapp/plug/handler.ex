@@ -12,9 +12,22 @@ defmodule Dapp.Plug.Handler do
     |> reply(conn)
   end
 
-  # Create an args map for use cases.
+  # Args for use case execution.
   defp args(conn, params) do
-    Map.merge(%{user: conn.assigns.user, role: conn.assigns.role}, params)
+    conn
+    |> args()
+    |> Map.merge(params)
+  end
+
+  # Conn specific args.
+  defp args(conn) do
+    %{
+      user: conn.assigns.user,
+      role: conn.assigns.role,
+      body: conn.body_params,
+      query: conn.query_params,
+      form: conn.params
+    }
   end
 
   # Use case success.
