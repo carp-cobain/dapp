@@ -1,6 +1,6 @@
 defmodule Dapp.Plug.Resp do
   @moduledoc """
-  HTTP response helpers 
+  HTTP response helpers.
   """
   import Plug.Conn
 

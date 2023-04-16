@@ -1,6 +1,6 @@
 defmodule Dapp.Plug.Handler do
   @moduledoc """
-  HTTP request handler 
+  HTTP request handler.
   """
   alias Dapp.Plug.Resp
 

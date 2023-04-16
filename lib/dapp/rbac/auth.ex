@@ -11,24 +11,23 @@ defmodule Dapp.Rbac.Auth do
 
   # Authorize users with valid blockchain address headers.
   def call(conn, _opts) do
-    conn
-    |> Header.auth_header()
-    |> authorize(conn)
+    addr = conn |> Header.auth_header()
+    conn |> authorize(addr)
   end
 
-  # Authorize user unless we got a nil address.
-  defp authorize(addr, conn) do
+  # Authorize user if an address was found.
+  defp authorize(conn, addr) do
     if is_nil(addr) do
-      Resp.unauthorized(conn)
+      conn |> Resp.unauthorized()
     else
-      assign_user(conn, addr)
+      conn |> assign_user(addr)
     end
   end
 
   # Pull user from the repo and assign it for use in subsequent plugs.
   defp assign_user(conn, addr) do
     case Repo.get(addr) do
-      nil -> Resp.unauthorized(conn)
+      nil -> conn |> Resp.unauthorized()
       user -> conn |> assign(:user, user)
     end
   end

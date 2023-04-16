@@ -4,7 +4,7 @@ defmodule Dapp.Rbac.Header do
   """
   import Plug.Conn
 
-  @address_header "x-address"
+  @address_header Application.compile_env(:dapp, :address_header, "x-address")
 
   # Get blockchain address header.
   def auth_header(conn), do: get_header(conn, @address_header)

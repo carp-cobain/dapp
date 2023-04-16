@@ -1,6 +1,6 @@
 defmodule Dapp.Plug.Router do
   @moduledoc """
-  HTTP request interface 
+  Core HTTP router.
   """
   use Plug.Router
   alias Dapp.Plug.{Handler, Resp}
