@@ -6,7 +6,7 @@ defmodule Dapp.Data.Schema.Grant do
   alias Dapp.Data.Schema.{Role, User}
 
   schema "grants" do
-    belongs_to(:user, User)
+    belongs_to(:user, User, type: Ecto.Nanoid)
     belongs_to(:role, Role)
     timestamps()
   end

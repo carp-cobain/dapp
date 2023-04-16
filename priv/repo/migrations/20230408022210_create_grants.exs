@@ -3,7 +3,7 @@ defmodule Dapp.Data.Repo.Migrations.CreateGrants do
 
   def change do
     create table(:grants) do
-      add :user_id, references(:users), null: false
+      add :user_id, references(:users, type: :string), size: 21, null: false
       add :role_id, references(:roles), null: false
       timestamps()
     end
