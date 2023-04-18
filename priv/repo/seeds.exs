@@ -5,7 +5,7 @@
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
 alias Dapp.Data.Repo
-alias Dapp.Data.Schema.{Grant, Role, User}
+alias Dapp.Data.Schema.{Grant, Role, User, Feature, Toggle}
 
 # Roles
 role_admin = Repo.insert!(%Role{name: "Admin"})
@@ -40,3 +40,18 @@ Repo.insert!(
     role: role_admin
   }
 )
+
+# Feature Toggles
+feature = Repo.insert!(
+  %Feature{
+    name: "get_secret"
+  }
+)
+Repo.insert!(
+  %Toggle{
+    feature: feature,
+    name: "show_user_email",
+    enabled: true
+  }
+)
+

@@ -24,6 +24,7 @@ defmodule Dapp.Plug.Handler do
     %{
       user: conn.assigns.user,
       role: conn.assigns.role,
+      features: conn.assigns.features,
       body: conn.body_params,
       query: conn.query_params,
       form: conn.params

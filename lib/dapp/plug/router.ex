@@ -3,13 +3,14 @@ defmodule Dapp.Plug.Router do
   Core HTTP router.
   """
   use Plug.Router
-  alias Dapp.Plug.{Handler, Resp}
+  alias Dapp.Plug.{Features, Handler, Resp}
   alias Dapp.Rbac.{Access, Auth}
   alias Dapp.UseCase.{GetResource, GetSecret}
 
   plug(:match)
   plug(Auth)
   plug(Access)
+  plug(Features)
   plug(Plug.Parsers, parsers: [:json], json_decoder: Jason)
   plug(:dispatch)
 

@@ -4,17 +4,12 @@ defmodule Dapp.UseCase.GetResource do
   """
   @behaviour Dapp.UseCase
 
+  # Execute this use case.
   def execute(args) do
     if is_nil(args) do
       {:error, "nil args", 400}
     else
-      {:ok, "Resource: #{get_name(args)} is authorized"}
-    end
-  end
-
-  defp get_name(args) do
-    unless is_nil(args) || is_nil(args.user) do
-      args.user.name
+      {:ok, "Resource: user is authorized"}
     end
   end
 end

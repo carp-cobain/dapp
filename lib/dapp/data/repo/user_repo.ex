@@ -3,6 +3,7 @@ defmodule Dapp.Data.Repo.UserRepo do
   User queries for dApp.
   """
   import Ecto.Query
+
   alias Dapp.Data.Repo
   alias Dapp.Data.Schema.User
 
