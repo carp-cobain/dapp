@@ -1,6 +1,6 @@
 # Elixir dApp Template
 
-A dApp elixir template with in-app role-based access control (RBAC).
+A dApp elixir template with in-app role-based access control (RBAC) and feature toggle support.
 
 ## Setup
 

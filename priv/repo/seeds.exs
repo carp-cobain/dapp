@@ -15,15 +15,15 @@ role_viewer = Repo.insert!(%Role{name: "Viewer"})
 viewer = Repo.insert!(
   %User{
     blockchain_address: "tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskv", 
-    email: "victor-viewer@email.com",
-    name: "Victor"
+    email: "victor@gmail.com",
+    name: "Victor Viewer"
   }
 )
 admin = Repo.insert!(
   %User{
     blockchain_address: "tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kska", 
-    email: "alice-admin@email.com",
-    name: "Alice"
+    email: "alice@gmail.com",
+    name: "Alice Admin"
   }
 )
 

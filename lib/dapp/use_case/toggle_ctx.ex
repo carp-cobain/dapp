@@ -6,7 +6,8 @@ defmodule Dapp.UseCase.ToggleCtx do
   # Determine if a feature toggle is enabled.
   # Again, we assume the total number of features is fairly small.
   def enabled?(args, feature_name, toggle_name) do
-    find(args.features, feature_name)
+    Map.get(args, :features, [])
+    |> find(feature_name)
     |> map(fn feature -> toggle_enabled?(feature.toggles, toggle_name) end)
     |> get_or_else(false)
   end
