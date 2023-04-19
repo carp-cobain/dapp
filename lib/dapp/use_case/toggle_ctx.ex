@@ -6,23 +6,31 @@ defmodule Dapp.UseCase.ToggleCtx do
   # Determine if a feature toggle is enabled.
   # Again, we assume the total number of features is fairly small.
   def enabled?(args, feature_name, toggle_name) do
-    feature = Enum.find(args.features, &(&1.name == feature_name))
-
-    if is_nil(feature) do
-      false
-    else
+    find(args.features, feature_name)
+    |> and_then(fn feature ->
       toggle_enabled?(feature.toggles, toggle_name)
-    end
+    end)
   end
 
   # Determine if a toggle is enabled.
-  defp toggle_enabled?(toggles, toggle_name) do
-    toggle = Enum.find(toggles, &(&1.name == toggle_name))
+  defp toggle_enabled?(toggles, name) do
+    find(toggles, name)
+    |> and_then(fn toggle ->
+      toggle.enabled
+    end)
+  end
 
-    if is_nil(toggle) do
+  # Pass a struct to a predicate when non-nil or else return false
+  defp and_then(struct, f) do
+    if is_nil(struct) do
       false
     else
-      toggle.enabled
+      f.(struct)
     end
+  end
+
+  # Find a list entry by name.
+  defp find(list, name) do
+    Enum.find(list, &(&1.name == name))
   end
 end

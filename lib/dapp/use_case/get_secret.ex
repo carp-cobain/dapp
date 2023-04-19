@@ -4,6 +4,8 @@ defmodule Dapp.UseCase.GetSecret do
   """
   @behaviour Dapp.UseCase
 
+  alias Dapp.UseCase.ToggleCtx
+
   # The feature maps to only this use case for this example.
   @feature "get_secret"
 
@@ -21,7 +23,7 @@ defmodule Dapp.UseCase.GetSecret do
 
   # Determine whether to show the user email.
   defp get_user(args) do
-    if Dapp.UseCase.ToggleCtx.enabled?(args, @feature, @toggle) do
+    if ToggleCtx.enabled?(args, @feature, @toggle) do
       args.user.email
     else
       "user"

@@ -35,6 +35,7 @@ defmodule Dapp.MixProject do
   # Helpful mix aliases
   defp aliases do
     [
+      compile: ["format", "compile"],
       setup: ["deps.get", "ecto.setup"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
