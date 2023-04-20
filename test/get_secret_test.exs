@@ -17,41 +17,56 @@ defmodule GetSecretTest do
   # Test context
   setup do
     %{
-      valid_args: %{user: @user},
-      enabled_feature: %{user: @user, features: [@feature]},
-      disabled_feature: %{user: @user, features: [@feature_disabled]},
+      toggle_enabled: %{user: @user, features: [@feature]},
+      toggle_disabled: %{user: @user, features: [@feature_disabled]},
+      only_user: %{user: @user},
       nil_email: %{user: @nil_email, features: [@feature]}
     }
   end
 
   # Tests
   describe "GetSecret.execute/1" do
-    test "it succeeds with valid args", ctx do
-      assert GetSecret.execute(ctx.valid_args) == {:ok, "Secret: user is authorized"}
-    end
-
     test "it succeeds with feature toggle enabled", ctx do
-      assert GetSecret.execute(ctx.enabled_feature) == {:ok, "Secret: #{@user.email} is authorized"}
+      assert execute(ctx.toggle_enabled) == success(@user.email)
     end
 
     test "it succeeds with feature toggle disabled", ctx do
-      assert GetSecret.execute(ctx.disabled_feature) == {:ok, "Secret: user is authorized"}
+      assert execute(ctx.toggle_disabled) == success()
+    end
+
+    test "it succeeds with only user in args", ctx do
+      assert execute(ctx.only_user) == success()
     end
 
     test "it falls back to default message with nil email", ctx do
-      assert GetSecret.execute(ctx.nil_email) == {:ok, "Secret: user is authorized"}
+      assert execute(ctx.nil_email) == success()
     end
 
     test "it fails with nil args" do
-      assert GetSecret.execute(nil) == {:error, "invalid args", 400}
+      assert execute(nil) == invalid_args()
     end
 
     test "it fails with empty args" do
-      assert GetSecret.execute(%{}) == {:error, "invalid args", 400}
+      assert execute(%{}) == invalid_args()
     end
 
     test "it fails with nil user" do
-      assert GetSecret.execute(%{user: nil}) == {:error, "invalid args", 400}
+      assert execute(%{user: nil}) == invalid_args()
     end
+  end
+
+  # Execute the use case under test
+  defp execute(args) do
+    GetSecret.execute(args)
+  end
+
+  # Expected success value
+  defp success(expect \\ "user") do
+    {:ok, "Secret: #{expect} is authorized"}
+  end
+
+  # Invalid args value
+  defp invalid_args() do
+    {:error, "invalid args", 400}
   end
 end
