@@ -2,19 +2,13 @@ defmodule Dapp.UseCase.ToggleCtx do
   @moduledoc """
   Helper for feature toggles.
   """
+  defstruct [:feature, :toggle]
 
   # Determine if a feature toggle is enabled.
   # Again, we assume the total number of features is fairly small.
-  def enabled?(args, feature_name, toggle_name) do
-    Map.get(args, :features, [])
-    |> find(feature_name)
-    |> map(fn feature -> toggle_enabled?(feature.toggles, toggle_name) end)
-    |> get_or_else(false)
-  end
-
-  # Determine if a toggle is enabled.
-  defp toggle_enabled?(toggles, name) do
-    find(toggles, name)
+  def enabled?(ctx, args) do
+    Map.get(args, :toggles, [])
+    |> find(ctx.feature, ctx.toggle)
     |> map(fn toggle -> toggle.enabled end)
     |> get_or_else(false)
   end
@@ -36,7 +30,9 @@ defmodule Dapp.UseCase.ToggleCtx do
   end
 
   # Find a list entry by name.
-  defp find(list, name) do
-    Enum.find(list, &(&1.name == name))
+  defp find(list, feature, name) do
+    Enum.find(list, fn toggle ->
+      toggle.feature == feature && toggle.name == name
+    end)
   end
 end

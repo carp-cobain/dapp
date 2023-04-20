@@ -6,24 +6,22 @@ defmodule Dapp.UseCase.GetSecret do
 
   alias Dapp.UseCase.ToggleCtx
 
-  # The feature maps to only this use case in this example.
-  @feature "get_secret"
-
-  # The toggle for showing a user email.
-  @toggle "show_user_email"
+  # The toggle for showing user email.
+  # The feature applies to only this use case in this example.
+  @show_user_email %ToggleCtx{feature: "get_secret", toggle: "show_user_email"}
 
   # Execute this use case.
   def execute(args) do
     if is_nil(args) || is_nil(Map.get(args, :user)) do
       {:error, "invalid args", 400}
     else
-      get_user(args) |> or_else("user") |> complete()
+      get_email(args) |> or_else("user") |> ok()
     end
   end
 
-  # Determine whether to show the user email.
-  defp get_user(args) do
-    if ToggleCtx.enabled?(args, @feature, @toggle) do
+  # Get the user email if the feature toggle is enabled.
+  defp get_email(args) do
+    if ToggleCtx.enabled?(@show_user_email, args) do
       unless is_nil(args.user) do
         Map.get(args.user, :email)
       end
@@ -40,7 +38,7 @@ defmodule Dapp.UseCase.GetSecret do
   end
 
   # Use case success
-  defp complete(user) do
+  defp ok(user) do
     {:ok, "Secret: #{user} is authorized"}
   end
 end

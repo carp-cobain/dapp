@@ -12,7 +12,7 @@ defmodule Dapp.Plug.Features do
   # This strategy assumes the number of feature toggles is fairly small.
   def call(conn, _opts) do
     if Map.has_key?(conn.assigns, :user) do
-      conn |> assign(:features, Repo.all())
+      conn |> assign(:toggles, Repo.toggles())
     else
       Resp.unauthorized(conn)
     end

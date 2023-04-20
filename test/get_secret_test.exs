@@ -7,20 +7,16 @@ defmodule GetSecretTest do
   @nil_email %{email: nil}
 
   # Feature toggles
-  @toggle %{name: "show_user_email", enabled: true}
-  @feature %{name: "get_secret", toggles: [@toggle]}
-
-  # Disabled feature toggles
-  @toggle_disabled %{name: "show_user_email", enabled: false}
-  @feature_disabled %{name: "get_secret", toggles: [@toggle_disabled]}
+  @toggle %{feature: "get_secret", name: "show_user_email", enabled: true}
+  @toggle_disabled %{feature: "get_secret", name: "show_user_email", enabled: false}
 
   # Test context
   setup do
     %{
-      toggle_enabled: %{user: @user, features: [@feature]},
-      toggle_disabled: %{user: @user, features: [@feature_disabled]},
+      toggle_enabled: %{user: @user, toggles: [@toggle]},
+      toggle_disabled: %{user: @user, toggles: [@toggle_disabled]},
       only_user: %{user: @user},
-      nil_email: %{user: @nil_email, features: [@feature]}
+      nil_email: %{user: @nil_email, toggles: [@toggle]}
     }
   end
 
