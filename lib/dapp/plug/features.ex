@@ -4,7 +4,6 @@ defmodule Dapp.Plug.Features do
   """
   import Plug.Conn
   alias Dapp.Data.Repo.FeatureRepo, as: Repo
-  alias Dapp.Plug.Resp
 
   def init(opts), do: opts
 
@@ -12,9 +11,10 @@ defmodule Dapp.Plug.Features do
   # This strategy assumes the number of feature toggles is fairly small.
   def call(conn, _opts) do
     if Map.has_key?(conn.assigns, :user) do
+      # NOTE: Could filter toggles for user here...
       conn |> assign(:toggles, Repo.toggles())
     else
-      Resp.unauthorized(conn)
+      conn
     end
   end
 end

@@ -24,7 +24,7 @@ defmodule Dapp.Plug.Handler do
     %{
       user: conn.assigns.user,
       role: conn.assigns.role,
-      toggles: conn.assigns.toggles,
+      toggles: Map.get(conn.assigns, :toggles, []),
       body: conn.body_params,
       query: conn.query_params,
       form: conn.params

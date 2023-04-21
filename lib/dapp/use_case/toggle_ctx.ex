@@ -1,38 +1,39 @@
 defmodule Dapp.UseCase.ToggleCtx do
   @moduledoc """
-  Helper for feature toggles.
+  Feature toggle context.
   """
-  defstruct [:feature, :toggle]
+  use Witchcraft
+  import Algae
+  alias Algae.Maybe
+
+  # Define toggle context as a product struct.
+  defdata do
+    feature :: String.t()
+    toggle :: String.t()
+  end
 
   # Determine if a feature toggle is enabled.
-  # Again, we assume the total number of features is fairly small.
   def enabled?(ctx, args) do
-    Map.get(args, :toggles, [])
-    |> find(ctx.feature, ctx.toggle)
-    |> map(fn toggle -> toggle.enabled end)
-    |> or_else(false)
+    toggle_enabled(ctx, args)
+    |> Maybe.from_maybe(else: false)
   end
 
-  # Pass a struct to a predicate when non-nil or else return false
-  defp map(struct, f) do
-    unless is_nil(struct) do
-      f.(struct)
-    end
+  # Determine whether a toggle - if it exists - is enabled.
+  defp toggle_enabled(ctx, args) do
+    get_maybe(args, :toggles) >>>
+      fn ts -> find(ts, ctx.feature, ctx.toggle) end >>>
+      fn t -> get_maybe(t, :enabled) end
   end
 
-  # Return a value, or a default when value is nil.
-  defp or_else(value, default) do
-    if is_nil(value) do
-      default
-    else
-      value
-    end
+  # Get a field from a map and wrap in a Maybe.
+  defp get_maybe(args, field) do
+    Map.get(args, field)
+    |> Maybe.from_nillable()
   end
 
-  # Find a list entry by name.
-  defp find(list, feature, name) do
-    Enum.find(list, fn toggle ->
-      toggle.feature == feature && toggle.name == name
-    end)
+  # Find a toggle or nothing.
+  defp find(ts, feature, name) do
+    Enum.find(ts, fn t -> Map.get(t, :feature) == feature && Map.get(t, :name) == name end)
+    |> Maybe.from_nillable()
   end
 end
