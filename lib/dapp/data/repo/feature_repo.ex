@@ -6,7 +6,7 @@ defmodule Dapp.Data.Repo.FeatureRepo do
   alias Dapp.Data.Repo
 
   # Query and flatten all enabled toggles across features.
-  def toggles() do
+  def toggles do
     Repo.all(
       from(f in "features",
         join: t in "toggles",

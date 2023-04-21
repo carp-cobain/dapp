@@ -10,7 +10,7 @@ defmodule Dapp.UseCase.ToggleCtx do
     Map.get(args, :toggles, [])
     |> find(ctx.feature, ctx.toggle)
     |> map(fn toggle -> toggle.enabled end)
-    |> get_or_else(false)
+    |> or_else(false)
   end
 
   # Pass a struct to a predicate when non-nil or else return false
@@ -21,7 +21,7 @@ defmodule Dapp.UseCase.ToggleCtx do
   end
 
   # Return a value, or a default when value is nil.
-  defp get_or_else(value, default) do
+  defp or_else(value, default) do
     if is_nil(value) do
       default
     else

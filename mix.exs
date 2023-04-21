@@ -8,6 +8,7 @@ defmodule Dapp.MixProject do
       elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
+      preferred_cli_env: [quality: :test],
       aliases: aliases()
     ]
   end
@@ -39,7 +40,8 @@ defmodule Dapp.MixProject do
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       compile: ["format", "compile"],
-      test: ["ecto.create --quiet", "ecto.migrate", "test"]
+      test: ["ecto.create --quiet", "ecto.migrate", "test"],
+      quality: ["test", "credo --strict"]
     ]
   end
 end

@@ -2,7 +2,7 @@ defmodule GetSecretTest do
   use ExUnit.Case, async: true
   alias Dapp.UseCase.GetSecret
 
-  # User 
+  # User
   @user %{email: "user@domain.com"}
   @nil_email %{email: nil}
 
@@ -62,7 +62,7 @@ defmodule GetSecretTest do
   end
 
   # Invalid args value
-  defp invalid_args() do
+  defp invalid_args do
     {:error, "invalid args", 400}
   end
 end
