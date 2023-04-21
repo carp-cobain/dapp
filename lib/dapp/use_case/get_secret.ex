@@ -3,12 +3,10 @@ defmodule Dapp.UseCase.GetSecret do
   Example secret resource (admin only access).
   """
   @behaviour Dapp.UseCase
-
   alias Dapp.UseCase.ToggleCtx
 
   # The toggle for showing user email.
-  # The feature applies to only this use case in this example.
-  @show_user_email %ToggleCtx{feature: "get_secret", toggle: "show_user_email"}
+  @show_user_email ToggleCtx.new("get_secret", "show_user_email")
 
   # Execute this use case.
   def execute(args) do
@@ -22,9 +20,7 @@ defmodule Dapp.UseCase.GetSecret do
   # Get the user email if the feature toggle is enabled.
   defp get_email(args) do
     if ToggleCtx.enabled?(@show_user_email, args) do
-      unless is_nil(args.user) do
-        Map.get(args.user, :email)
-      end
+      Map.get(args.user, :email)
     end
   end
 

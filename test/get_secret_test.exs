@@ -10,13 +10,17 @@ defmodule GetSecretTest do
   @toggle %{feature: "get_secret", name: "show_user_email", enabled: true}
   @toggle_disabled %{feature: "get_secret", name: "show_user_email", enabled: false}
 
+  # Missing feature
+  @bad_toggle %{name: "show_user_email", enabled: true}
+
   # Test context
   setup do
     %{
       toggle_enabled: %{user: @user, toggles: [@toggle]},
       toggle_disabled: %{user: @user, toggles: [@toggle_disabled]},
       only_user: %{user: @user},
-      nil_email: %{user: @nil_email, toggles: [@toggle]}
+      nil_email: %{user: @nil_email, toggles: [@toggle]},
+      bad_toggle: %{user: @user, toggles: [@bad_toggle]}
     }
   end
 
@@ -36,6 +40,10 @@ defmodule GetSecretTest do
 
     test "it falls back to default message with nil email", ctx do
       assert execute(ctx.nil_email) == success()
+    end
+
+    test "it falls back to default message with a bad toggle", ctx do
+      assert execute(ctx.bad_toggle) == success()
     end
 
     test "it fails with nil args" do

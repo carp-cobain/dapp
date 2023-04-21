@@ -28,6 +28,7 @@ defmodule Dapp.MixProject do
       {:postgrex, "~> 0.16.5"},
       {:plug_cowboy, "~> 2.6.1"},
       {:jason, "~> 1.4"},
+      {:algae, "~> 1.3.1"},
       {:ecto_identifier, "~> 0.2.0"},
       {:credo, "~> 1.7.0", only: [:dev, :test], runtime: false}
     ]
@@ -39,7 +40,6 @@ defmodule Dapp.MixProject do
       setup: ["deps.get", "ecto.setup"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
-      compile: ["format", "compile"],
       test: ["ecto.create --quiet", "ecto.migrate", "test"],
       quality: ["test", "credo --strict"]
     ]
