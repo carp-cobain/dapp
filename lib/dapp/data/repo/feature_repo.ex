@@ -5,13 +5,31 @@ defmodule Dapp.Data.Repo.FeatureRepo do
   import Ecto.Query
   alias Dapp.Data.Repo
 
-  # Query and flatten all enabled toggles across features.
+  # Query for global feature toggles.
   def toggles do
     Repo.all(
-      from(f in "features",
-        join: t in "toggles",
+      from(t in "toggles",
+        join: f in "features",
         on: f.id == t.feature_id,
-        where: t.enabled == true,
+        where: f.global == true and t.enabled == true,
+        select: %{
+          feature: f.name,
+          name: t.name,
+          enabled: t.enabled
+        }
+      )
+    )
+  end
+
+  # Query for user feature toggles.
+  def toggles(user) do
+    Repo.all(
+      from(t in "toggles",
+        join: f in "features",
+        on: f.id == t.feature_id,
+        join: u in "user_features",
+        on: f.id == u.feature_id and u.user_id == ^user.id,
+        where: f.global == false and t.enabled == true,
         select: %{
           feature: f.name,
           name: t.name,
