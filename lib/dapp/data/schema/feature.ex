@@ -7,6 +7,7 @@ defmodule Dapp.Data.Schema.Feature do
 
   schema "features" do
     field(:name, :string)
+    field(:global, :boolean, default: true)
     timestamps()
     has_many(:toggles, Toggle)
   end

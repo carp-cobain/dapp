@@ -11,10 +11,14 @@ defmodule Dapp.Plug.Features do
   # This strategy assumes the number of feature toggles is fairly small.
   def call(conn, _opts) do
     if Map.has_key?(conn.assigns, :user) do
-      # NOTE: Could filter toggles for user here...
-      conn |> assign(:toggles, Repo.toggles())
+      conn |> assign(:toggles, toggles(conn.assigns.user))
     else
       conn
     end
+  end
+
+  # Collect global and user feature toggles.
+  defp toggles(user) do
+    Repo.toggles() ++ Repo.toggles(user)
   end
 end

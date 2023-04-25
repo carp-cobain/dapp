@@ -1,4 +1,4 @@
-defmodule Dapp.UseCase.ToggleCtx do
+defmodule Dapp.Feature.ToggleCtx do
   @moduledoc """
   Feature toggle context.
   """
@@ -18,10 +18,10 @@ defmodule Dapp.UseCase.ToggleCtx do
     |> Maybe.from_maybe(else: false)
   end
 
-  # Determine whether a toggle - if it exists - is enabled.
+  # Determine whether a toggle exists, and is enabled.
   defp toggle_enabled(ctx, args) do
     get_maybe(args, :toggles) >>>
-      fn ts -> find(ts, ctx.feature, ctx.toggle) end >>>
+      fn ts -> find_maybe(ts, ctx.feature, ctx.toggle) end >>>
       fn t -> get_maybe(t, :enabled) end
   end
 
@@ -32,8 +32,10 @@ defmodule Dapp.UseCase.ToggleCtx do
   end
 
   # Find a toggle or nothing.
-  defp find(ts, feature, name) do
-    Enum.find(ts, fn t -> Map.get(t, :feature) == feature && Map.get(t, :name) == name end)
+  defp find_maybe(ts, feature, name) do
+    Enum.find(ts, fn t ->
+      Map.get(t, :feature) == feature && Map.get(t, :name) == name
+    end)
     |> Maybe.from_nillable()
   end
 end
