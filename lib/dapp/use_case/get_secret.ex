@@ -3,7 +3,7 @@ defmodule Dapp.UseCase.GetSecret do
   Example secret resource (admin only access).
   """
   @behaviour Dapp.UseCase
-  use Dapp.Feature.ShowUserEmail
+  use Dapp.Feature.ShowUser
 
   # Execute this use case.
   def execute(args) do

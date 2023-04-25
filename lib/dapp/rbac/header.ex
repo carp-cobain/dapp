@@ -8,15 +8,9 @@ defmodule Dapp.Rbac.Header do
   @group_header Application.compile_env(:dapp, :group_header)
 
   # Get blockchain address header.
-
   def auth_header(conn) do
-    group = get_header(conn, @group_header)
-
-    if is_nil(group) do
+    get_header(conn, @group_header) ||
       get_header(conn, @user_header)
-    else
-      group
-    end
   end
 
   # Get a single header value.

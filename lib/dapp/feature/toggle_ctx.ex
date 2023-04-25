@@ -31,7 +31,7 @@ defmodule Dapp.Feature.ToggleCtx do
     |> Maybe.from_nillable()
   end
 
-  # Find a toggle or nothing.
+  # Find a toggle or return nothing.
   defp find_maybe(ts, feature, name) do
     Enum.find(ts, fn t ->
       Map.get(t, :feature) == feature && Map.get(t, :name) == name
