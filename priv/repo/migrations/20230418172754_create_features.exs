@@ -4,6 +4,7 @@ defmodule Dapp.Data.Repo.Migrations.CreateFeatures do
   def change do
     create table(:features) do
       add :name, :string, null: false
+      add :global, :boolean, null: false, default: true
       timestamps()
     end
     create unique_index(:features, [:name])

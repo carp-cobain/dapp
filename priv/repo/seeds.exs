@@ -4,8 +4,8 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
-alias Dapp.Data.Repo
-alias Dapp.Data.Schema.{Grant, Role, User, Feature, Toggle, UserFeature}
+alias Dapp.Repo
+alias Dapp.Schema.{Grant, Role, User, Feature, Toggle, UserFeature}
 
 # Roles
 role_admin = Repo.insert!(%Role{name: "Admin"})
@@ -47,9 +47,9 @@ global_features = Repo.insert!(
     name: "global_features"
   }
 )
-viewer_features = Repo.insert!(
+admin_features = Repo.insert!(
   %Feature{
-    name: "viewer_features",
+    name: "admin_features",
     global: false
   }
 )
@@ -58,14 +58,14 @@ viewer_features = Repo.insert!(
 Repo.insert!(
   %Toggle{
     feature: global_features,
-    name: "show_user_email",
+    name: "show_user_name",
     enabled: true
   }
 )
 Repo.insert!(
   %Toggle{
-    feature: viewer_features,
-    name: "show_user_name",
+    feature: admin_features,
+    name: "show_user_email",
     enabled: true
   }
 )
@@ -73,8 +73,8 @@ Repo.insert!(
 # User feature associations
 Repo.insert!(
   %UserFeature{
-    user: viewer,
-    feature: viewer_features
+    user: admin,
+    feature: admin_features
   }
 )
 

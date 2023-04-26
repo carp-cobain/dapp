@@ -1,4 +1,4 @@
-defmodule Dapp.Data.Schema.User do
+defmodule Dapp.Schema.User do
   @moduledoc """
   Schema data mapper for the users table.
   """

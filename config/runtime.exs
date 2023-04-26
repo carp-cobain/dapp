@@ -9,7 +9,7 @@ if config_env() == :prod do
 
   db_pool_size = System.get_env("DB_POOL_SIZE") || "10"
 
-  config :dapp, Dapp.Data.Repo,
+  config :dapp, Dapp.Repo,
     url: db_url,
     pool_size: String.to_integer(db_pool_size)
 end

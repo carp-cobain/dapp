@@ -1,4 +1,4 @@
-defmodule Dapp.Data.Repo do
+defmodule Dapp.Repo do
   @moduledoc """
   Database repository for dApp.
   """

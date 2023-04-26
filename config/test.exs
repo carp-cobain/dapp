@@ -3,7 +3,7 @@ import Config
 # The MIX_TEST_PARTITION environment variable can be used
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
-config :dapp, Dapp.Data.Repo,
+config :dapp, Dapp.Repo,
   username: "postgres",
   password: "password1",
   hostname: "localhost",

@@ -1,11 +1,14 @@
-defmodule Dapp.Data.Repo.UserRepo do
+defmodule Dapp.Repo.UserRepo do
   @moduledoc """
   User queries for dApp.
   """
   import Ecto.Query
 
-  alias Dapp.Data.Repo
-  alias Dapp.Data.Schema.User
+  alias Dapp.Repo
+  alias Dapp.Schema.User
+
+  # Query all users
+  def all, do: Repo.all(User)
 
   # Query for the user with the given blockchain address.
   def get(address) do
@@ -19,12 +22,13 @@ defmodule Dapp.Data.Repo.UserRepo do
     end
   end
 
-  # Get the role name for a user.
-  def role(user) do
-    role = query_role(user)
-
-    unless is_nil(role) do
-      Map.get(role, :name)
+  # Get user access level.
+  def access(user) do
+    (query_role(user) || %{})
+    |> Map.get(:role)
+    |> case do
+      nil -> :unauthorized
+      role -> {:authorized, role}
     end
   end
 
@@ -36,7 +40,7 @@ defmodule Dapp.Data.Repo.UserRepo do
           join: g in "grants",
           on: g.role_id == r.id,
           where: g.user_id == ^user.id,
-          select: %{name: r.name}
+          select: %{role: r.name}
         )
       )
     end

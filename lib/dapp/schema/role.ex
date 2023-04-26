@@ -1,4 +1,4 @@
-defmodule Dapp.Data.Schema.Role do
+defmodule Dapp.Schema.Role do
   @moduledoc """
   Schema data mapper for the roles table.
   """

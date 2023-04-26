@@ -1,7 +1,7 @@
 import Config
 
 config :dapp,
-  ecto_repos: [Dapp.Data.Repo]
+  ecto_repos: [Dapp.Repo]
 
 # Blockchain address auth headers
 config :dapp,

@@ -1,6 +1,6 @@
 import Config
 
-config :dapp, Dapp.Data.Repo,
+config :dapp, Dapp.Repo,
   database: "dapp_dev",
   username: "postgres",
   password: "password1",

@@ -8,7 +8,7 @@ defmodule Dapp do
     Logger.info("Starting dApp...")
 
     Supervisor.start_link(
-      [Dapp.Data.Repo, {Plug.Cowboy, scheme: :http, plug: Dapp.Plug, options: [port: 8888]}],
+      [Dapp.Repo, {Plug.Cowboy, scheme: :http, plug: Dapp.Plug, options: [port: 8888]}],
       strategy: :one_for_one,
       name: Dapp.Supervisor
     )

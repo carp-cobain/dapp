@@ -1,9 +1,9 @@
-defmodule Dapp.Data.Repo.FeatureRepo do
+defmodule Dapp.Repo.FeatureRepo do
   @moduledoc """
   Feature toggle queries for dApp.
   """
   import Ecto.Query
-  alias Dapp.Data.Repo
+  alias Dapp.Repo
 
   # Query for global feature toggles.
   def toggles do

@@ -7,8 +7,8 @@ defmodule GetSecretTest do
   @nil_email %{email: nil}
 
   # Feature toggles
-  @toggle %{feature: "global_features", name: "show_user_email", enabled: true}
-  @toggle_disabled %{feature: "global_features", name: "show_user_email", enabled: false}
+  @toggle %{feature: "admin_features", name: "show_user_email", enabled: true}
+  @toggle_disabled %{feature: "admin_features", name: "show_user_email", enabled: false}
 
   # Missing feature
   @bad_toggle %{name: "show_user_email", enabled: true}
@@ -35,19 +35,19 @@ defmodule GetSecretTest do
     end
 
     test "it succeeds with feature toggle disabled", ctx do
-      assert GetSecret.execute(ctx.toggle_disabled) == ctx.success.("user")
+      assert GetSecret.execute(ctx.toggle_disabled) == ctx.success.("-")
     end
 
     test "it succeeds with only user in args", ctx do
-      assert GetSecret.execute(ctx.only_user) == ctx.success.("user")
+      assert GetSecret.execute(ctx.only_user) == ctx.success.("-")
     end
 
     test "it falls back to default message with nil email", ctx do
-      assert GetSecret.execute(ctx.nil_email) == ctx.success.("user")
+      assert GetSecret.execute(ctx.nil_email) == ctx.success.("-")
     end
 
     test "it falls back to default message with a bad toggle", ctx do
-      assert GetSecret.execute(ctx.bad_toggle) == ctx.success.("user")
+      assert GetSecret.execute(ctx.bad_toggle) == ctx.success.("-")
     end
 
     test "it fails with nil args", ctx do

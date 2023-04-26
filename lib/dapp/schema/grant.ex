@@ -1,9 +1,9 @@
-defmodule Dapp.Data.Schema.Grant do
+defmodule Dapp.Schema.Grant do
   @moduledoc """
   Schema data mapper for the grants table.
   """
   use Ecto.Schema
-  alias Dapp.Data.Schema.{Role, User}
+  alias Dapp.Schema.{Role, User}
 
   schema "grants" do
     belongs_to(:user, User, type: Ecto.Nanoid)

@@ -1,9 +1,9 @@
-defmodule Dapp.Data.Schema.UserFeature do
+defmodule Dapp.Schema.UserFeature do
   @moduledoc """
   Schema data mapper for the user_features table.
   """
   use Ecto.Schema
-  alias Dapp.Data.Schema.{Feature, User}
+  alias Dapp.Schema.{Feature, User}
 
   schema "user_features" do
     belongs_to(:user, User, type: Ecto.Nanoid)
