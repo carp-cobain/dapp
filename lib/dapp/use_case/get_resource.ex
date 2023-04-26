@@ -3,7 +3,7 @@ defmodule Dapp.UseCase.GetResource do
   Example protected resource.
   """
   @behaviour Dapp.UseCase
-  use Dapp.Feature.ShowUserName
+  use Dapp.Feature.ShowUser
 
   # Execute this use case.
   def execute(args) do

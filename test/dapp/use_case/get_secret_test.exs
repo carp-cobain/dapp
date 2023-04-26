@@ -7,8 +7,8 @@ defmodule GetSecretTest do
   @nil_email %{email: nil}
 
   # Feature toggles
-  @toggle %{feature: "global_toggles", name: "show_user_email", enabled: true}
-  @toggle_disabled %{feature: "global_toggles", name: "show_user_email", enabled: false}
+  @toggle %{feature: "global_features", name: "show_user_email", enabled: true}
+  @toggle_disabled %{feature: "global_features", name: "show_user_email", enabled: false}
 
   # Missing feature
   @bad_toggle %{name: "show_user_email", enabled: true}

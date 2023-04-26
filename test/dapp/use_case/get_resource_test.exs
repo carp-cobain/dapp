@@ -1,4 +1,4 @@
-defmodule GetResourceTest do
+defmodule Dapp.UseCase.GetResourceTest do
   use ExUnit.Case, async: true
   alias Dapp.UseCase.GetResource
 

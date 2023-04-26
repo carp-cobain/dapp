@@ -4,13 +4,13 @@ A dApp elixir template with in-app role-based access control (RBAC) and feature 
 
 ## Setup
 
-Install elixir.
+Install Elixir
 
 ```shell
 brew install elixir
 ```
 
-Run a PostgreSQL database container.
+Run a PostgreSQL database container (assumes docker is installed).
 
 ```shell
 docker run --rm --name my-postgres -p 5432:5432 -e POSTGRES_PASSWORD=password1 -e POSTGRES_USER=postgres -d postgres

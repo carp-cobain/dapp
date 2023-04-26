@@ -69,6 +69,8 @@ Repo.insert!(
     enabled: true
   }
 )
+
+# User feature associations
 Repo.insert!(
   %UserFeature{
     user: viewer,
