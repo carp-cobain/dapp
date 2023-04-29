@@ -11,5 +11,9 @@ config :dapp, Dapp.Repo,
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: 8
 
+# Test network prefix
+config :dapp,
+  network_prefix: "tp"
+
 # Print only warnings and errors during test
 config :logger, level: :warn

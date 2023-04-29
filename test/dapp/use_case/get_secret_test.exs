@@ -35,19 +35,19 @@ defmodule GetSecretTest do
     end
 
     test "it succeeds with feature toggle disabled", ctx do
-      assert GetSecret.execute(ctx.toggle_disabled) == ctx.success.("-")
+      assert GetSecret.execute(ctx.toggle_disabled) == ctx.success.("user")
     end
 
     test "it succeeds with only user in args", ctx do
-      assert GetSecret.execute(ctx.only_user) == ctx.success.("-")
+      assert GetSecret.execute(ctx.only_user) == ctx.success.("user")
     end
 
     test "it falls back to default message with nil email", ctx do
-      assert GetSecret.execute(ctx.nil_email) == ctx.success.("-")
+      assert GetSecret.execute(ctx.nil_email) == ctx.success.("user")
     end
 
     test "it falls back to default message with a bad toggle", ctx do
-      assert GetSecret.execute(ctx.bad_toggle) == ctx.success.("-")
+      assert GetSecret.execute(ctx.bad_toggle) == ctx.success.("user")
     end
 
     test "it fails with nil args", ctx do

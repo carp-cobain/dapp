@@ -3,9 +3,8 @@ defmodule Dapp.UseCase.GetUsers do
   Return all users in the DB.
   """
   @behaviour Dapp.UseCase
-
-  alias Dapp.Repo.UserRepo
   use Dapp.Feature.ShowUser
+  alias Dapp.Repo.UserRepo, as: Users
 
   # Execute this use case.
   def execute(args) do
@@ -19,7 +18,7 @@ defmodule Dapp.UseCase.GetUsers do
   # Query and show users
   defp get_users(args) do
     Enum.map(
-      UserRepo.all(),
+      Users.all(),
       &show_user(%{user: &1, toggles: args.toggles})
     )
   end

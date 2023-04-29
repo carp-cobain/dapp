@@ -10,6 +10,18 @@ defmodule Dapp.Repo.UserRepo do
   # Query all users
   def all, do: Repo.all(User)
 
+  # Create a user from a blockchain address or raise.
+  def create!(addr) do
+    Repo.insert!(%User{blockchain_address: addr})
+  end
+
+  # Validate and create a user from a blockchain address.
+  def create(address) do
+    %User{}
+    |> User.changeset(%{blockchain_address: address})
+    |> Repo.insert()
+  end
+
   # Query for the user with the given blockchain address.
   def get(address) do
     unless is_nil(address) do

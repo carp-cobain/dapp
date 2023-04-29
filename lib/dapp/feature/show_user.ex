@@ -7,7 +7,7 @@ defmodule Dapp.Feature.ShowUser do
       alias Dapp.Feature.ToggleCtx
 
       # Default return value
-      @default "-"
+      @default "user"
 
       # Toggle for showing email.
       @show_user_email ToggleCtx.new("admin_features", "show_user_email")
@@ -42,22 +42,12 @@ defmodule Dapp.Feature.ShowUser do
 
       # Show user email if enabled or else a default value.
       def show_user_email(args) do
-        @show_user_email
-        |> show_field(args, :email)
+        Map.get(email_toggle(args), :email) || @default
       end
 
       # Show user name if enabled or else a default value.
       def show_user_name(args) do
-        @show_user_name
-        |> show_field(args, :name)
-      end
-
-      # Show user field when a feature toggle is enabled.
-      defp show_field(ctx, args, field) do
-        case ToggleCtx.enabled?(ctx, args) do
-          true -> Map.get(args.user, field) || @default
-          false -> @default
-        end
+        Map.get(name_toggle(args), :name) || @default
       end
     end
   end

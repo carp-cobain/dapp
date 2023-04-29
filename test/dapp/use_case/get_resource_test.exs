@@ -35,19 +35,19 @@ defmodule Dapp.UseCase.GetResourceTest do
     end
 
     test "it succeeds with feature toggle disabled", ctx do
-      assert GetResource.execute(ctx.toggle_disabled) == ctx.success.("-")
+      assert GetResource.execute(ctx.toggle_disabled) == ctx.success.("user")
     end
 
     test "it succeeds with only user in args", ctx do
-      assert GetResource.execute(ctx.only_user) == ctx.success.("-")
+      assert GetResource.execute(ctx.only_user) == ctx.success.("user")
     end
 
     test "it falls back to default message with nil name", ctx do
-      assert GetResource.execute(ctx.nil_name) == ctx.success.("-")
+      assert GetResource.execute(ctx.nil_name) == ctx.success.("user")
     end
 
     test "it falls back to default message with a bad toggle", ctx do
-      assert GetResource.execute(ctx.bad_toggle) == ctx.success.("-")
+      assert GetResource.execute(ctx.bad_toggle) == ctx.success.("user")
     end
 
     test "it fails with nil args", ctx do
