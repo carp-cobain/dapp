@@ -8,13 +8,14 @@ defmodule Dapp.Repo.UserRepoTest do
   # Test context
   setup do
     # When using a sandbox, each test runs in an isolated, independent transaction
+    # which is rolled back after test execution.
     :ok = Sandbox.checkout(Dapp.Repo)
     %{address: "tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskz"}
   end
 
   # Test user repo
   describe "UserRepo" do
-    test "should create and get a user using a blockchain address", ctx do
+    test "should create and get a user using only a blockchain address", ctx do
       user = UserRepo.create!(ctx.address)
       assert String.length(user.id) == NanoidConfig.default_size()
       assert UserRepo.get(ctx.address) == user
