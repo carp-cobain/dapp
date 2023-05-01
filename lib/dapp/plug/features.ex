@@ -13,7 +13,7 @@ defmodule Dapp.Plug.Features do
     toggles =
       case Map.get(conn.assigns, :user) do
         nil -> Repo.toggles()
-        user -> Repo.toggles() ++ Repo.toggles(user)
+        user -> Repo.toggles() ++ Repo.toggles(user.id)
       end
 
     conn |> assign(:toggles, toggles)

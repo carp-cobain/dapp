@@ -12,11 +12,7 @@ defmodule Dapp.Repo.UserRepoTest do
     # When using a sandbox, each test runs in an isolated, independent transaction
     # which is rolled back after test execution.
     :ok = Sandbox.checkout(Dapp.Repo)
-
-    %{
-      address: "tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskz",
-      role: "Test"
-    }
+    %{address: "tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskz", role: "Test"}
   end
 
   # Test user repo
@@ -33,7 +29,7 @@ defmodule Dapp.Repo.UserRepoTest do
       assert UserRepo.access(user) == :unauthorized
     end
 
-    test "should return authorized role for users with a grant", ctx do
+    test "should return the authorized role for users with a grant", ctx do
       user = UserRepo.create!(ctx.address)
       role = Repo.insert!(%Role{name: ctx.role})
       Repo.insert!(%Grant{user: user, role: role})

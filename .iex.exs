@@ -1,4 +1,3 @@
-alias Dapp.Data.Query
-alias Dapp.Data.Repo
-alias Dapp.Data.Repo.{UserRepo, FeatureRepo}
-alias Dapp.Data.Schema.{Grant, Role, User, Feature, Toggle, UserFeature}
+alias Dapp.Repo
+alias Dapp.Repo.{UserRepo, FeatureRepo}
+alias Dapp.Schema.{Grant, Role, User, Feature, Toggle, UserFeature}
