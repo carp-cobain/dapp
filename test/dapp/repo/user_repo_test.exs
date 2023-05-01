@@ -26,14 +26,14 @@ defmodule Dapp.Repo.UserRepoTest do
 
     test "should return unauthorized for users without a grant", ctx do
       user = UserRepo.create!(ctx.address)
-      assert UserRepo.access(user) == :unauthorized
+      assert UserRepo.access(user.id) == :unauthorized
     end
 
     test "should return the authorized role for users with a grant", ctx do
       user = UserRepo.create!(ctx.address)
       role = Repo.insert!(%Role{name: ctx.role})
       Repo.insert!(%Grant{user: user, role: role})
-      assert UserRepo.access(user) == {:authorized, ctx.role}
+      assert UserRepo.access(user.id) == {:authorized, ctx.role}
     end
   end
 end

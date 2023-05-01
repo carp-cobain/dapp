@@ -28,7 +28,7 @@ defmodule Dapp.Rbac.Access do
 
   # Assign role or halt request.
   defp check_user_access(conn, opts) do
-    case Repo.access(conn.assigns.user) do
+    case Repo.access(conn.assigns.user.id) do
       :unauthorized -> Resp.unauthorized(conn)
       {:authorized, role} -> assign_role(conn, opts, role)
     end
