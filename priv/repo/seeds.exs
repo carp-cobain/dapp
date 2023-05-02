@@ -64,6 +64,13 @@ Repo.insert!(
 )
 Repo.insert!(
   %Toggle{
+    feature: global_features,
+    name: "show_user_timestamps",
+    enabled: false
+  }
+)
+Repo.insert!(
+  %Toggle{
     feature: admin_features,
     name: "show_user_email",
     enabled: true

@@ -23,9 +23,14 @@ defmodule Dapp.Plug.Handler do
     }
   end
 
-  # Use case success.
+  # Use case success (200).
   defp reply({:ok, dto}, conn) do
     Resp.send_json(conn, %{ok: dto})
+  end
+
+  # Use case success (201).
+  defp reply({:created, dto}, conn) do
+    Resp.send_json(conn, %{ok: dto}, 201)
   end
 
   # Use case failure.

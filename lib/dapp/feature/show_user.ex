@@ -15,37 +15,47 @@ defmodule Dapp.Feature.ShowUser do
       # Toggle for showing name.
       @show_user_name ToggleCtx.new("global_features", "show_user_name")
 
-      # Show user dto
+      # Toggle for showing name.
+      @show_user_timestamps ToggleCtx.new("global_features", "show_user_timestamps")
+
+      # Create a user DTO using feature toggles.
       def show_user(args) do
         %{id: args.user.id, blockchain_address: args.user.blockchain_address}
         |> Map.merge(email_toggle(args))
         |> Map.merge(name_toggle(args))
+        |> Map.merge(timestamps_toggle(args))
       end
 
       # Return user name if toggle is enabled.
       defp name_toggle(args) do
-        if ToggleCtx.enabled?(@show_user_name, args) do
-          %{name: args.user.name}
-        else
-          %{}
+        case ToggleCtx.enabled?(@show_user_name, args) do
+          true -> %{name: args.user.name}
+          false -> %{}
         end
       end
 
       # Return user email if toggle is enabled.
       defp email_toggle(args) do
-        if ToggleCtx.enabled?(@show_user_email, args) do
-          %{email: args.user.email}
-        else
-          %{}
+        case ToggleCtx.enabled?(@show_user_email, args) do
+          true -> %{email: args.user.email}
+          false -> %{}
         end
       end
 
-      # Show user email if enabled or else a default value.
+      # Return user timestamps if toggle is enabled.
+      defp timestamps_toggle(args) do
+        case ToggleCtx.enabled?(@show_user_timestamps, args) do
+          true -> %{inserted_at: args.user.inserted_at, updated_at: args.user.updated_at}
+          false -> %{}
+        end
+      end
+
+      # Show user email or a default value.
       def show_user_email(args) do
         Map.get(email_toggle(args), :email) || @default
       end
 
-      # Show user name if enabled or else a default value.
+      # Show user name or a default value.
       def show_user_name(args) do
         Map.get(name_toggle(args), :name) || @default
       end
