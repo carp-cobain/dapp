@@ -11,18 +11,22 @@ defmodule Dapp.UseCase.GetUsers do
     if is_nil(args) || is_nil(Map.get(args, :user)) do
       {:error, "invalid args", 400}
     else
-      get_users(args) |> ok()
+      toggles(args)
+      |> get_users()
+      |> case do
+        users -> {:ok, %{users: users}}
+      end
     end
   end
 
-  # Query and show users
-  defp get_users(args) do
+  # Get toggles or empty list.
+  defp toggles(args), do: Map.get(args, :toggles) || []
+
+  # Query and show all users.
+  defp get_users(toggles) do
     Enum.map(
       Users.all(),
-      &show_user(%{user: &1, toggles: args.toggles})
+      &show_user(%{user: &1, toggles: toggles})
     )
   end
-
-  # Success dto
-  defp ok(users), do: {:ok, %{users: users}}
 end
