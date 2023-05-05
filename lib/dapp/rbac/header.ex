@@ -7,7 +7,7 @@ defmodule Dapp.Rbac.Header do
   @user_header Application.compile_env(:dapp, :user_header)
   @group_header Application.compile_env(:dapp, :group_header)
 
-  # Get blockchain address header.
+  @doc "Get blockchain address header."
   def auth_header(conn) do
     get_header(conn, @group_header) ||
       get_header(conn, @user_header)

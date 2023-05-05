@@ -6,13 +6,13 @@ defmodule Dapp.Feature.ToggleCtx do
   import Algae
   alias Algae.Maybe
 
-  # Define toggle context as a product struct.
+  @doc "Define toggle context as a product struct."
   defdata do
     feature :: String.t()
     toggle :: String.t()
   end
 
-  # Determine if a feature toggle is enabled.
+  @doc "Determine whether a feature toggle is enabled."
   def enabled?(ctx, args) do
     combine(ctx, args)
     |> toggle_enabled()

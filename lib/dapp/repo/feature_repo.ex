@@ -1,11 +1,13 @@
 defmodule Dapp.Repo.FeatureRepo do
   @moduledoc """
-  Feature toggle queries for dApp.
+  Feature toggle repository for the dApp.
   """
   import Ecto.Query
   alias Dapp.Repo
 
-  # Query for global feature toggles.
+  @doc """
+  Get all enabled global feature toggles.
+  """
   def toggles do
     Repo.all(
       from(t in "toggles",
@@ -21,10 +23,12 @@ defmodule Dapp.Repo.FeatureRepo do
     )
   end
 
-  # Handle nil user_id
+  @doc """
+  Get all enabled feature toggles for a user. If the user_id is nil,
+  return an empty list.
+  """
   def toggles(user_id) when is_nil(user_id), do: []
 
-  # Query for user feature toggles.
   def toggles(user_id) do
     Repo.all(
       from(t in "toggles",

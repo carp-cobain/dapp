@@ -1,17 +1,16 @@
 defmodule Dapp.UseCase.GetUsers do
-  @moduledoc """
-  Return all users in the DB.
-  """
-  @behaviour Dapp.UseCase
-  use Dapp.Feature.ShowUser
-  alias Dapp.Repo.UserRepo, as: Users
+  @moduledoc "Show all users in the DB."
 
-  # Execute this use case.
+  @behaviour Dapp.UseCase
+  alias Dapp.Repo.UserRepo, as: Users
+  use Dapp.Feature.ShowUser
+
+  @doc "Query and show all users."
   def execute(args) do
     if is_nil(args) || is_nil(Map.get(args, :user)) do
       {:error, "invalid args", 400}
     else
-      toggles(args)
+      (Map.get(args, :toggles) || [])
       |> get_users()
       |> case do
         users -> {:ok, %{users: users}}
@@ -19,10 +18,6 @@ defmodule Dapp.UseCase.GetUsers do
     end
   end
 
-  # Get toggles or empty list.
-  defp toggles(args), do: Map.get(args, :toggles) || []
-
-  # Query and show all users.
   defp get_users(toggles) do
     Enum.map(
       Users.all(),

@@ -8,7 +8,7 @@ defmodule Dapp.Rbac.Access do
 
   @default_roles ["Admin", "Viewer"]
 
-  # Set white-listed roles in opts if not provided.
+  @doc "Set white-listed roles in opts if not provided."
   def init(opts) do
     if is_nil(opts[:roles]) do
       opts ++ [roles: @default_roles]
@@ -17,7 +17,7 @@ defmodule Dapp.Rbac.Access do
     end
   end
 
-  # Check user access.
+  @doc "Check user access level for each request."
   def call(conn, opts) do
     if Map.has_key?(conn.assigns, :user) do
       check_user_access(conn, opts)
@@ -52,7 +52,7 @@ defmodule Dapp.Rbac.Access do
     end
   end
 
-  # Only allow the admin role to access a route.
+  @doc "Only allow the admin role to access a route."
   def admin(conn, route) do
     control(conn, ["Admin"], route)
   end

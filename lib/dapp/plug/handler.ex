@@ -4,14 +4,14 @@ defmodule Dapp.Plug.Handler do
   """
   alias Dapp.Plug.Resp
 
-  # Execute a use case.
+  @doc "Execute a use case and send the result DTO as JSON."
   def execute(conn, use_case) do
     args(conn)
     |> use_case.execute()
     |> reply(conn)
   end
 
-  # Conn specific args.
+  # Build input args for use case execution.
   defp args(conn) do
     %{
       user: conn.assigns.user,

@@ -7,9 +7,10 @@ defmodule Dapp.Rbac.Auth do
   alias Dapp.Rbac.Header
   alias Dapp.Repo.UserRepo, as: Repo
 
+  @doc false
   def init(opts), do: opts
 
-  # Authorize users with valid blockchain address headers.
+  @doc "Authorize users with valid blockchain address headers."
   def call(conn, _opts) do
     addr = conn |> Header.auth_header()
     conn |> authorize(addr)

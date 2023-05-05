@@ -24,7 +24,7 @@ defmodule Dapp.Plug.Router do
     Handler.execute(conn, GetMe)
   end
 
-  # Only allow admins to the secret
+  # Only allow admins to the secret.
   get "/secret" do
     Access.admin(conn, fn ->
       Handler.execute(conn, GetSecret)
@@ -38,7 +38,7 @@ defmodule Dapp.Plug.Router do
     end)
   end
 
-  # Respond with 404.
+  # Catch-all responds with a 404.
   match _ do
     Resp.not_found(conn)
   end

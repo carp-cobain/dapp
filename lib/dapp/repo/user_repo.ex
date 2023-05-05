@@ -1,28 +1,28 @@
 defmodule Dapp.Repo.UserRepo do
   @moduledoc """
-  User queries for dApp.
+  User repository for the dApp.
   """
   import Ecto.Query
 
   alias Dapp.Repo
   alias Dapp.Schema.User
 
-  # Query all users
+  @doc "Get all users"
   def all, do: Repo.all(User)
 
-  # Create a user from a blockchain address or raise.
+  @doc "Create a user from a blockchain address or raise."
   def create!(address) do
     Repo.insert!(%User{blockchain_address: address})
   end
 
-  # Validate and create a user from a blockchain address.
+  @doc "Validate and create a user from a blockchain address."
   def create(address) do
     %User{}
     |> User.changeset(%{blockchain_address: address})
     |> Repo.insert()
   end
 
-  # Query for the user with the given blockchain address.
+  @doc "Query for the user with the given blockchain address."
   def get(address) do
     unless is_nil(address) do
       Repo.one(
@@ -34,7 +34,7 @@ defmodule Dapp.Repo.UserRepo do
     end
   end
 
-  # Get user access level.
+  @doc "Get the access level for a user."
   def access(user_id) do
     (query_role(user_id) || %{})
     |> Map.get(:role)
@@ -44,7 +44,7 @@ defmodule Dapp.Repo.UserRepo do
     end
   end
 
-  # Query for a user's role.
+  # Helper: query for a user's role.
   defp query_role(user_id) do
     unless is_nil(user_id) do
       Repo.one(

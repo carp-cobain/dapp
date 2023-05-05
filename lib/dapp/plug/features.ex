@@ -5,10 +5,13 @@ defmodule Dapp.Plug.Features do
   import Plug.Conn
   alias Dapp.Repo.FeatureRepo, as: Repo
 
+  @doc false
   def init(opts), do: opts
 
-  # Load and assign feature toggles if user has been authorized.
-  # This strategy assumes the number of feature toggles is fairly small.
+  @doc """
+  Load and assign feature toggles to a request.
+  It is assumed that the number of feature toggles is fairly small.
+  """
   def call(conn, _opts) do
     toggles =
       case Map.get(conn.assigns, :user) do
