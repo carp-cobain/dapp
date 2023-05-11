@@ -5,7 +5,7 @@ defmodule Dapp.Plug.Router do
   use Plug.Router
   alias Dapp.Plug.{Features, Handler, Resp}
   alias Dapp.Rbac.{Access, Auth}
-  alias Dapp.UseCase.{GetMe, GetResource, GetSecret, GetUsers}
+  alias Dapp.UseCase.{GetProfile, GetUsers}
 
   plug(:match)
   plug(Auth)
@@ -14,21 +14,9 @@ defmodule Dapp.Plug.Router do
   plug(Plug.Parsers, parsers: [:json], json_decoder: Jason)
   plug(:dispatch)
 
-  # Allow authorized users to view.
-  get "/resource" do
-    Handler.execute(conn, GetResource)
-  end
-
-  # Allow authorized users to see their own info.
-  get "/me" do
-    Handler.execute(conn, GetMe)
-  end
-
-  # Only allow admins to the secret.
-  get "/secret" do
-    Access.admin(conn, fn ->
-      Handler.execute(conn, GetSecret)
-    end)
+  # Allow all authorized users to see their profile.
+  get "/profile" do
+    Handler.execute(conn, GetProfile)
   end
 
   # Only allow admins to see all users.

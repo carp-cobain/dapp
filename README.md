@@ -1,6 +1,9 @@
 # Elixir dApp Template
 
-A dApp elixir template with in-app role-based access control (RBAC) and feature toggle support.
+A dApp template with:
+
+  - Role-based access control (RBAC)
+  - Dark features
 
 ## Setup
 
@@ -33,31 +36,31 @@ iex -S mix
 An authorized viewer
 
 ```sh
-curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskv" http://localhost:8888/dapp/api/v1/resource
+curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskv" http://localhost:8888/dapp/api/v1/profile
 ```
 
 An authorized admin
 
 ```sh
-curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kska" http://localhost:8888/dapp/api/v1/secret
+curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kska" http://localhost:8888/dapp/api/v1/users
 ```
 
 ## Unauthorized Access
 
-Viewer unauthorized to access secret route.
+Viewer unauthorized to access users route.
 
 ```sh
-curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskv" http://localhost:8888/dapp/api/v1/secret
+curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskv" http://localhost:8888/dapp/api/v1/users
 ```
 
-Unknown caller is unauthorized
+Unauthorized user (no DB entry)
 
 ```sh
-curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskt" http://localhost:8888/dapp/api/v1/resource
+curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskt" http://localhost:8888/dapp/api/v1/profile
 ```
 
-Unauthorized caller
+Unknown user is unauthorized
 
 ```sh
-curl -is -XGET http://localhost:8888/dapp/api/v1/resource
+curl -is -XGET http://localhost:8888/dapp/api/v1/profile
 ```

@@ -1,4 +1,4 @@
-defmodule Dapp.Data.Repo.Migrations.CreateToggles do
+defmodule Dapp.Repo.Migrations.CreateToggles do
   use Ecto.Migration
 
   def change do

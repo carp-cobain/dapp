@@ -8,8 +8,8 @@ defmodule Dapp.Feature.ToggleCtx do
 
   @doc "Define toggle context as a product struct."
   defdata do
-    feature :: String.t()
-    toggle :: String.t()
+    feature :: atom()
+    toggle :: atom()
   end
 
   @doc "Determine whether a feature toggle is enabled."
@@ -19,7 +19,8 @@ defmodule Dapp.Feature.ToggleCtx do
     |> Maybe.from_maybe(else: false)
   end
 
-  # Combine context and args into a nillable tuple.
+  # Combine toggle context and args into a tuple. If either param is nil,
+  # the result is nil.
   defp combine(ctx, args) do
     unless is_nil(ctx) || is_nil(args) do
       {ctx, args}
@@ -45,8 +46,13 @@ defmodule Dapp.Feature.ToggleCtx do
   # Find a toggle or return nothing.
   defp find_toggle(ts, feature, name) do
     Enum.find(ts, fn t ->
-      Map.get(t, :feature) == feature && Map.get(t, :name) == name
+      Map.get(t, :feature) == atos(feature) && Map.get(t, :name) == atos(name)
     end)
     |> Maybe.from_nillable()
+  end
+
+  # Shorten atom-to-string call.
+  defp atos(atom) do
+    Atom.to_string(atom)
   end
 end

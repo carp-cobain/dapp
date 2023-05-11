@@ -5,6 +5,7 @@ defmodule Dapp.Plug.Handler do
   alias Dapp.Plug.Resp
 
   @doc "Execute a use case and send the result DTO as JSON."
+  @spec execute(Plug.Conn.t(), Dapp.UseCase.t()) :: Plug.Conn.t()
   def execute(conn, use_case) do
     args(conn)
     |> use_case.execute()
@@ -31,6 +32,11 @@ defmodule Dapp.Plug.Handler do
   # Use case success (201).
   defp reply({:created, dto}, conn) do
     Resp.send_json(conn, %{ok: dto}, 201)
+  end
+
+  # Use case success (204).
+  defp reply(:nothing, conn) do
+    Resp.no_content(conn)
   end
 
   # Use case failure.
