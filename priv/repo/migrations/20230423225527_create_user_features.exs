@@ -1,4 +1,4 @@
-defmodule Dapp.Data.Repo.Migrations.CreateUserFeatures do
+defmodule Dapp.Repo.Migrations.CreateUserFeatures do
   use Ecto.Migration
 
   def change do

@@ -1,4 +1,4 @@
-defmodule Dapp.Data.Repo.Migrations.CreateGrants do
+defmodule Dapp.Repo.Migrations.CreateGrants do
   use Ecto.Migration
 
   def change do

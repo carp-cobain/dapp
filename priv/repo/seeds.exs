@@ -53,6 +53,12 @@ admin_features = Repo.insert!(
     global: false
   }
 )
+trial_features = Repo.insert!(
+  %Feature{
+    name: "trial_features",
+    global: false
+  }
+)
 
 # Feature toggles
 Repo.insert!(
@@ -76,6 +82,13 @@ Repo.insert!(
     enabled: true
   }
 )
+Repo.insert!(
+  %Toggle{
+    feature: trial_features,
+    name: "user_expiration",
+    enabled: true
+  }
+)
 
 # User feature associations
 Repo.insert!(
@@ -84,4 +97,11 @@ Repo.insert!(
     feature: admin_features
   }
 )
+# Uncomment for trial expiration on viewer...
+#Repo.insert!(
+#  %UserFeature{
+#    user: viewer,
+#    feature: trial_features
+#  }
+#)
 

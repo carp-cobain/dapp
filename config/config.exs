@@ -5,8 +5,10 @@ config :dapp,
 
 # Blockchain address auth headers
 config :dapp,
+  network_prefix: "pb",
   user_header: "x-address",
-  group_header: "x-group-policy"
+  group_header: "x-group-policy",
+  trial_ttl_seconds: 16_000_666
 
 # Shows how to configure nanoid size, alphabet.
 config :nanoid,

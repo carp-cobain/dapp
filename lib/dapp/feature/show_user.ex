@@ -9,14 +9,10 @@ defmodule Dapp.Feature.ShowUser do
       # Default return value
       @default "user"
 
-      # Toggle for showing email.
-      @show_user_email ToggleCtx.new("admin_features", "show_user_email")
-
-      # Toggle for showing name.
-      @show_user_name ToggleCtx.new("global_features", "show_user_name")
-
-      # Toggle for showing name.
-      @show_user_timestamps ToggleCtx.new("global_features", "show_user_timestamps")
+      # Toggles for showing users.
+      @show_user_email ToggleCtx.new(:admin_features, :show_user_email)
+      @show_user_name ToggleCtx.new(:global_features, :show_user_name)
+      @show_user_timestamps ToggleCtx.new(:global_features, :show_user_timestamps)
 
       @doc "Create a user DTO using enabled feature toggles."
       def show_user(args) do
@@ -24,16 +20,6 @@ defmodule Dapp.Feature.ShowUser do
         |> Map.merge(email_toggle(args))
         |> Map.merge(name_toggle(args))
         |> Map.merge(timestamps_toggle(args))
-      end
-
-      @doc "Show user email or a default value."
-      def show_user_email(args) do
-        Map.get(email_toggle(args), :email) || @default
-      end
-
-      @doc "Show user name or a default value."
-      def show_user_name(args) do
-        Map.get(name_toggle(args), :name) || @default
       end
 
       # Helper: return user name if toggle is enabled.
