@@ -2,9 +2,9 @@ defmodule Dapp.Feature.ToggleCtx do
   @moduledoc """
   Feature toggle context.
   """
-  use Witchcraft
-  import Algae
   alias Algae.Maybe
+  import Algae
+  use Witchcraft
 
   @doc "Define toggle context as a product struct."
   defdata do

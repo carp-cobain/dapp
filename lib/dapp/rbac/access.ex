@@ -2,13 +2,14 @@ defmodule Dapp.Rbac.Access do
   @moduledoc """
   Controls access to protected routes.
   """
-  import Plug.Conn
   alias Dapp.Plug.Resp
   alias Dapp.Repo.UserRepo, as: Repo
+  import Plug.Conn
 
+  # When not provided explicitly, allow access to users with these roles.
   @default_roles ["Admin", "Viewer"]
 
-  @doc "Set white-listed roles in opts if not provided."
+  @doc "Handle white-listed roles."
   def init(opts) do
     if is_nil(opts[:roles]) do
       opts ++ [roles: @default_roles]
@@ -17,7 +18,7 @@ defmodule Dapp.Rbac.Access do
     end
   end
 
-  @doc "Check user access level for each request."
+  @doc "Check user access for a request."
   def call(conn, opts) do
     if Map.has_key?(conn.assigns, :user) do
       check_user_access(conn, opts)
@@ -44,7 +45,7 @@ defmodule Dapp.Rbac.Access do
   end
 
   # Allow a router to narrow the roles allowed to access a given route.
-  def control(conn, roles \\ [], route) do
+  def control(conn, roles, route) do
     if Map.get(conn.assigns, :role) in roles do
       route.()
     else

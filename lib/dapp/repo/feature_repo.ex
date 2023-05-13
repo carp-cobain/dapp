@@ -2,8 +2,8 @@ defmodule Dapp.Repo.FeatureRepo do
   @moduledoc """
   Feature toggle repository for the dApp.
   """
-  import Ecto.Query
   alias Dapp.Repo
+  import Ecto.Query
 
   @doc """
   Get all enabled global feature toggles.
@@ -13,7 +13,7 @@ defmodule Dapp.Repo.FeatureRepo do
       from(t in "toggles",
         join: f in "features",
         on: f.id == t.feature_id,
-        where: f.global == true and t.enabled == true,
+        where: f.global == true and t.enabled == true and t.expires_at > ^now(),
         select: %{
           feature: f.name,
           name: t.name,
@@ -36,7 +36,7 @@ defmodule Dapp.Repo.FeatureRepo do
         on: f.id == t.feature_id,
         join: u in "user_features",
         on: f.id == u.feature_id and u.user_id == ^user_id,
-        where: f.global == false and t.enabled == true,
+        where: f.global == false and t.enabled == true and t.expires_at > ^now(),
         select: %{
           feature: f.name,
           name: t.name,
@@ -44,5 +44,11 @@ defmodule Dapp.Repo.FeatureRepo do
         }
       )
     )
+  end
+
+  # Current time UTC
+  defp now do
+    DateTime.utc_now()
+    |> DateTime.truncate(:second)
   end
 end

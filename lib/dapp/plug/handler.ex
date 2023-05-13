@@ -3,6 +3,7 @@ defmodule Dapp.Plug.Handler do
   HTTP request handler.
   """
   alias Dapp.Plug.Resp
+  require Logger
 
   @doc "Execute a use case and send the result DTO as JSON."
   @spec execute(Plug.Conn.t(), Dapp.UseCase.t()) :: Plug.Conn.t()
@@ -17,30 +18,31 @@ defmodule Dapp.Plug.Handler do
     %{
       user: conn.assigns.user,
       role: conn.assigns.role,
-      toggles: Map.get(conn.assigns, :toggles, []),
+      toggles: conn.assigns.toggles,
       body: conn.body_params,
       query: conn.query_params,
       form: conn.params
     }
   end
 
+  # Use case success (204).
+  defp reply(:ok, conn) do
+    Resp.no_content(conn)
+  end
+
   # Use case success (200).
   defp reply({:ok, dto}, conn) do
-    Resp.send_json(conn, %{ok: dto})
+    Resp.send_json(conn, dto)
   end
 
   # Use case success (201).
   defp reply({:created, dto}, conn) do
-    Resp.send_json(conn, %{ok: dto}, 201)
-  end
-
-  # Use case success (204).
-  defp reply(:nothing, conn) do
-    Resp.no_content(conn)
+    Resp.send_json(conn, dto, 201)
   end
 
   # Use case failure.
   defp reply({:error, details, status}, conn) do
+    Logger.error("Error executing use case: #{details}")
     Resp.send_json(conn, %{error: details}, status)
   end
 end

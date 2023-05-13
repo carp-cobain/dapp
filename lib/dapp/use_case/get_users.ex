@@ -1,20 +1,22 @@
 defmodule Dapp.UseCase.GetUsers do
-  @moduledoc "Show all users in the DB."
-  @behaviour Dapp.UseCase
-  use Dapp.Feature.ShowUser
+  @moduledoc """
+  Show all users in the DB.
+  """
   alias Dapp.Repo.UserRepo
   alias Dapp.UseCase.Args
+  use Dapp.Feature.ShowUser
 
+  @behaviour Dapp.UseCase
   @doc "Query and show all users."
-  def execute(args), do: Args.validate(args, fn -> get_users(args) end)
+  def execute(args) do
+    Args.validate(args, &get_users/1)
+  end
 
   # Get all users
   defp get_users(args) do
-    (Map.get(args, :toggles) || [])
+    args.toggles
     |> show_users()
-    |> case do
-      users -> {:ok, %{users: users}}
-    end
+    |> ok()
   end
 
   # Render user data using the authorized user's feature toggles.
@@ -23,5 +25,10 @@ defmodule Dapp.UseCase.GetUsers do
       UserRepo.all(),
       &show_user(%{user: &1, toggles: toggles})
     )
+  end
+
+  # Success DTO helper.
+  defp ok(users) do
+    {:ok, %{users: users}}
   end
 end

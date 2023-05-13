@@ -2,10 +2,9 @@ defmodule Dapp.Repo.UserRepo do
   @moduledoc """
   User repository for the dApp.
   """
-  import Ecto.Query
-
   alias Dapp.Repo
   alias Dapp.Schema.User
+  import Ecto.Query
 
   @doc "Get all users"
   def all, do: Repo.all(User)
@@ -44,7 +43,7 @@ defmodule Dapp.Repo.UserRepo do
     end
   end
 
-  # Helper: query for a user's role.
+  # Query for a user's role.
   defp query_role(user_id) do
     unless is_nil(user_id) do
       Repo.one(

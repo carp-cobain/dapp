@@ -2,9 +2,10 @@ defmodule Dapp.Schema.User do
   @moduledoc """
   Schema data mapper for the users table.
   """
-  use Ecto.Schema
   import Ecto.Changeset
+  use Ecto.Schema
 
+  # Read blockchain network prefix from config.
   @network_prefix Application.compile_env(:dapp, :network_prefix)
 
   @primary_key {:id, :string, autogenerate: {Ecto.Nanoid, :autogenerate, []}}

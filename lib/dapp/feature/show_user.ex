@@ -1,12 +1,14 @@
 defmodule Dapp.Feature.ShowUser do
   @moduledoc """
-  Feature toggles for showing user information
+  Feature macro for showing user information.
   """
+
+  @doc false
   defmacro __using__(_opts) do
     quote do
       alias Dapp.Feature.ToggleCtx
 
-      # Default return value
+      # Default return value.
       @default "user"
 
       # Toggles for showing users.
@@ -22,7 +24,7 @@ defmodule Dapp.Feature.ShowUser do
         |> Map.merge(timestamps_toggle(args))
       end
 
-      # Helper: return user name if toggle is enabled.
+      # Return user name if toggle is enabled.
       defp name_toggle(args) do
         case ToggleCtx.enabled?(@show_user_name, args) do
           true -> %{name: args.user.name}
@@ -30,7 +32,7 @@ defmodule Dapp.Feature.ShowUser do
         end
       end
 
-      # Helper: return user email if toggle is enabled.
+      # Return user email if toggle is enabled.
       defp email_toggle(args) do
         case ToggleCtx.enabled?(@show_user_email, args) do
           true -> %{email: args.user.email}
@@ -38,7 +40,7 @@ defmodule Dapp.Feature.ShowUser do
         end
       end
 
-      # Helper: return user timestamps if toggle is enabled.
+      # Return user timestamps if toggle is enabled.
       defp timestamps_toggle(args) do
         case ToggleCtx.enabled?(@show_user_timestamps, args) do
           true -> %{inserted_at: args.user.inserted_at, updated_at: args.user.updated_at}

@@ -4,6 +4,7 @@ defmodule Dapp.Rbac.Header do
   """
   import Plug.Conn
 
+  # Read header names from config.
   @user_header Application.compile_env(:dapp, :user_header)
   @group_header Application.compile_env(:dapp, :group_header)
 

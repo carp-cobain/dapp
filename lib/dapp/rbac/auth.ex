@@ -2,10 +2,10 @@ defmodule Dapp.Rbac.Auth do
   @moduledoc """
   Authorizes requests with a blockchain address header.
   """
-  import Plug.Conn
   alias Dapp.Plug.Resp
   alias Dapp.Rbac.Header
   alias Dapp.Repo.UserRepo, as: Repo
+  import Plug.Conn
 
   @doc false
   def init(opts), do: opts

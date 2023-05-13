@@ -1,11 +1,11 @@
 defmodule Dapp.Plug.Router do
   @moduledoc """
-  Core HTTP router.
+  Maps HTTP requests to use cases.
   """
-  use Plug.Router
   alias Dapp.Plug.{Features, Handler, Resp}
   alias Dapp.Rbac.{Access, Auth}
   alias Dapp.UseCase.{GetProfile, GetUsers}
+  use Plug.Router
 
   plug(:match)
   plug(Auth)

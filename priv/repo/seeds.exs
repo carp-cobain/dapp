@@ -61,32 +61,37 @@ trial_features = Repo.insert!(
 )
 
 # Feature toggles
+{:ok, expires_at, _} = DateTime.from_iso8601("2100-12-21T00:00:00Z") 
 Repo.insert!(
   %Toggle{
     feature: global_features,
     name: "show_user_name",
-    enabled: true
+    enabled: true,
+    expires_at: expires_at
   }
 )
 Repo.insert!(
   %Toggle{
     feature: global_features,
     name: "show_user_timestamps",
-    enabled: false
+    enabled: false,
+    expires_at: expires_at
   }
 )
 Repo.insert!(
   %Toggle{
     feature: admin_features,
     name: "show_user_email",
-    enabled: true
+    enabled: true,
+    expires_at: expires_at
   }
 )
 Repo.insert!(
   %Toggle{
     feature: trial_features,
     name: "user_expiration",
-    enabled: true
+    enabled: true,
+    expires_at: expires_at
   }
 )
 
@@ -98,10 +103,10 @@ Repo.insert!(
   }
 )
 # Uncomment for trial expiration on viewer...
-#Repo.insert!(
-#  %UserFeature{
-#    user: viewer,
-#    feature: trial_features
-#  }
-#)
+Repo.insert!(
+  %UserFeature{
+    user: viewer,
+    feature: trial_features
+  }
+)
 

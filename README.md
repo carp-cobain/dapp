@@ -36,13 +36,13 @@ iex -S mix
 An authorized viewer
 
 ```sh
-curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskv" http://localhost:8888/dapp/api/v1/profile
+curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskv" http://localhost:8888/dapp/v1/profile
 ```
 
 An authorized admin
 
 ```sh
-curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kska" http://localhost:8888/dapp/api/v1/users
+curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kska" http://localhost:8888/dapp/v1/users
 ```
 
 ## Unauthorized Access
@@ -50,17 +50,17 @@ curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kska" http://
 Viewer unauthorized to access users route.
 
 ```sh
-curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskv" http://localhost:8888/dapp/api/v1/users
+curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskv" http://localhost:8888/dapp/v1/users
 ```
 
 Unauthorized user (no DB entry)
 
 ```sh
-curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskt" http://localhost:8888/dapp/api/v1/profile
+curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskt" http://localhost:8888/dapp/v1/profile
 ```
 
 Unknown user is unauthorized
 
 ```sh
-curl -is -XGET http://localhost:8888/dapp/api/v1/profile
+curl -is -XGET http://localhost:8888/dapp/v1/profile
 ```
