@@ -8,22 +8,23 @@ defmodule Dapp.Plug.Handler do
   @doc "Execute a use case and send the result DTO as JSON."
   @spec execute(Plug.Conn.t(), Dapp.UseCase.t()) :: Plug.Conn.t()
   def execute(conn, use_case) do
-    args(conn)
+    conn
+    |> params()
+    |> Map.merge(conn.assigns)
     |> use_case.execute()
     |> reply(conn)
   end
 
-  # Build input args for use case execution.
-  defp args(conn) do
-    %{
-      user: conn.assigns.user,
-      role: conn.assigns.role,
-      toggles: conn.assigns.toggles,
+  # Build a map from request params
+  defp params(conn),
+    do: %{
+      # Multi-part form data shows up here
+      params: conn.params,
+      # Body data for POST, PUT, etc
       body: conn.body_params,
-      query: conn.query_params,
-      form: conn.params
+      # Query params - ex "?foo=bar&baz=qux"
+      query: conn.query_params
     }
-  end
 
   # Use case success (204).
   defp reply(:ok, conn) do

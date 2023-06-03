@@ -94,6 +94,14 @@ Repo.insert!(
     expires_at: expires_at
   }
 )
+Repo.insert!(
+  %Toggle{
+    feature: admin_features,
+    name: "show_user_role",
+    enabled: true,
+    expires_at: expires_at
+  }
+)
 
 # User feature associations
 Repo.insert!(
