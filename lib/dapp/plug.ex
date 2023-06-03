@@ -17,7 +17,6 @@ defmodule Dapp.Plug do
 
   # Forward to plug router.
   forward("/dapp/v1", to: Dapp.Plug.Router)
-  forward("/dapp/api/v1", to: Dapp.Plug.Router)
 
   # Status route.
   get "/dapp/status" do

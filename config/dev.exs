@@ -11,5 +11,4 @@ config :dapp, Dapp.Repo,
 
 # Test network prefix
 config :dapp,
-  network_prefix: "tp",
-  trial_ttl_seconds: 666
+  network_prefix: "tp"

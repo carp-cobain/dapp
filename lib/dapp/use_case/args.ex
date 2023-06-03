@@ -5,7 +5,7 @@ defmodule Dapp.UseCase.Args do
 
   @doc "Execute a function if use case args are valid."
   def validate(args, exec) do
-    validate(args, [:user, :toggles], exec)
+    validate(args, [:user], exec)
   end
 
   @doc "Execute a function if use case args have all required fields."

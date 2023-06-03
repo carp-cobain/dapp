@@ -3,8 +3,6 @@ defmodule Dapp.UseCase.GetProfile do
   Use case for showing the authorized user's profile.
   """
   alias Dapp.UseCase.Args
-  use Dapp.Feature.ShowUser
-  use Dapp.Feature.Trial.Expiration
 
   @behaviour Dapp.UseCase
   @doc "Show the authorized user profile."
@@ -14,24 +12,19 @@ defmodule Dapp.UseCase.GetProfile do
 
   # Get profile DTO.
   defp get_profile(args) do
-    args
-    |> show_user()
-    |> check_expires(args)
-  end
-
-  # Check for user expiration.
-  defp check_expires(user, args) do
-    case feature_expiration(args) do
-      :does_not_expire -> ok(user)
-      {status, expires_at} -> merge(user, status, expires_at)
-    end
-  end
-
-  # Merge profile data with expiration data.
-  defp merge(user, status, expires_at) do
-    expiration_dto(status, expires_at)
-    |> Map.merge(user)
+    args.user
+    |> dto()
     |> ok()
+  end
+
+  # Create user DTO.
+  defp dto(user) do
+    %{
+      id: user.id,
+      blockchain_address: user.blockchain_address,
+      name: user.name,
+      email: user.email
+    }
   end
 
   # Success result.

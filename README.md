@@ -1,9 +1,6 @@
 # Elixir dApp Template
 
-A dApp template with:
-
-  - Role-based access control (RBAC)
-  - Dark features
+A dApp template with role-based access control (RBAC).
 
 ## Setup
 

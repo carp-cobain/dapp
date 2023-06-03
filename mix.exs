@@ -28,7 +28,6 @@ defmodule Dapp.MixProject do
       {:postgrex, "~> 0.16.5"},
       {:plug_cowboy, "~> 2.6.1"},
       {:jason, "~> 1.4"},
-      {:algae, "~> 1.3.1"},
       {:ecto_identifier, "~> 0.2.0"},
       {:credo, "~> 1.7.0", only: [:dev, :test], runtime: false}
     ]

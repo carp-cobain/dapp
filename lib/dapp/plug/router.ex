@@ -2,7 +2,7 @@ defmodule Dapp.Plug.Router do
   @moduledoc """
   Maps HTTP requests to use cases.
   """
-  alias Dapp.Plug.{Features, Handler, Resp}
+  alias Dapp.Plug.{Handler, Resp}
   alias Dapp.Rbac.{Access, Auth}
   alias Dapp.UseCase.{GetProfile, GetUsers}
   use Plug.Router
@@ -10,7 +10,6 @@ defmodule Dapp.Plug.Router do
   plug(:match)
   plug(Auth)
   plug(Access)
-  plug(Features)
   plug(Plug.Parsers, parsers: [:json], json_decoder: Jason)
   plug(:dispatch)
 
