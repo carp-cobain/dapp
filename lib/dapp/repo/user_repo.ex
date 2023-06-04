@@ -2,27 +2,31 @@ defmodule Dapp.Repo.UserRepo do
   @moduledoc """
   User repository for the dApp.
   """
+  alias Algae.Either.{Left, Right}
   alias Dapp.Repo
   alias Dapp.Schema.User
   import Ecto.Query
-
-  @doc "Get all users"
-  def all, do: Repo.all(User)
 
   @doc "Create a user from a blockchain address or raise."
   def create!(address) do
     Repo.insert!(%User{blockchain_address: address})
   end
 
-  @doc "Validate and create a user from a blockchain address."
-  def create(address) do
-    %User{}
-    |> User.changeset(%{blockchain_address: address})
-    |> Repo.insert()
+  @doc "Get a user by id and wrap in Either."
+  def get(id) when is_nil(id) do
+    {"Invalid user id: nil", 400}
+    |> Left.new()
+  end
+
+  def get(id) do
+    case Repo.get(User, id) do
+      nil -> {"Not found", 404} |> Left.new()
+      user -> Right.new(user)
+    end
   end
 
   @doc "Query for the user with the given blockchain address."
-  def get(address) do
+  def get_by_address(address) do
     unless is_nil(address) do
       Repo.one(
         from(u in User,
