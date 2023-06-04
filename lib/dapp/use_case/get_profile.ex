@@ -1,34 +1,40 @@
 defmodule Dapp.UseCase.GetProfile do
   @moduledoc """
-  Use case for showing the authorized user's profile.
+  Use case for showing a user profile.
   """
+  alias Dapp.Dto.User, as: UserDto
   alias Dapp.UseCase.Args
 
-  @behaviour Dapp.UseCase
-  @doc "Show the authorized user profile."
-  def execute(args) do
-    Args.validate(args, &get_profile/1)
+  alias Algae.Either.Right
+  alias Algae.Reader
+  use Witchcraft, except: [then: 2]
+
+  @doc "Create a GetProfile reader monad"
+  def new(user_repo) do
+    monad %Reader{} do
+      ctx <- Reader.ask()
+      return(get_profile(ctx, user_repo))
+    end
   end
 
-  # Get profile DTO.
-  defp get_profile(args) do
-    args.user
-    |> dto()
-    |> ok()
+  # Get a user profile.
+  defp get_profile(ctx, repo) do
+    chain do
+      args <- Args.from_nillable(ctx)
+      user_id <- Args.get(args, :user_id)
+      query_user(repo, user_id)
+    end
   end
 
-  # Create user DTO.
-  defp dto(user) do
-    %{
-      id: user.id,
-      blockchain_address: user.blockchain_address,
-      name: user.name,
-      email: user.email
-    }
+  # Query user by ID.
+  defp query_user(repo, id) do
+    repo.get(id) >>>
+      fn user -> user |> dto() |> Right.new() end
   end
 
-  # Success result.
-  defp ok(dto) do
-    {:ok, %{profile: dto}}
+  # Create DTO response.
+  def dto(u) do
+    UserDto.new(u.id, u.blockchain_address, u.name, u.email)
+    |> then(fn dto -> %{profile: dto} end)
   end
 end

@@ -4,32 +4,30 @@ defmodule Dapp.Rbac.Auth do
   """
   alias Dapp.Plug.Resp
   alias Dapp.Rbac.Header
-  alias Dapp.Repo.UserRepo, as: Repo
+  alias Dapp.Repo.UserRepo
   import Plug.Conn
+
+  alias Algae.Maybe
+  alias Algae.Maybe.{Just, Nothing}
+  use Witchcraft
 
   @doc false
   def init(opts), do: opts
 
   @doc "Authorize users with valid blockchain address headers."
   def call(conn, _opts) do
-    addr = conn |> Header.auth_header()
-    conn |> authorize(addr)
-  end
-
-  # Authorize user if an address was found.
-  defp authorize(conn, addr) do
-    if is_nil(addr) do
-      conn |> Resp.unauthorized()
-    else
-      conn |> assign_user(addr)
+    case auth_user(conn) do
+      %Just{just: user} -> assign(conn, :user, user)
+      %Nothing{} -> Resp.unauthorized(conn)
     end
   end
 
-  # Pull user from the repo and assign it for use in subsequent plugs.
-  defp assign_user(conn, addr) do
-    case Repo.get(addr) do
-      nil -> conn |> Resp.unauthorized()
-      user -> conn |> assign(:user, user)
-    end
+  # Get an authorized user from the db using a request header.
+  defp auth_user(conn) do
+    Header.auth_header(conn) >>>
+      fn addr ->
+        UserRepo.get_by_address(addr)
+        |> Maybe.from_nillable()
+      end
   end
 end

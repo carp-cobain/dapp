@@ -21,7 +21,7 @@ defmodule Dapp.Repo.UserRepoTest do
       user = UserRepo.create!(ctx.address)
       assert String.length(user.id) == NanoidConfig.default_size()
       assert is_nil(user.name) && is_nil(user.email)
-      assert UserRepo.get(ctx.address) == user
+      assert UserRepo.get_by_address(ctx.address) == user
     end
 
     test "should return unauthorized for users without a grant", ctx do

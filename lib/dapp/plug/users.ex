@@ -1,10 +1,11 @@
-defmodule Dapp.Plug.Router do
+defmodule Dapp.Plug.Users do
   @moduledoc """
-  Maps HTTP requests to use cases.
+  Maps user endpoints to use cases.
   """
   alias Dapp.Plug.{Handler, Resp}
   alias Dapp.Rbac.{Access, Auth}
-  alias Dapp.UseCase.{GetProfile, GetUsers}
+  alias Dapp.Repo.UserRepo
+  alias Dapp.UseCase.GetProfile
   use Plug.Router
 
   plug(:match)
@@ -15,13 +16,21 @@ defmodule Dapp.Plug.Router do
 
   # Allow all authorized users to see their profile.
   get "/profile" do
-    Handler.execute(conn, GetProfile)
+    Handler.run(
+      conn,
+      GetProfile.new(UserRepo),
+      %{user_id: conn.assigns.user.id}
+    )
   end
 
-  # Only allow admins to see all users.
-  get "/users" do
+  # Allow admins to see anyone's profile.
+  get "/:user_id/profile" do
     Access.admin(conn, fn ->
-      Handler.execute(conn, GetUsers)
+      Handler.run(
+        conn,
+        GetProfile.new(UserRepo),
+        %{user_id: user_id}
+      )
     end)
   end
 

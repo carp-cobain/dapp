@@ -30,34 +30,34 @@ iex -S mix
 
 ## Authorized Access
 
-An authorized viewer
+An authorized viewer can see thier profile.
 
 ```sh
-curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskv" http://localhost:8888/dapp/v1/profile
+curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskv" http://localhost:8888/dapp/v1/users/profile
 ```
 
-An authorized admin
+An authorized admin can see any user's profile.
 
 ```sh
-curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kska" http://localhost:8888/dapp/v1/users
+curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kska" http://localhost:8888/dapp/v1/users/{user_id}/profile
 ```
 
 ## Unauthorized Access
 
-Viewer unauthorized to access users route.
+Viewer unauthorized to access other user's profiles.
 
 ```sh
-curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskv" http://localhost:8888/dapp/v1/users
+curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskv" http://localhost:8888/dapp/v1/users/{user_id}/profile
 ```
 
-Unauthorized user (no DB entry)
+Unauthorized users (no DB entry) have no profile (must call signup route first).
 
 ```sh
-curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskt" http://localhost:8888/dapp/v1/profile
+curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskt" http://localhost:8888/dapp/v1/users/profile
 ```
 
 Unknown user is unauthorized
 
 ```sh
-curl -is -XGET http://localhost:8888/dapp/v1/profile
+curl -is -XGET http://localhost:8888/dapp/v1/users/profile
 ```

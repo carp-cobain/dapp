@@ -4,11 +4,6 @@ defmodule Dapp.Plug.Resp do
   """
   import Plug.Conn
 
-  @doc "No content success helper."
-  def no_content(conn) do
-    send_resp(conn, 204, "")
-  end
-
   @doc "Not found error helper."
   def not_found(conn) do
     conn

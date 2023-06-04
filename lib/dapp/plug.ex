@@ -1,22 +1,20 @@
 defmodule Dapp.Plug do
   @moduledoc """
-  Top-level plug: handles status requests and forwards to internal router.
+  Handles status requests and forwards to internal routers.
   """
-
   alias Dapp.Plug.Resp
+  use Plug.Router
 
   if Mix.env() == :dev do
     use Plug.Debugger
   end
 
-  use Plug.Router
-
   plug(Plug.Logger)
   plug(:match)
   plug(:dispatch)
 
-  # Forward to plug router.
-  forward("/dapp/v1", to: Dapp.Plug.Router)
+  # Forward to users router.
+  forward("/dapp/v1/users", to: Dapp.Plug.Users)
 
   # Status route.
   get "/dapp/status" do

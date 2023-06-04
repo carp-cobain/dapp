@@ -29,6 +29,7 @@ defmodule Dapp.MixProject do
       {:plug_cowboy, "~> 2.6.1"},
       {:jason, "~> 1.4"},
       {:ecto_identifier, "~> 0.2.0"},
+      {:algae, "~> 1.3.1"},
       {:credo, "~> 1.7.0", only: [:dev, :test], runtime: false}
     ]
   end
