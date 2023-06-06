@@ -18,18 +18,19 @@ defmodule Dapp.Plug.UsersTest do
     # which is rolled back after test execution.
     :ok = Sandbox.checkout(Dapp.Repo)
 
-    # Recreate role
+    # Clean out any existing data
+    Enum.map(Repo.all(Dapp.Schema.Grant), fn g -> Repo.delete!(g) end)
+    Enum.map(Repo.all(Dapp.Schema.User), fn u -> Repo.delete!(u) end)
     Enum.map(Repo.all(Role), fn r -> Repo.delete!(r) end)
-    role = Repo.insert!(%Role{name: "Viewer"})
 
     # Recreate user
-    Enum.map(Repo.all(Dapp.Schema.User), fn u -> Repo.delete!(u) end)
-    setup_user("tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8ksku", role)
+    setup_user("tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8ksku")
   end
 
   # Make sure we insert a role + user w/ grant.
-  defp setup_user(addr, role) do
+  defp setup_user(addr) do
     user = UserRepo.create!(addr)
+    role = Repo.insert!(%Role{name: "Viewer"})
     Repo.insert!(%Grant{user: user, role: role})
     %{address: addr, user: user}
   end
