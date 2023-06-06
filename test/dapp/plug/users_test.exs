@@ -17,12 +17,18 @@ defmodule Dapp.Plug.UsersTest do
     # When using a sandbox, each test runs in an isolated, independent transaction
     # which is rolled back after test execution.
     :ok = Sandbox.checkout(Dapp.Repo)
-    setup_user("tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskz")
+
+    # Recreate role
+    Enum.map(Repo.all(Role), fn r -> Repo.delete!(r) end)
+    role = Repo.insert!(%Role{name: "Viewer"})
+
+    # Recreate user
+    Enum.map(Repo.all(Dapp.Schema.User), fn u -> Repo.delete!(u) end)
+    setup_user("tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8ksku", role)
   end
 
   # Make sure we insert a role + user w/ grant.
-  defp setup_user(addr) do
-    role = Repo.insert!(%Role{name: "Viewer"})
+  defp setup_user(addr, role) do
     user = UserRepo.create!(addr)
     Repo.insert!(%Grant{user: user, role: role})
     %{address: addr, user: user}
