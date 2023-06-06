@@ -2,11 +2,12 @@ defmodule Dapp.Plug.Users do
   @moduledoc """
   Maps user endpoints to use cases.
   """
+  use Plug.Router
+
   alias Dapp.Plug.{Handler, Resp}
   alias Dapp.Rbac.{Access, Auth}
   alias Dapp.Repo.UserRepo
   alias Dapp.UseCase.GetProfile
-  use Plug.Router
 
   plug(:match)
   plug(Auth)

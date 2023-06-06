@@ -1,3 +1,6 @@
 alias Dapp.Repo
-alias Dapp.Repo.{UserRepo, FeatureRepo}
-alias Dapp.Schema.{Grant, Role, User, Feature, Toggle, UserFeature}
+alias Dapp.Repo.UserRepo
+alias Dapp.Schema.Grant
+alias Dapp.Schema.Role
+alias Dapp.Schema.User
+alias Dapp.UseCase.GetProfile

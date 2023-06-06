@@ -17,7 +17,7 @@ defmodule Dapp.Plug do
   forward("/dapp/v1/users", to: Dapp.Plug.Users)
 
   # Status route.
-  get "/dapp/status" do
+  get "/status" do
     Resp.send_json(conn, %{status: "up"})
   end
 

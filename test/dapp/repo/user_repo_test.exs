@@ -1,6 +1,7 @@
 defmodule Dapp.Repo.UserRepoTest do
   use ExUnit.Case, async: true
 
+  alias Algae.Maybe
   alias Dapp.Repo
   alias Dapp.Repo.UserRepo
   alias Dapp.Schema.{Grant, Role}
@@ -21,7 +22,7 @@ defmodule Dapp.Repo.UserRepoTest do
       user = UserRepo.create!(ctx.address)
       assert String.length(user.id) == NanoidConfig.default_size()
       assert is_nil(user.name) && is_nil(user.email)
-      assert UserRepo.get_by_address(ctx.address) == user
+      assert UserRepo.get_by_address(ctx.address) == Maybe.new(user)
     end
 
     test "should return unauthorized for users without a grant", ctx do

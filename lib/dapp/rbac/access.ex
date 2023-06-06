@@ -3,7 +3,7 @@ defmodule Dapp.Rbac.Access do
   Controls access to protected routes.
   """
   alias Dapp.Plug.Resp
-  alias Dapp.Repo.UserRepo, as: Repo
+  alias Dapp.Repo.UserRepo
   import Plug.Conn
 
   # When not provided explicitly, allow access to users with these roles.
@@ -29,7 +29,7 @@ defmodule Dapp.Rbac.Access do
 
   # Assign role or halt request.
   defp check_user_access(conn, opts) do
-    case Repo.access(conn.assigns.user.id) do
+    case UserRepo.access(conn.assigns.user.id) do
       :unauthorized -> Resp.unauthorized(conn)
       {:authorized, role} -> assign_role(conn, opts, role)
     end

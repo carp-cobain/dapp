@@ -2,10 +2,13 @@ defmodule Dapp.Repo.UserRepo do
   @moduledoc """
   User repository for the dApp.
   """
+  import Ecto.Query
+
   alias Algae.Either.{Left, Right}
+  alias Algae.Maybe
+
   alias Dapp.Repo
   alias Dapp.Schema.User
-  import Ecto.Query
 
   @doc "Create a user from a blockchain address or raise."
   def create!(address) do
@@ -35,6 +38,7 @@ defmodule Dapp.Repo.UserRepo do
         )
       )
     end
+    |> Maybe.from_nillable()
   end
 
   @doc "Get the access level for a user."
