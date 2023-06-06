@@ -18,17 +18,12 @@ defmodule Dapp.Plug.Handler do
   # Build input context for running a use case
   defp context(conn, args) do
     # Add more to context here if required
-    %{args: args, assigns: conn.assigns}
+    Map.merge(conn.assigns, %{args: args})
   end
 
   # Debug context for each request.
   defp debug_context(ctx) do
     Logger.debug("ctx = #{inspect(ctx)}")
-  end
-
-  # Handle either success case.
-  defp reply(%Right{right: {:created, dto}}, conn) do
-    Resp.send_json(conn, dto, 201)
   end
 
   # Handle either success case.

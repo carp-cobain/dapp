@@ -8,6 +8,7 @@ defmodule Dapp.MixProject do
       elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
+      elixirc_paths: elixirc_paths(Mix.env()),
       preferred_cli_env: [quality: :test],
       aliases: aliases()
     ]
@@ -33,6 +34,10 @@ defmodule Dapp.MixProject do
       {:credo, "~> 1.7.0", only: [:dev, :test], runtime: false}
     ]
   end
+
+  # Add mocks to path in test
+  defp elixirc_paths(:test), do: ["lib", "lib_mock"]
+  defp elixirc_paths(_), do: ["lib"]
 
   # Helpful mix aliases
   defp aliases do

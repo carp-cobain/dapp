@@ -9,20 +9,20 @@ defmodule Dapp.UseCase.GetProfile do
   alias Algae.Reader
   use Witchcraft, except: [then: 2]
 
-  @doc "Create a GetProfile reader monad"
+  @doc "Wrap the GetProfile use case in a reader monad."
   def new(user_repo) do
     monad %Reader{} do
       ctx <- Reader.ask()
-      return(get_profile(ctx, user_repo))
+      return(execute(ctx, user_repo))
     end
   end
 
-  # Get a user profile.
-  defp get_profile(ctx, repo) do
+  @doc "Get a user profile."
+  def execute(ctx, user_repo) do
     chain do
       args <- Args.from_nillable(ctx)
       user_id <- Args.get(args, :user_id)
-      query_user(repo, user_id)
+      query_user(user_repo, user_id)
     end
   end
 
@@ -33,8 +33,8 @@ defmodule Dapp.UseCase.GetProfile do
   end
 
   # Create DTO response.
-  def dto(u) do
-    UserDto.new(u.id, u.blockchain_address, u.name, u.email)
+  def dto(user) do
+    UserDto.from_schema(user)
     |> then(fn dto -> %{profile: dto} end)
   end
 end

@@ -1,0 +1,36 @@
+defmodule Dapp.UseCase.GetProfileTest do
+  use ExUnit.Case, async: true
+
+  alias Algae.Either.Right
+  alias Algae.Reader
+
+  alias Dapp.Mock.UserRepo
+  alias Dapp.UseCase.GetProfile
+
+  # Create user and return use case context
+  setup do
+    addr = "tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskt"
+    user = UserRepo.create!(addr)
+    %{args: %{user_id: user.id}, blockchain_address: addr}
+  end
+
+  # GetProfile use case tests
+  describe "GetProfile" do
+    #
+    test "should return an existing user profile (monad reader)", ctx do
+      use_case = GetProfile.new(UserRepo)
+      assert %Right{right: dto} = Reader.run(use_case, ctx)
+      assert dto.profile.blockchain_address == ctx.blockchain_address
+    end
+
+    test "should return an existing user profile (direct execute)", ctx do
+      assert %Right{right: dto} = GetProfile.execute(ctx, UserRepo)
+      assert dto.profile.blockchain_address == ctx.blockchain_address
+    end
+
+    test "monad reader should call execute", ctx do
+      use_case = GetProfile.new(UserRepo)
+      assert Reader.run(use_case, ctx) == GetProfile.execute(ctx, UserRepo)
+    end
+  end
+end

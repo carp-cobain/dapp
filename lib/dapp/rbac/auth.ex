@@ -7,7 +7,6 @@ defmodule Dapp.Rbac.Auth do
   alias Dapp.Repo.UserRepo
   import Plug.Conn
 
-  alias Algae.Maybe
   alias Algae.Maybe.{Just, Nothing}
   use Witchcraft
 
@@ -25,9 +24,6 @@ defmodule Dapp.Rbac.Auth do
   # Get an authorized user from the db using a request header.
   defp auth_user(conn) do
     Header.auth_header(conn) >>>
-      fn addr ->
-        UserRepo.get_by_address(addr)
-        |> Maybe.from_nillable()
-      end
+      fn addr -> UserRepo.get_by_address(addr) end
   end
 end
