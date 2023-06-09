@@ -1,62 +1,66 @@
 defmodule Dapp.Mock.UserRepo do
   @moduledoc false
 
+  alias Dapp.Error
   alias Dapp.Mock.Db
   alias Dapp.Schema.User
-
-  alias Algae.Either.{Left, Right}
-  alias Algae.Maybe
-  alias Algae.State
-
   use Dapp.Mock.DbState
 
+  alias Algae.Either.{Left, Right}
+  alias Algae.State
   use Witchcraft
 
   # ##########################################################################
   # API
   # ##########################################################################
 
-  # Get all users
-  def all, do: Map.values(get_state())
-
-  # Clear db state (mock repo only).
-  def clear, do: put_state(%{})
-
-  # Create a user with only a blockchain address.
-  def create!(address) do
-    mk_user(address, now())
-    |> tap(fn user -> upsert(user.id, user) end)
+  # Validate and create a user with a name and email.
+  def signup(params) do
+    validate(params) >>>
+      fn user ->
+        upsert(user.id, user)
+        Right.new(user)
+      end
   end
 
-  # Validate and create a user.
-  def create(address) do
-    validate(%{blockchain_address: address}) >>>
-      fn changes ->
-        create!(changes.blockchain_address)
-        |> Right.new()
-      end
+  # Handle get for nil user id.
+  def get(id) when is_nil(id) do
+    {Error.wrap("Invalid user id: nil"), 400}
+    |> Left.new()
   end
 
   # Get a user by id.
   def get(id) do
     Db.get(id)
     |> State.evaluate(get_state())
-    |> case do
-      nil -> {"Not found", 404} |> Left.new()
-      user -> Right.new(user)
-    end
+    |> either()
+  end
+
+  # Handle a nil user by blockchain address.
+  def get_by_address(address) when is_nil(address) do
+    {Error.wrap("Invalid address: nil"), 400}
+    |> Left.new()
   end
 
   # Get a user by blockchain address.
   def get_by_address(address) do
     Db.find(:blockchain_address, address)
     |> State.evaluate(get_state())
-    |> Maybe.from_nillable()
+    |> either()
   end
 
   # ##########################################################################
   # Helpers
   # ##########################################################################
+
+  # Wrap user in a Left when nil.
+  defp either(user) when is_nil(user) do
+    {Error.wrap("User not found"), 404}
+    |> Left.new()
+  end
+
+  # Wrap user in a Right.
+  defp either(user), do: Right.new(user)
 
   # Create helper
   defp upsert(pk, row) do
@@ -71,23 +75,22 @@ defmodule Dapp.Mock.UserRepo do
     |> NaiveDateTime.truncate(:second)
   end
 
-  # Create a user schema struct.
-  defp mk_user(addr, ts),
+  # Create a user schema struct with defaults generated.
+  defp mk_user(ts),
     do: %User{
       id: Nanoid.generate(),
-      blockchain_address: addr,
       inserted_at: ts,
       updated_at: ts
     }
 
-  # Check that user params are valid
+  # Check that user params are valid and return either user or errors.
   defp validate(params) do
-    cs = User.changeset(%User{}, params)
+    cs = now() |> mk_user() |> User.changeset(params)
 
     if cs.valid? do
-      Right.new(cs.changes)
+      Ecto.Changeset.apply_changes(cs) |> Right.new()
     else
-      Left.new(cs.errors)
+      {Error.details(cs), 400} |> Left.new()
     end
   end
 end

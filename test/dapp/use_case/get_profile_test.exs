@@ -9,14 +9,14 @@ defmodule Dapp.UseCase.GetProfileTest do
 
   # Create user and return use case context
   setup do
-    addr = "tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskt"
-    user = UserRepo.create!(addr)
+    addr = "tp#{Nanoid.generate(39)}" |> String.downcase()
+    params = %{blockchain_address: addr, name: "Jane Doe", email: "jane.doe@email.com"}
+    %Right{right: user} = UserRepo.signup(params)
     %{args: %{user_id: user.id}, blockchain_address: addr}
   end
 
   # GetProfile use case tests
   describe "GetProfile" do
-    #
     test "should return an existing user profile (monad reader)", ctx do
       use_case = GetProfile.new(UserRepo)
       assert %Right{right: dto} = Reader.run(use_case, ctx)

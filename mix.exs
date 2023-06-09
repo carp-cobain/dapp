@@ -10,7 +10,12 @@ defmodule Dapp.MixProject do
       deps: deps(),
       elixirc_paths: elixirc_paths(Mix.env()),
       preferred_cli_env: [quality: :test],
-      aliases: aliases()
+      aliases: aliases(),
+      test_coverage: [
+        summary: [
+          threshold: 80
+        ]
+      ]
     ]
   end
 

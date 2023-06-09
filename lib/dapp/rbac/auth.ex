@@ -2,12 +2,13 @@ defmodule Dapp.Rbac.Auth do
   @moduledoc """
   Authorizes requests with a blockchain address header.
   """
+  import Plug.Conn
+
   alias Dapp.Plug.Resp
   alias Dapp.Rbac.Header
   alias Dapp.Repo.UserRepo
-  import Plug.Conn
 
-  alias Algae.Maybe.{Just, Nothing}
+  alias Algae.Either.Right
   use Witchcraft
 
   @doc false
@@ -16,8 +17,8 @@ defmodule Dapp.Rbac.Auth do
   @doc "Authorize users with valid blockchain address headers."
   def call(conn, _opts) do
     case auth_user(conn) do
-      %Just{just: user} -> assign(conn, :user, user)
-      %Nothing{} -> Resp.unauthorized(conn)
+      %Right{right: user} -> assign(conn, :user, user)
+      _ -> Resp.unauthorized(conn)
     end
   end
 

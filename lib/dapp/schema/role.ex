@@ -9,6 +9,7 @@ defmodule Dapp.Schema.Role do
     field(:name, :string)
   end
 
+  @doc "Validate role changes"
   def changeset(struct, params) do
     struct
     |> cast(params, [:name])

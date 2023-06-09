@@ -2,31 +2,33 @@ defmodule Dapp.UseCase.Args do
   @moduledoc """
   Use case arguments helper functions.
   """
+  alias Dapp.Error
+
   alias Algae.Either.{Left, Right}
   use Witchcraft
 
-  @doc "Wrap nillable args in an Either"
-  def from_nillable(ctx) do
-    if is_nil(ctx) do
-      {"Invalid context: nil", 400} |> Left.new()
-    else
-      get_args(ctx)
-    end
+  # Handle nil context with error.
+  def from_nillable(ctx) when is_nil(ctx) do
+    Error.wrap("Invalid use cse context: nil")
+    |> bad_request()
   end
 
-  # Get args from context.
-  defp get_args(ctx) do
+  @doc "Wrap nillable args in an Either"
+  def from_nillable(ctx) do
     case Map.get(ctx, :args) do
-      nil -> {"Invalid args: nil", 400} |> Left.new()
+      nil -> Error.wrap("Invalid use case args: nil") |> bad_request()
       args -> Right.new(args)
     end
   end
 
   @doc "Wrap nillable Map.get/2 in an Either"
-  def get(args, key) do
+  def required(args, key) do
     case Map.get(args, key) do
-      nil -> {"Arg #{key} is required", 400} |> Left.new()
+      nil -> Error.wrap(key, "use case arg is required") |> bad_request()
       value -> Right.new(value)
     end
   end
+
+  # Wrap error with 400
+  defp bad_request(details), do: {details, 400} |> Left.new()
 end
