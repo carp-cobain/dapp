@@ -1,6 +1,6 @@
-defmodule Dapp.UseCase.GetProfile do
+defmodule Dapp.UseCase.Signup do
   @moduledoc """
-  Use case for showing a user profile.
+  Use case for creating a user profile.
   """
   alias Dapp.UseCase.Args
   alias Dapp.UseCase.Dto
@@ -16,12 +16,11 @@ defmodule Dapp.UseCase.GetProfile do
     end
   end
 
-  @doc "Get a user profile."
+  @doc "Create a user profile."
   def execute(ctx, repo) do
     chain do
       args <- Args.from_nillable(ctx)
-      user_id <- Args.required(args, :user_id)
-      user <- repo.get(user_id)
+      user <- repo.signup(args)
       Dto.profile(user)
     end
   end

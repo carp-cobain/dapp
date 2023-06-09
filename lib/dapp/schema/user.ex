@@ -16,10 +16,11 @@ defmodule Dapp.Schema.User do
     timestamps()
   end
 
+  @doc "Validate user changes"
   def changeset(struct, params) do
     struct
     |> cast(params, [:blockchain_address, :email, :name])
-    |> validate_required([:blockchain_address])
+    |> validate_required([:blockchain_address, :email, :name])
     |> validate_length(:blockchain_address, min: 41, max: 61)
     |> validate_length(:email, min: 3, max: 255)
     |> validate_length(:name, min: 1, max: 255)

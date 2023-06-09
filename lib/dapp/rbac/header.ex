@@ -4,9 +4,10 @@ defmodule Dapp.Rbac.Header do
   """
   import Plug.Conn
 
-  alias Algae.Maybe
-  alias Algae.Maybe.{Just, Nothing}
+  alias Algae.Either.{Left, Right}
   use Witchcraft
+
+  require Logger
 
   # Read header names from config.
   @user_header Application.compile_env(:dapp, :user_header)
@@ -17,16 +18,18 @@ defmodule Dapp.Rbac.Header do
 
   @doc "Assigns blockchain address header if found."
   def call(conn, _opts) do
-    case auth_header(conn) do
-      %Just{just: address} -> assign(conn, :blockchain_address, address)
-      %Nothing{} -> conn
+    case addr_header(conn) do
+      nil -> conn
+      address -> assign(conn, :blockchain_address, address)
     end
   end
 
-  @doc "Get blockchain address header wrapped in Maybe."
+  @doc "Get blockchain address header wrapped in Either."
   def auth_header(conn) do
-    addr_header(conn)
-    |> Maybe.from_nillable()
+    case addr_header(conn) do
+      nil -> Left.new("Auth header not found")
+      addr -> Right.new(addr)
+    end
   end
 
   # Get group header if provided. Otherwise, get user header.

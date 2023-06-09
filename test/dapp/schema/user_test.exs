@@ -4,17 +4,17 @@ defmodule Dapp.Schema.UserTest do
 
   # Test context
   setup do
+    valid_addr = "tp#{Nanoid.generate(39)}" |> String.downcase()
+    bad_prefix = "zz#{Nanoid.generate(39)}" |> String.downcase()
+    too_long = "tp#{Nanoid.generate(99)}" |> String.downcase()
+
     %{
-      valid_params: %{
-        blockchain_address: "tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskz",
-        name: "Jon Doe",
-        email: "jon.doe@gmail.com"
-      },
-      valid_address: %{blockchain_address: "tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskz"},
-      bad_prefix: %{blockchain_address: "zz17vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskz"},
-      too_short: %{blockchain_address: "tp19vd8fpwxzck93q"},
-      too_long: %{blockchain_address: "tp16vd8fpwxzck93q1118vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskz8vd8skz"},
-      email_too_short: %{email: "a@", blockchain_address: "tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskz"}
+      valid_params: %{blockchain_address: valid_addr, name: "Jon Doe", email: "jon.doe@gmail.com"},
+      valid_address: %{blockchain_address: valid_addr},
+      bad_prefix: %{blockchain_address: bad_prefix},
+      too_short: %{blockchain_address: "tp123skt"},
+      too_long: %{blockchain_address: too_long},
+      email_too_short: %{email: "a@", blockchain_address: valid_addr}
     }
   end
 
@@ -22,11 +22,6 @@ defmodule Dapp.Schema.UserTest do
   describe "User.changeset" do
     test "it succeeds on valid params", ctx do
       result = User.changeset(%User{}, ctx.valid_params)
-      assert result.valid?
-    end
-
-    test "it succeeds with only a valid blockchain address", ctx do
-      result = User.changeset(%User{}, ctx.valid_address)
       assert result.valid?
     end
 
