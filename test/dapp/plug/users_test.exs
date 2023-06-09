@@ -18,8 +18,13 @@ defmodule Dapp.Plug.UsersTest do
 
   # Make sure we insert a role + user w/ grant.
   defp setup_user(addr) do
+    role =
+      case Repo.get_by(Role, name: "Viewer") do
+        nil -> Repo.insert!(%Role{name: "Viewer"})
+        role -> role
+      end
+
     user = Repo.insert!(%User{blockchain_address: addr})
-    role = Repo.insert!(%Role{name: "Viewer"})
     Repo.insert!(%Grant{user: user, role: role})
     %{address: addr}
   end

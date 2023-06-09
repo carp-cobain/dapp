@@ -32,8 +32,13 @@ defmodule Dapp.Repo.UserRepoTest do
     end
 
     test "should return the authorized role for users with a grant", ctx do
+      role =
+        case Repo.get_by(Role, name: ctx.role) do
+          nil -> Repo.insert!(%Role{name: ctx.role})
+          role -> role
+        end
+
       user = Repo.insert!(%User{blockchain_address: ctx.address})
-      role = Repo.insert!(%Role{name: ctx.role})
       Repo.insert!(%Grant{user: user, role: role})
       assert UserRepo.access(user.id) == {:authorized, ctx.role}
     end
