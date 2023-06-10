@@ -1,5 +1,7 @@
 defmodule Dapp.Mock.Db do
-  @moduledoc false
+  @moduledoc """
+  Define mock DB operations with state monads.
+  """
 
   alias Algae.State
   import Algae.State
@@ -25,12 +27,9 @@ defmodule Dapp.Mock.Db do
   # Find a row by column value.
   def find(col, value) do
     monad %State{} do
-      rows <- State.get(&rows/1)
+      rows <- State.get(&Map.values/1)
       let(row = Enum.find(rows, &(Map.get(&1, col) == value)))
       return(row)
     end
   end
-
-  # Get 'rows' from a db
-  defp rows(db), do: Map.values(db)
 end

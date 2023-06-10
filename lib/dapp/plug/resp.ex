@@ -4,16 +4,18 @@ defmodule Dapp.Plug.Resp do
   """
   import Plug.Conn
 
+  alias Dapp.Error
+
   @doc "Not found error helper."
   def not_found(conn) do
     conn
-    |> send_json(%{error: "Not found"}, 404)
+    |> send_json(%{error: Error.new("not found")}, 404)
   end
 
   @doc "Unauthorized request error helper."
   def unauthorized(conn) do
     conn
-    |> send_json(%{error: "Unauthorized"}, 401)
+    |> send_json(%{error: Error.new("unauthorized")}, 401)
     |> halt
   end
 

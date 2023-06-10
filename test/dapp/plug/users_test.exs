@@ -18,15 +18,17 @@ defmodule Dapp.Plug.UsersTest do
 
   # Make sure we insert a role + user w/ grant.
   defp setup_user(addr) do
-    role =
-      case Repo.get_by(Role, name: "Viewer") do
-        nil -> Repo.insert!(%Role{name: "Viewer"})
-        role -> role
-      end
-
     user = Repo.insert!(%User{blockchain_address: addr})
-    Repo.insert!(%Grant{user: user, role: role})
+    Repo.insert!(%Grant{user: user, role: setup_role()})
     %{address: addr}
+  end
+
+  # Get or insert a role
+  defp setup_role do
+    case Repo.get_by(Role, name: "Viewer") do
+      nil -> Repo.insert!(%Role{name: "Viewer"})
+      role -> role
+    end
   end
 
   # Authorized request
@@ -49,7 +51,7 @@ defmodule Dapp.Plug.UsersTest do
   # Route not found
   test "it returns a 404 for unknown routes", ctx do
     opts = UsersPlug.init([])
-    req = conn(:get, "/route_does_not_exist") |> put_req_header("x-address", ctx.address)
+    req = conn(:get, "/nonesuch") |> put_req_header("x-address", ctx.address)
     res = UsersPlug.call(req, opts)
     assert res.status == 404
   end
