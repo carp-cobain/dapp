@@ -1,19 +1,47 @@
 defmodule Dapp.Error do
-  @moduledoc """
-  Error helper functions.
-  """
+  @moduledoc "Error support for dApp"
+  import Algae
 
-  @doc "Wrap an error with only detail"
-  def wrap(message), do: wrap(nil, message)
+  alias Dapp.Error.BadField
+  alias Dapp.Error.Message
 
-  @doc "Wrap an invalid field error"
-  def wrap(field, detail), do: %{details: [%{field: field, detail: detail}]}
+  @doc "Error sum types"
+  defsum do
+    defdata Message do
+      message :: String.t()
+    end
+
+    defdata BadField do
+      field :: String.t()
+      detail :: String.t()
+    end
+  end
+
+  # Encoder for BadField
+  defimpl Jason.Encoder, for: BadField do
+    def encode(value, opts) do
+      Jason.Encode.map(Map.take(value, [:field, :detail]), opts)
+    end
+  end
+
+  # Encoder for Message
+  defimpl Jason.Encoder, for: Message do
+    def encode(value, opts) do
+      Jason.Encode.map(Map.take(value, [:message]), opts)
+    end
+  end
+
+  @doc "Create an error with only detail"
+  def new(message), do: Message.new(message)
+
+  @doc "Create an invalid field error"
+  def new(field, detail), do: BadField.new(field, detail)
 
   # nil case handling.
-  def details(cs) when is_nil(cs), do: %{details: []}
+  def extract(cs) when is_nil(cs), do: %{}
 
-  @doc "Extract error details from an ecto change set."
-  def details(cs) do
+  @doc "Extract errors from an ecto change set."
+  def extract(cs) do
     %{
       details:
         Enum.map(
@@ -34,11 +62,11 @@ defmodule Dapp.Error do
         String.replace(acc, "%{#{k}}", to_string(v))
       end)
 
-    %{field: field, detail: detail}
+    BadField.new(field, detail)
   end
 
   # Get error detail.
-  defp get_field_detail(f, s), do: {f, s}
+  defp get_field_detail(f, s), do: BadField.new(f, s)
 
   # Can check for and apply error overrides here.
   # For example, ecto reports the first column on unique constraint violations over multiple columns.

@@ -1,5 +1,7 @@
 defmodule Dapp.Mock.UserRepo do
-  @moduledoc false
+  @moduledoc """
+  A fake user repo that allows testing use cases without a DB connection.
+  """
 
   alias Dapp.Error
   alias Dapp.Mock.Db
@@ -25,7 +27,7 @@ defmodule Dapp.Mock.UserRepo do
 
   # Handle get for nil user id.
   def get(id) when is_nil(id) do
-    {Error.wrap("Invalid user id: nil"), 400}
+    {Error.new("invalid user id: nil"), 400}
     |> Left.new()
   end
 
@@ -38,7 +40,7 @@ defmodule Dapp.Mock.UserRepo do
 
   # Handle a nil user by blockchain address.
   def get_by_address(address) when is_nil(address) do
-    {Error.wrap("Invalid address: nil"), 400}
+    {Error.new("invalid address: nil"), 400}
     |> Left.new()
   end
 
@@ -55,7 +57,7 @@ defmodule Dapp.Mock.UserRepo do
 
   # Wrap user in a Left when nil.
   defp either(user) when is_nil(user) do
-    {Error.wrap("User not found"), 404}
+    {Error.new("user not found"), 404}
     |> Left.new()
   end
 
@@ -90,7 +92,7 @@ defmodule Dapp.Mock.UserRepo do
     if cs.valid? do
       Ecto.Changeset.apply_changes(cs) |> Right.new()
     else
-      {Error.details(cs), 400} |> Left.new()
+      {Error.extract(cs), 400} |> Left.new()
     end
   end
 end

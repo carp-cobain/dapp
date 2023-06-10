@@ -14,7 +14,7 @@ defmodule Dapp.Repo.UserRepoTest do
     # which is rolled back after test execution.
     :ok = Sandbox.checkout(Dapp.Repo)
     addr = "tp#{Nanoid.generate(39)}" |> String.downcase()
-    %{address: addr, role: "Test"}
+    %{address: addr, role: "Test-#{Nanoid.generate(6)}"}
   end
 
   # Test user repo
@@ -32,12 +32,7 @@ defmodule Dapp.Repo.UserRepoTest do
     end
 
     test "should return the authorized role for users with a grant", ctx do
-      role =
-        case Repo.get_by(Role, name: ctx.role) do
-          nil -> Repo.insert!(%Role{name: ctx.role})
-          role -> role
-        end
-
+      role = Repo.insert!(%Role{name: ctx.role})
       user = Repo.insert!(%User{blockchain_address: ctx.address})
       Repo.insert!(%Grant{user: user, role: role})
       assert UserRepo.access(user.id) == {:authorized, ctx.role}

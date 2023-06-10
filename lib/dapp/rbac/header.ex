@@ -3,11 +3,7 @@ defmodule Dapp.Rbac.Header do
   Extracts blockchain address header.
   """
   import Plug.Conn
-
-  alias Algae.Either.{Left, Right}
-  use Witchcraft
-
-  require Logger
+  alias Dapp.Plug.Resp
 
   # Read header names from config.
   @user_header Application.compile_env(:dapp, :user_header)
@@ -18,22 +14,14 @@ defmodule Dapp.Rbac.Header do
 
   @doc "Assigns blockchain address header if found."
   def call(conn, _opts) do
-    case addr_header(conn) do
-      nil -> conn
+    case auth_header(conn) do
+      nil -> Resp.unauthorized(conn)
       address -> assign(conn, :blockchain_address, address)
     end
   end
 
-  @doc "Get blockchain address header wrapped in Either."
-  def auth_header(conn) do
-    case addr_header(conn) do
-      nil -> Left.new("Auth header not found")
-      addr -> Right.new(addr)
-    end
-  end
-
   # Get group header if provided. Otherwise, get user header.
-  defp addr_header(conn) do
+  def auth_header(conn) do
     get_header(conn, @group_header) || get_header(conn, @user_header)
   end
 

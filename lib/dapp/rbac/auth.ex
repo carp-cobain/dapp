@@ -24,7 +24,7 @@ defmodule Dapp.Rbac.Auth do
 
   # Get an authorized user from the db using a request header.
   defp auth_user(conn) do
-    Header.auth_header(conn) >>>
-      fn addr -> UserRepo.get_by_address(addr) end
+    Header.auth_header(conn)
+    |> UserRepo.get_by_address()
   end
 end
