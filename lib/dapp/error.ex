@@ -37,24 +37,24 @@ defmodule Dapp.Error do
   @doc "Create an invalid field error"
   def new(field, detail), do: BadField.new(field, detail)
 
-  # nil case handling.
+  # Guard for nil changeset.
   def extract(cs) when is_nil(cs), do: %{}
 
   @doc "Extract errors from an ecto change set."
-  def extract(cs) do
-    %{
-      details:
-        Enum.map(
-          Map.get(cs, :errors) || [],
-          fn {f, d} ->
-            get_field_detail(f, d)
-          end
-        )
-    }
+  def extract(cs), do: %{details: details(cs)}
+
+  # Extract error details from a changeset.
+  defp details(cs) do
+    Enum.map(
+      Map.get(cs, :errors) || [],
+      fn {f, d} ->
+        get_bad_field(f, d)
+      end
+    )
   end
 
   # Get error field and detail.
-  defp get_field_detail(f, {m, vs}) do
+  defp get_bad_field(f, {m, vs}) do
     {field, message} = check_override(f, m, vs)
 
     detail =
@@ -66,7 +66,7 @@ defmodule Dapp.Error do
   end
 
   # Get error detail.
-  defp get_field_detail(f, s), do: BadField.new(f, s)
+  defp get_bad_field(f, s), do: BadField.new(f, s)
 
   # Can check for and apply error overrides here.
   # For example, ecto reports the first column on unique constraint violations over multiple columns.
