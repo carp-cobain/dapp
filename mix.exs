@@ -14,6 +14,11 @@ defmodule Dapp.MixProject do
       test_coverage: [
         summary: [
           threshold: 80
+        ],
+        ignore_modules: [
+          Dapp.Mock.Db,
+          Dapp.Mock.DbState,
+          Dapp.Mock.UserRepo
         ]
       ]
     ]

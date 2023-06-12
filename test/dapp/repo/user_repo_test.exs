@@ -1,7 +1,7 @@
 defmodule Dapp.Repo.UserRepoTest do
   use ExUnit.Case, async: true
 
-  alias Algae.Either.Right
+  alias Algae.Either.{Left, Right}
   alias Dapp.Repo
   alias Dapp.Repo.UserRepo
   alias Dapp.Schema.{Grant, Role, User}
@@ -36,6 +36,19 @@ defmodule Dapp.Repo.UserRepoTest do
       user = Repo.insert!(%User{blockchain_address: ctx.address})
       Repo.insert!(%Grant{user: user, role: role})
       assert UserRepo.access(user.id) == {:authorized, ctx.role}
+    end
+
+    test "it should return an error when a user is not found" do
+      user_id = Nanoid.generate()
+      assert %Left{left: {error, status}} = UserRepo.get(user_id)
+      assert error.message == "user not found: #{user_id}"
+      assert status == 404
+    end
+
+    test "it should return an error when an invalid user_id is passed" do
+      assert %Left{left: {error, status}} = UserRepo.get(nil)
+      assert error.message == "user_id cannot be nil"
+      assert status == 400
     end
   end
 end
