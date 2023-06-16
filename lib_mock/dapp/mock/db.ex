@@ -2,7 +2,6 @@ defmodule Dapp.Mock.Db do
   @moduledoc """
   Define mock DB operations with state monads.
   """
-
   alias Algae.State
   import Algae.State
   use Witchcraft
