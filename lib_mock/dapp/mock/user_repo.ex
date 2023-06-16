@@ -2,14 +2,15 @@ defmodule Dapp.Mock.UserRepo do
   @moduledoc """
   A fake user repo that allows testing use cases without a DB connection.
   """
-
   alias Dapp.Error
   alias Dapp.Mock.Db
   alias Dapp.Schema.User
+
   use Dapp.Mock.DbState
 
   alias Algae.Either.{Left, Right}
   alias Algae.State
+
   use Witchcraft
 
   # ##########################################################################
@@ -25,35 +26,39 @@ defmodule Dapp.Mock.UserRepo do
       end
   end
 
-  # Handle get for nil user id.
-  def get(id) when is_nil(id) do
-    {Error.new("invalid user id: nil"), 400}
-    |> Left.new()
-  end
-
   # Get a user by id.
   def get(id) do
     Db.get(id)
-    |> State.evaluate(get_state())
+    |> eval()
     |> either()
-  end
-
-  # Handle a nil user by blockchain address.
-  def get_by_address(address) when is_nil(address) do
-    {Error.new("invalid address: nil"), 400}
-    |> Left.new()
   end
 
   # Get a user by blockchain address.
   def get_by_address(address) do
-    Db.find(:blockchain_address, address)
-    |> State.evaluate(get_state())
+    find(address)
+    |> eval()
     |> either()
   end
+
+  # Compose/Pointfree experiments...
+  # import Quark.Compose
+  # import Quark.Pointfree
+  # use Witchcraft, except: [<~>: 2]
+  # defx get_pf, do: ((&Db.get/1) <~> (&eval/1) <~> (&either/1)).()
+  # defx get_by_address_pf, do: ((&find/1) <~> (&eval/1) <~> (&either/1)).()
 
   # ##########################################################################
   # Helpers
   # ##########################################################################
+
+  # State evaluation helper
+  defp eval(op), do: State.evaluate(op, get_state())
+
+  # State execution helper
+  defp exec(op), do: State.execute(op, get_state())
+
+  # Get a user by blockchain address.
+  defp find(address), do: Db.find(:blockchain_address, address)
 
   # Wrap user in a Left when nil.
   defp either(user) when is_nil(user) do
@@ -65,9 +70,9 @@ defmodule Dapp.Mock.UserRepo do
   defp either(user), do: Right.new(user)
 
   # Create helper
-  defp upsert(pk, row) do
-    Db.upsert(pk, row)
-    |> State.execute(get_state())
+  def upsert(pk, user) do
+    Db.upsert(pk, user)
+    |> exec()
     |> put_state()
   end
 
@@ -87,12 +92,17 @@ defmodule Dapp.Mock.UserRepo do
 
   # Check that user params are valid and return either user or errors.
   defp validate(params) do
-    cs = now() |> mk_user() |> User.changeset(params)
+    cs =
+      now()
+      |> mk_user()
+      |> User.changeset(params)
 
     if cs.valid? do
-      Ecto.Changeset.apply_changes(cs) |> Right.new()
+      Ecto.Changeset.apply_changes(cs)
+      |> Right.new()
     else
-      {Error.extract(cs), 400} |> Left.new()
+      {Error.extract(cs), 400}
+      |> Left.new()
     end
   end
 end

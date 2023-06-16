@@ -6,21 +6,15 @@ defmodule Dapp.UseCase.ArgsTest do
 
   # Return use case context
   setup do
-    %{args: %{user_id: Nanoid.generate(), fst: 100, snd: "asdf"}}
+    %{args: %{id: Nanoid.generate(), balance: 100, name: "Jane"}}
   end
 
   # Test use case args
   describe "Args" do
     test "it should return valid args", ctx do
       assert Right.new(ctx.args) == Args.from_nillable(ctx)
-    end
-
-    test "it should return a required arg", ctx do
-      assert Right.new(ctx.args.user_id) == Args.required(ctx.args, :user_id)
-    end
-
-    test "it should take required args as a tuple", ctx do
-      assert Right.new({100, "asdf"}) == Args.take(ctx.args, [:fst, :snd])
+      assert Right.new(ctx.args.id) == Args.required(ctx.args, :id)
+      assert Right.new({"Jane", 100}) == Args.take(ctx.args, [:name, :balance])
     end
 
     test "it should return an error on nil context" do
@@ -36,9 +30,16 @@ defmodule Dapp.UseCase.ArgsTest do
     end
 
     test "it should return an error for a missing required arg", ctx do
-      assert %Left{left: {error, status}} = Args.required(ctx.args, :name)
-      assert error.field == :name
-      assert error.detail == "use case arg is required"
+      assert %Left{left: {error, status}} = Args.required(ctx.args, :age)
+      assert error.field == :age
+      assert error.message == "use case arg is required"
+      assert status == 400
+    end
+
+    test "it should fail to take missing required args", ctx do
+      assert %Left{left: {error, status}} = Args.take(ctx.args, [:name, :age])
+      assert error.field == :age
+      assert error.message == "use case arg is required"
       assert status == 400
     end
   end

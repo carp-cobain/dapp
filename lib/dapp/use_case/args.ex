@@ -21,10 +21,10 @@ defmodule Dapp.UseCase.Args do
     end
   end
 
-  @doc "Wrap nillable Map.get/2 in an Either"
+  @doc "Get a required arg value"
   def required(args, key) do
     case Map.get(args, key) do
-      nil -> Error.new(key, "use case arg is required") |> failure()
+      nil -> Error.new("use case arg is required", key) |> failure()
       value -> success(value)
     end
   end
