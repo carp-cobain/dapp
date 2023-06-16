@@ -1,6 +1,6 @@
 defmodule Dapp.Plug.Handler do
   @moduledoc """
-  HTTP request handler.
+  Executes use cases with a HTTP request context, and replies with JSON results.
   """
   alias Algae.Either.{Left, Right}
   alias Algae.Reader
@@ -20,7 +20,7 @@ defmodule Dapp.Plug.Handler do
 
   # Build input context for running a use case
   defp context(conn, args) do
-    # Add more to context here if required
+    # Add more to context here if required - feature flags for example.
     Map.merge(conn.assigns, %{args: args})
   end
 
@@ -40,7 +40,7 @@ defmodule Dapp.Plug.Handler do
 
   # Handle either error case.
   defp reply(%Left{left: {error, status}}, conn) do
-    Logger.error("Error executing use case: #{inspect(error)}")
+    if Mix.env() != :test, do: Logger.error("Error executing use case: #{inspect(error)}")
     Resp.send_json(conn, %{error: error}, status)
   end
 end

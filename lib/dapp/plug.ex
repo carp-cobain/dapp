@@ -1,13 +1,14 @@
 defmodule Dapp.Plug do
   @moduledoc """
-  Handles status requests and forwards to internal routers.
+  Map top-level routes to internal routers.
   """
-  alias Dapp.Plug.Resp
   use Plug.Router
 
   if Mix.env() == :dev do
     use Plug.Debugger
   end
+
+  alias Dapp.Plug.Resp
 
   plug(Plug.Logger)
   plug(:match)

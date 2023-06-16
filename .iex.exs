@@ -4,3 +4,4 @@ alias Dapp.Schema.Grant
 alias Dapp.Schema.Role
 alias Dapp.Schema.User
 alias Dapp.UseCase.GetProfile
+alias Dapp.UseCase.Signup
