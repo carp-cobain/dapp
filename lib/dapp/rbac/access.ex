@@ -31,12 +31,12 @@ defmodule Dapp.Rbac.Access do
   defp check_user_access(conn, opts) do
     case UserRepo.access(conn.assigns.user.id) do
       :unauthorized -> Resp.unauthorized(conn)
-      {:authorized, role} -> assign_role(conn, opts, role)
+      {:authorized, role} -> verify_role(conn, opts, role)
     end
   end
 
   # The user has a role in the DB, but we need to make sure the role was white-listed.
-  defp assign_role(conn, opts, role) do
+  defp verify_role(conn, opts, role) do
     if role in opts[:roles] do
       conn |> assign(:role, role)
     else

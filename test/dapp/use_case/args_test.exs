@@ -20,27 +20,27 @@ defmodule Dapp.UseCase.ArgsTest do
     test "it should return an error on nil context" do
       assert %Left{left: {error, status}} = Args.from_nillable(nil)
       assert error.message == "invalid use case context: nil"
-      assert status == 400
+      assert status == :invalid_args
     end
 
     test "it should return an error on nil args in context" do
       assert %Left{left: {error, status}} = Args.from_nillable(%{args: nil})
       assert error.message == "invalid use case args: nil"
-      assert status == 400
+      assert status == :invalid_args
     end
 
     test "it should return an error for a missing required arg", ctx do
       assert %Left{left: {error, status}} = Args.required(ctx.args, :age)
       assert error.field == :age
       assert error.message == "use case arg is required"
-      assert status == 400
+      assert status == :invalid_args
     end
 
     test "it should fail to take missing required args", ctx do
       assert %Left{left: {error, status}} = Args.take(ctx.args, [:name, :age])
       assert error.field == :age
       assert error.message == "use case arg is required"
-      assert status == 400
+      assert status == :invalid_args
     end
   end
 end

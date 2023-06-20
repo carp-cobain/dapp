@@ -11,4 +11,11 @@ defmodule Dapp.UseCase.Dto do
     |> then(fn dto -> %{profile: dto} end)
     |> Right.new()
   end
+
+  @doc "Create role list DTO from a list of schema structs."
+  def roles(roles) do
+    Enum.map(roles, &Dto.from_schema/1)
+    |> then(fn dto -> %{roles: dto} end)
+    |> Right.new()
+  end
 end

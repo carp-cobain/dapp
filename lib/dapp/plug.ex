@@ -14,6 +14,9 @@ defmodule Dapp.Plug do
   plug(:match)
   plug(:dispatch)
 
+  # Forward to roles router.
+  forward("/dapp/v1/roles", to: Dapp.Plug.Roles)
+
   # Forward to signup router.
   forward("/dapp/v1/signup", to: Dapp.Plug.Signup)
 

@@ -17,7 +17,7 @@ defmodule Dapp.Repo.UserRepo do
   @doc "Create a user with name, email and a viewer grant"
   def signup(params) do
     case Repo.get_by(Role, name: @viewer) do
-      nil -> {Error.new("internal error: required role not found"), 500} |> Left.new()
+      nil -> {Error.new("internal error: required role not found"), :internal_error} |> Left.new()
       role -> signup(params, role.id, Nanoid.generate())
     end
   end
@@ -30,14 +30,14 @@ defmodule Dapp.Repo.UserRepo do
     |> Repo.transaction()
     |> case do
       {:ok, result} -> Right.new(result.user)
-      {:error, _name, cs, _changes_so_far} -> Error.extract(cs) |> bad_request()
+      {:error, _name, cs, _changes_so_far} -> Error.extract(cs) |> invalid_args()
     end
   end
 
   # Return error on nil user id.
   def get(user_id) when is_nil(user_id) do
     Error.new("user_id cannot be nil")
-    |> bad_request()
+    |> invalid_args()
   end
 
   @doc "Get a user by id and wrap in Either."
@@ -51,7 +51,7 @@ defmodule Dapp.Repo.UserRepo do
   # Return error on nil address.
   def get_by_address(address) when is_nil(address) do
     Error.new("address cannot be nil")
-    |> bad_request()
+    |> invalid_args()
   end
 
   @doc "Query for the user with the given blockchain address."
@@ -92,11 +92,11 @@ defmodule Dapp.Repo.UserRepo do
     end
   end
 
-  # Error helper for 400
-  defp bad_request(error), do: wrap_error(error, 400)
+  # Error helper for bad requests
+  defp invalid_args(error), do: wrap_error(error, :invalid_args)
 
-  # Error helper for 404
-  defp not_found(error), do: wrap_error(error, 404)
+  # Error helper for not found
+  defp not_found(error), do: wrap_error(error, :not_found)
 
   # Error helper
   defp wrap_error(error, status), do: {error, status} |> Left.new()

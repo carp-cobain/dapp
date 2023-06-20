@@ -7,6 +7,8 @@ defmodule Dapp.Plug.Handler do
   alias Dapp.Plug.Resp
   require Logger
 
+  import Quark.Partial
+
   # For returning 201
   @post "POST"
 
@@ -15,6 +17,14 @@ defmodule Dapp.Plug.Handler do
     context(conn, args)
     |> tap(&debug_context/1)
     |> then(fn ctx -> Reader.run(use_case, ctx) end)
+    |> reply(conn)
+  end
+
+  @doc "Run a partially applied use case."
+  defpartial by_lazy(conn, use_case, args) do
+    context(conn, args)
+    |> tap(&debug_context/1)
+    |> use_case.()
     |> reply(conn)
   end
 
@@ -41,6 +51,15 @@ defmodule Dapp.Plug.Handler do
   # Handle either error case.
   defp reply(%Left{left: {error, status}}, conn) do
     if Mix.env() != :test, do: Logger.error("Error executing use case: #{inspect(error)}")
-    Resp.send_json(conn, %{error: error}, status)
+    Resp.send_json(conn, %{error: error}, http_status(status))
+  end
+
+  # Convert use case status to http status
+  defp http_status(status) do
+    case status do
+      :invalid_args -> 400
+      :not_found -> 404
+      _ -> 500
+    end
   end
 end

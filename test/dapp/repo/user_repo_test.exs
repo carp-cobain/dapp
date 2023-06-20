@@ -42,13 +42,13 @@ defmodule Dapp.Repo.UserRepoTest do
       user_id = Nanoid.generate()
       assert %Left{left: {error, status}} = UserRepo.get(user_id)
       assert error.message == "user not found: #{user_id}"
-      assert status == 404
+      assert status == :not_found
     end
 
     test "it should return an error when an invalid user_id is passed" do
       assert %Left{left: {error, status}} = UserRepo.get(nil)
       assert error.message == "user_id cannot be nil"
-      assert status == 400
+      assert status == :invalid_args
     end
   end
 end

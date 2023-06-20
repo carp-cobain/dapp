@@ -9,13 +9,13 @@ defmodule Dapp.Plug.Resp do
   @doc "Not found error helper."
   def not_found(conn) do
     conn
-    |> send_json(%{error: Error.new("not found")}, 404)
+    |> send_json(error("not found"), 404)
   end
 
   @doc "Unauthorized request error helper."
   def unauthorized(conn) do
     conn
-    |> send_json(%{error: Error.new("unauthorized")}, 401)
+    |> send_json(error("unauthorized"), 401)
     |> halt
   end
 
@@ -25,4 +25,7 @@ defmodule Dapp.Plug.Resp do
     |> put_resp_content_type("application/json")
     |> send_resp(status, Jason.encode!(data))
   end
+
+  # Error helper
+  defp error(message), do: %{error: Error.new(message)}
 end
