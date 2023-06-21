@@ -41,6 +41,6 @@ defmodule Dapp.UseCase.Args do
   # Wrap value in right.
   defp success(value), do: Right.new(value)
 
-  # Wrap error with 400 in left.
-  defp failure(error), do: {error, 400} |> Left.new()
+  # Wrap error with status in left.
+  defp failure(error), do: {error, :invalid_args} |> Left.new()
 end

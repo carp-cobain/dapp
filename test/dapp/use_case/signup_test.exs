@@ -31,6 +31,6 @@ defmodule Dapp.UseCase.SignupTest do
     assert Enum.find(error.details, fn e -> e.field == :blockchain_address end)
     assert Enum.find(error.details, fn e -> e.field == :name end)
     assert Enum.find(error.details, fn e -> e.field == :email end)
-    assert status == 400
+    assert status == :invalid_args
   end
 end
