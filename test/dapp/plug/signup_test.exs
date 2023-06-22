@@ -8,6 +8,9 @@ defmodule Dapp.Plug.SignupTest do
 
   alias Dapp.Plug.Signup, as: SignupPlug
 
+  # Required role granted upon signup.
+  @signup_role Application.compile_env(:dapp, :signup_role)
+
   # Test context
   setup do
     # When using a sandbox, each test runs in an isolated, independent transaction
@@ -15,8 +18,8 @@ defmodule Dapp.Plug.SignupTest do
     :ok = Sandbox.checkout(Dapp.Repo)
 
     # Insert role if not found
-    if is_nil(Repo.get_by(Role, name: "Viewer")) do
-      Repo.insert!(%Role{name: "Viewer"})
+    if is_nil(Repo.get_by(Role, name: @signup_role)) do
+      Repo.insert!(%Role{name: @signup_role})
     end
 
     # Test context
@@ -30,7 +33,7 @@ defmodule Dapp.Plug.SignupTest do
   end
 
   # Successful signup
-  test "it creates a viewer profile", ctx do
+  test "it creates a profile", ctx do
     res =
       conn(:post, "/", Jason.encode!(ctx.body))
       |> put_req_header("content-type", "application/json")
@@ -41,7 +44,7 @@ defmodule Dapp.Plug.SignupTest do
   end
 
   # Failed signup: no name or email.
-  test "it fails to create a viewer profile with no body", ctx do
+  test "it fails to create a profile with no body", ctx do
     res =
       conn(:post, "/")
       |> put_req_header("content-type", "application/json")
@@ -52,7 +55,7 @@ defmodule Dapp.Plug.SignupTest do
   end
 
   # Failed signup: no auth header.
-  test "it fails to create a viewer profile with no auth header", ctx do
+  test "it fails to create a profile with no auth header", ctx do
     res =
       conn(:post, "/", Jason.encode!(ctx.body))
       |> put_req_header("content-type", "application/json")

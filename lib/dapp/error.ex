@@ -35,11 +35,9 @@ defmodule Dapp.Error do
   end
 
   # Get error field and detail.
-  defp get_field_detail(f, {m, vs}) do
-    {field, message} = check_override(f, m, vs)
-
+  defp get_field_detail(field, {message, values}) do
     detail =
-      Enum.reduce(vs, message, fn {k, v}, acc ->
+      Enum.reduce(values, message, fn {k, v}, acc ->
         String.replace(acc, "%{#{k}}", to_string(v))
       end)
 
@@ -47,12 +45,5 @@ defmodule Dapp.Error do
   end
 
   # Get error detail.
-  defp get_field_detail(f, s), do: Error.new(s, f)
-
-  # Can check for and apply error overrides here.
-  # For example, ecto reports the first column on unique constraint violations over multiple columns.
-  # Could return the the more useful column here for this case.
-  defp check_override(field, message, _values) do
-    {field, message}
-  end
+  defp get_field_detail(field, message), do: Error.new(message, field)
 end

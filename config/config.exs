@@ -3,11 +3,12 @@ import Config
 config :dapp,
   ecto_repos: [Dapp.Repo]
 
-# Blockchain address auth headers
+# Network prefix, blockchain address auth headers, and other config
 config :dapp,
   network_prefix: "pb",
   user_header: "x-address",
-  group_header: "x-group-policy"
+  group_header: "x-group-policy",
+  signup_role: "Viewer"
 
 # Shows how to configure nanoid size, alphabet.
 config :nanoid,
