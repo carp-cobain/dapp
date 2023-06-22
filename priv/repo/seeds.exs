@@ -7,18 +7,21 @@
 alias Dapp.Repo
 alias Dapp.Schema.{Grant, Role, User}
 
-# Roles
+# Always insert roles
 role_admin = Repo.insert!(%Role{name: "Admin"})
 role_viewer = Repo.insert!(%Role{name: "Viewer"})
+
+# Insert env-specific seed data
+if Mix.env() == :dev do
 
 # Users
 viewer = Repo.insert!(
   %User{
     blockchain_address: "tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskv", 
-    email: "victor@gmail.com",
-    name: "Victor Viewer"
-  }
-)
+      email: "victor@gmail.com",
+      name: "Victor Viewer"
+    }
+  )
 admin = Repo.insert!(
   %User{
     blockchain_address: "tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kska", 
@@ -26,7 +29,6 @@ admin = Repo.insert!(
     name: "Alice Admin"
   }
 )
-
 # Grants
 Repo.insert!(
   %Grant {
@@ -40,3 +42,5 @@ Repo.insert!(
     role: role_admin
   }
 )
+
+end

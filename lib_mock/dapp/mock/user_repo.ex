@@ -37,7 +37,7 @@ defmodule Dapp.Mock.UserRepo do
   # Wrap user in the either type.
   defp either(user) do
     if is_nil(user) do
-      {Error.new("user not found"), :not_found} |> Left.new()
+      {:not_found, Error.new("user not found")} |> Left.new()
     else
       Right.new(user)
     end
@@ -68,7 +68,7 @@ defmodule Dapp.Mock.UserRepo do
       Ecto.Changeset.apply_changes(cs)
       |> Right.new()
     else
-      {Error.extract(cs), :invalid_args}
+      {:invalid_args, Error.extract(cs)}
       |> Left.new()
     end
   end

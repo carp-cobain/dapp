@@ -11,13 +11,13 @@ defmodule Dapp.Repo.UserRepo do
   alias Dapp.Repo
   alias Dapp.Schema.{Grant, Role, User}
 
-  # signup role name
-  @viewer "Viewer"
+  # Required role granted upon signup.
+  @signup_role Application.compile_env(:dapp, :signup_role)
 
-  @doc "Create a user with name, email and a viewer grant"
+  @doc "Create a user with name, email and a grant"
   def signup(params) do
-    case Repo.get_by(Role, name: @viewer) do
-      nil -> {Error.new("internal error: required role not found"), :internal_error} |> Left.new()
+    case Repo.get_by(Role, name: @signup_role) do
+      nil -> {:internal_error, Error.new("internal error: required role not found")} |> Left.new()
       role -> signup(params, role.id, Nanoid.generate())
     end
   end
@@ -99,5 +99,5 @@ defmodule Dapp.Repo.UserRepo do
   defp not_found(error), do: wrap_error(error, :not_found)
 
   # Error helper
-  defp wrap_error(error, status), do: {error, status} |> Left.new()
+  defp wrap_error(error, status), do: {status, error} |> Left.new()
 end

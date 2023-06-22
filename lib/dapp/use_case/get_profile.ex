@@ -11,8 +11,7 @@ defmodule Dapp.UseCase.GetProfile do
   @impl Dapp.UseCase
   def execute(ctx, repo) do
     chain do
-      args <- Args.from_nillable(ctx)
-      user_id <- Args.required(args, :user_id)
+      user_id <- Args.get(ctx, :user_id)
       user <- repo.get(user_id)
       Dto.profile(user)
     end

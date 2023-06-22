@@ -27,7 +27,7 @@ defmodule Dapp.UseCase.SignupTest do
   # Signup failure
   test "Signup should fail to create user profile with bad args" do
     use_case = Signup.new(UserRepo)
-    assert %Left{left: {error, status}} = Reader.run(use_case, %{args: %{}})
+    assert %Left{left: {status, error}} = Reader.run(use_case, %{args: %{}})
     assert Enum.find(error.details, fn e -> e.field == :blockchain_address end)
     assert Enum.find(error.details, fn e -> e.field == :name end)
     assert Enum.find(error.details, fn e -> e.field == :email end)

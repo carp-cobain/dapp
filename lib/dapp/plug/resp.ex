@@ -6,13 +6,13 @@ defmodule Dapp.Plug.Resp do
 
   alias Dapp.Error
 
-  @doc "Not found error helper."
+  @doc "Send a generic not found response."
   def not_found(conn) do
     conn
     |> send_json(error("not found"), 404)
   end
 
-  @doc "Unauthorized request error helper."
+  @doc "Send an unauthorized response and halt further request processing."
   def unauthorized(conn) do
     conn
     |> send_json(error("unauthorized"), 401)

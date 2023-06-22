@@ -21,7 +21,13 @@ defmodule Dapp.UseCase.Args do
     end
   end
 
-  @doc "Get a required arg value"
+  @doc "Get a required arg value directly from a context."
+  def get(ctx, key) do
+    from_nillable(ctx) >>>
+      fn args -> required(args, key) end
+  end
+
+  @doc "Get a required arg value."
   def required(args, key) do
     case Map.get(args, key) do
       nil -> Error.new("use case arg is required", key) |> failure()
@@ -30,7 +36,13 @@ defmodule Dapp.UseCase.Args do
   end
 
   @doc "Get a tuple of required arg values"
-  def take(args, keys) do
+  def take(ctx, keys) do
+    from_nillable(ctx) >>>
+      fn args -> take_args(args, keys) end
+  end
+
+  # Take helper
+  defp take_args(args, keys) do
     keys ~> (&required(args, &1)) |> sequence() >>>
       fn list ->
         left_fold(list, {}, &Tuple.append/2)
@@ -42,5 +54,5 @@ defmodule Dapp.UseCase.Args do
   defp success(value), do: Right.new(value)
 
   # Wrap error with status in left.
-  defp failure(error), do: {error, :invalid_args} |> Left.new()
+  defp failure(error), do: {:invalid_args, error} |> Left.new()
 end
