@@ -10,12 +10,13 @@ defmodule Dapp.Plug.Resp do
   def not_found(conn) do
     conn
     |> send_json(error("not found"), 404)
+    |> halt
   end
 
-  @doc "Send an unauthorized response and halt further request processing."
-  def unauthorized(conn) do
+  @doc "Send a bad request and halt further request processing."
+  def bad_request(conn) do
     conn
-    |> send_json(error("unauthorized"), 401)
+    |> send_json(error("not found"), 400)
     |> halt
   end
 

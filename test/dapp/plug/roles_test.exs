@@ -40,12 +40,12 @@ defmodule Dapp.Plug.RolesTest do
     assert res.status == 200
   end
 
-  test "it returns a 401 for an non-admin" do
+  test "it returns a bad request for an non-admin" do
     opts = RolesPlug.init([])
     address = "tp#{Nanoid.generate(39)}" |> String.downcase()
     req = conn(:get, "/") |> put_req_header("x-address", address)
     res = RolesPlug.call(req, opts)
-    assert res.status == 401
+    assert res.status == 400
   end
 
   test "it returns a 404 for an unknown route", ctx do

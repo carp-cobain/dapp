@@ -50,7 +50,7 @@ defmodule Dapp.Plug.Handler do
 
   # Handle either error case.
   defp reply(%Left{left: {status, error}}, conn) do
-    if Mix.env() != :test, do: Logger.error("Error executing use case: #{inspect(error)}")
+    Logger.info("Error executing use case: #{inspect(error)}")
     Resp.send_json(conn, %{error: error}, http_status(status))
   end
 

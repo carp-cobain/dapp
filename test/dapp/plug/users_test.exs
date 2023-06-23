@@ -40,12 +40,12 @@ defmodule Dapp.Plug.UsersTest do
   end
 
   # Unauthorized request
-  test "it returns a 401 for viewer calling an admin route", ctx do
+  test "it returns bad request for viewer calling an admin route", ctx do
     opts = UsersPlug.init([])
     fake_id = Nanoid.generate()
     req = conn(:get, "/#{fake_id}/profile") |> put_req_header("x-address", ctx.address)
     res = UsersPlug.call(req, opts)
-    assert res.status == 401
+    assert res.status == 400
   end
 
   # Route not found
