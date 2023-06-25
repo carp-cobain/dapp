@@ -1,6 +1,8 @@
 defmodule Dapp.UseCase do
   @moduledoc """
-  Define use case behaviour.
+  Use case execution is defined as a function that takes a context (map) and a second
+  parameter, often a repository for DB interaction. Execution must return an error
+  wrapped in `Either.Left`, or a success DTO wrapped in `Either.Right`.
   """
   @callback execute(map(), any()) :: Algae.Either.t()
 
@@ -8,7 +10,7 @@ defmodule Dapp.UseCase do
     quote do
       @behaviour Dapp.UseCase
 
-      alias Algae.Reader
+      alias Dapp.UseCase
       import Quark.Partial
       use Witchcraft
 
@@ -16,16 +18,8 @@ defmodule Dapp.UseCase do
       Allow partial application of use case execution.
       Params are flipped so callers can close over a repo before executing with a context.
       """
-      defpartial apply(repo, ctx) do
+      defpartial new(repo, ctx) do
         execute(ctx, repo)
-      end
-
-      @doc "Wrap use case execution in a reader monad."
-      def new(repo) do
-        monad %Reader{} do
-          ctx <- Reader.ask()
-          return(execute(ctx, repo))
-        end
       end
     end
   end

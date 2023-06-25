@@ -2,7 +2,6 @@ defmodule Dapp.UseCase.SignupTest do
   use ExUnit.Case, async: true
 
   alias Algae.Either.{Left, Right}
-  alias Algae.Reader
 
   alias Dapp.Mock.UserRepo
   alias Dapp.UseCase.Signup
@@ -15,8 +14,8 @@ defmodule Dapp.UseCase.SignupTest do
 
   # Signup success
   test "Signup should create user profile", ctx do
-    use_case = Signup.new(UserRepo)
-    assert %Right{right: dto} = Reader.run(use_case, ctx)
+    signup = Signup.new(UserRepo)
+    assert %Right{right: dto} = signup.(ctx)
     assert dto.profile.blockchain_address == ctx.args.blockchain_address
     assert dto.profile.name == ctx.args.name
     assert dto.profile.email == ctx.args.email
@@ -26,8 +25,8 @@ defmodule Dapp.UseCase.SignupTest do
 
   # Signup failure
   test "Signup should fail to create user profile with bad args" do
-    use_case = Signup.new(UserRepo)
-    assert %Left{left: {status, error}} = Reader.run(use_case, %{args: %{}})
+    signup = Signup.new(UserRepo)
+    assert %Left{left: {status, error}} = %{args: %{}} |> signup.()
     assert Enum.find(error.details, fn e -> e.field == :blockchain_address end)
     assert Enum.find(error.details, fn e -> e.field == :name end)
     assert Enum.find(error.details, fn e -> e.field == :email end)

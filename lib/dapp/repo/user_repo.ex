@@ -17,7 +17,7 @@ defmodule Dapp.Repo.UserRepo do
   @doc "Create a user with name, email and a grant"
   def signup(params) do
     case Repo.get_by(Role, name: @signup_role) do
-      nil -> {:internal_error, Error.new("internal error: required role not found")} |> Left.new()
+      nil -> Error.new("internal error: required role not found") |> internal_error()
       role -> signup(params, role.id, Nanoid.generate())
     end
   end
@@ -97,6 +97,9 @@ defmodule Dapp.Repo.UserRepo do
 
   # Error helper for not found
   defp not_found(error), do: wrap_error(error, :not_found)
+
+  # Error for server failures.
+  defp internal_error(error), do: wrap_error(error, :internal_error)
 
   # Error helper
   defp wrap_error(error, status), do: {status, error} |> Left.new()

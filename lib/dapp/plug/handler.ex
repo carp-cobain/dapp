@@ -3,7 +3,6 @@ defmodule Dapp.Plug.Handler do
   Executes use cases with a HTTP request context, and replies with JSON results.
   """
   alias Algae.Either.{Left, Right}
-  alias Algae.Reader
   alias Dapp.Plug.Resp
   require Logger
 
@@ -12,20 +11,17 @@ defmodule Dapp.Plug.Handler do
   # For returning 201
   @post "POST"
 
-  @doc "Run a use case as a reader monad."
-  def run(conn, use_case, args \\ %{}) do
-    context(conn, args)
-    |> tap(&debug_context/1)
-    |> then(fn ctx -> Reader.run(use_case, ctx) end)
-    |> reply(conn)
-  end
-
-  @doc "Run a partially applied use case."
-  defpartial by_lazy(conn, use_case, args) do
+  @doc "Execute a use case."
+  def execute(conn, use_case, args \\ %{}) do
     context(conn, args)
     |> tap(&debug_context/1)
     |> use_case.()
     |> reply(conn)
+  end
+
+  @doc "Enable partial application of use case execution."
+  defpartial by_lazy(conn, use_case, args) do
+    execute(conn, use_case, args)
   end
 
   # Build input context for running a use case

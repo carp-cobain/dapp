@@ -16,8 +16,11 @@ defmodule Dapp.Plug.Signup do
 
   # Create a new user with viewer grant.
   post "/" do
-    signup = Handler.by_lazy(conn, Signup.apply(UserRepo))
-    signup.(args(conn))
+    Handler.execute(
+      conn,
+      Signup.new(UserRepo),
+      args(conn)
+    )
   end
 
   # Get args from request.

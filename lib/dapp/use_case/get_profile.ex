@@ -8,7 +8,7 @@ defmodule Dapp.UseCase.GetProfile do
   alias Dapp.UseCase.Dto
 
   @doc "Get a user profile"
-  @impl Dapp.UseCase
+  @impl UseCase
   def execute(ctx, repo) do
     chain do
       user_id <- Args.get(ctx, :user_id)

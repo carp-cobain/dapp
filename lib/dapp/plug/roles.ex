@@ -16,7 +16,7 @@ defmodule Dapp.Plug.Roles do
 
   # Allow admins to see available roles.
   get "/" do
-    Handler.run(conn, GetRoles.new(RoleRepo))
+    Handler.execute(conn, GetRoles.new(RoleRepo))
   end
 
   # Catch-all responds with a 404.

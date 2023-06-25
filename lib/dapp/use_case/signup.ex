@@ -8,7 +8,7 @@ defmodule Dapp.UseCase.Signup do
   alias Dapp.UseCase.Dto
 
   @doc "Create a user profile."
-  @impl Dapp.UseCase
+  @impl UseCase
   def execute(ctx, repo) do
     chain do
       args <- Args.from_nillable(ctx)
