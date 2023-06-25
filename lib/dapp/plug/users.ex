@@ -17,22 +17,23 @@ defmodule Dapp.Plug.Users do
 
   # Allow all authorized users to see their profile.
   get "/profile" do
-    Handler.run(
-      conn,
-      GetProfile.new(UserRepo),
-      %{user_id: conn.assigns.user.id}
-    )
+    get_profile(conn, %{user_id: conn.assigns.user.id})
   end
 
   # Allow admins to see anyone's profile.
   get "/:user_id/profile" do
     Access.admin(conn, fn ->
-      Handler.run(
-        conn,
-        GetProfile.new(UserRepo),
-        %{user_id: user_id}
-      )
+      get_profile(conn, %{user_id: user_id})
     end)
+  end
+
+  # Get profile helper.
+  defp get_profile(conn, args) do
+    Handler.run(
+      conn,
+      GetProfile.new(UserRepo),
+      args
+    )
   end
 
   # Catch-all responds with a 404.

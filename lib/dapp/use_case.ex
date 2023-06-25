@@ -9,16 +9,7 @@ defmodule Dapp.UseCase do
       @behaviour Dapp.UseCase
 
       alias Algae.Reader
-      import Quark.Partial
       use Witchcraft
-
-      @doc """
-      Allow partial application of use case execution.
-      Params are flipped so callers can close over a repo before executing with a context.
-      """
-      defpartial apply(repo, ctx) do
-        execute(ctx, repo)
-      end
 
       @doc "Wrap use case execution in a reader monad."
       def new(repo) do
