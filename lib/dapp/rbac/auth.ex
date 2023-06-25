@@ -18,7 +18,7 @@ defmodule Dapp.Rbac.Auth do
   def call(conn, _opts) do
     case auth_user(conn) do
       %Right{right: user} -> assign(conn, :user, user)
-      _ -> Resp.unauthorized(conn)
+      _ -> Resp.bad_request(conn)
     end
   end
 

@@ -61,6 +61,6 @@ defmodule Dapp.Plug.SignupTest do
       |> put_req_header("content-type", "application/json")
       |> SignupPlug.call([])
 
-    assert res.status == 401
+    assert res.status == 400
   end
 end

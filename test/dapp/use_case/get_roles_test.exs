@@ -20,6 +20,8 @@ defmodule Dapp.UseCase.GetRolesTest do
       use_case = GetRoles.new(RoleRepo)
       assert %Right{right: dto} = Reader.run(use_case, ctx)
       assert length(dto.roles) == 2
+      assert Enum.find(dto.roles, &(&1.name == "Admin"))
+      assert Enum.find(dto.roles, &(&1.name == "Viewer"))
     end
   end
 end

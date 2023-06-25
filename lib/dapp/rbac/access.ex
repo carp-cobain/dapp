@@ -23,14 +23,14 @@ defmodule Dapp.Rbac.Access do
     if Map.has_key?(conn.assigns, :user) do
       check_user_access(conn, opts)
     else
-      Resp.unauthorized(conn)
+      Resp.bad_request(conn)
     end
   end
 
   # Assign role or halt request.
   defp check_user_access(conn, opts) do
     case UserRepo.access(conn.assigns.user.id) do
-      :unauthorized -> Resp.unauthorized(conn)
+      :unauthorized -> Resp.bad_request(conn)
       {:authorized, role} -> verify_role(conn, opts, role)
     end
   end
@@ -40,7 +40,7 @@ defmodule Dapp.Rbac.Access do
     if role in opts[:roles] do
       conn |> assign(:role, role)
     else
-      Resp.unauthorized(conn)
+      Resp.bad_request(conn)
     end
   end
 
@@ -49,7 +49,7 @@ defmodule Dapp.Rbac.Access do
     if Map.get(conn.assigns, :role) in roles do
       route.()
     else
-      Resp.unauthorized(conn)
+      Resp.bad_request(conn)
     end
   end
 

@@ -15,7 +15,7 @@ defmodule Dapp.Rbac.Header do
   @doc "Assigns blockchain address header if found."
   def call(conn, _opts) do
     case auth_header(conn) do
-      nil -> Resp.unauthorized(conn)
+      nil -> Resp.bad_request(conn)
       address -> assign(conn, :blockchain_address, address)
     end
   end

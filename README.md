@@ -4,11 +4,10 @@ A dApp template with role-based access control (RBAC).
 
 ## Setup
 
-Install Elixir 1.14.5
+Install erlang and elixir (assumes asdf package manager). See `.tool-versions` for info.
 
 ```shell
-brew install -s ./homebrew/elixir.rb
-brew pin erlang elixir
+asdf install
 ```
 
 Run a PostgreSQL database container (assumes docker is installed).
