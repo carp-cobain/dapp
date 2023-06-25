@@ -7,8 +7,6 @@ defmodule Dapp.Plug.Handler do
   alias Dapp.Plug.Resp
   require Logger
 
-  import Quark.Partial
-
   # For returning 201
   @post "POST"
 
@@ -17,14 +15,6 @@ defmodule Dapp.Plug.Handler do
     context(conn, args)
     |> tap(&debug_context/1)
     |> then(fn ctx -> Reader.run(use_case, ctx) end)
-    |> reply(conn)
-  end
-
-  @doc "Run a partially applied use case."
-  defpartial by_lazy(conn, use_case, args) do
-    context(conn, args)
-    |> tap(&debug_context/1)
-    |> use_case.()
     |> reply(conn)
   end
 

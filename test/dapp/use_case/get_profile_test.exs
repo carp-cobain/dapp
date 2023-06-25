@@ -17,15 +17,9 @@ defmodule Dapp.UseCase.GetProfileTest do
 
   # GetProfile use case tests
   describe "GetProfile" do
-    test "should return an existing user profile (monad reader)", ctx do
+    test "should return an existing user profile", ctx do
       use_case = GetProfile.new(UserRepo)
       assert %Right{right: dto} = Reader.run(use_case, ctx)
-      assert dto.profile.blockchain_address == ctx.blockchain_address
-    end
-
-    test "should return an existing user profile (partial application)", ctx do
-      use_case = GetProfile.apply(UserRepo)
-      assert %Right{right: dto} = use_case.(ctx)
       assert dto.profile.blockchain_address == ctx.blockchain_address
     end
 
