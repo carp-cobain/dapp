@@ -3,12 +3,13 @@ defmodule Dapp.UseCase.GetProfile do
   Use case for getting a user profile.
   """
   use Dapp.UseCase
+  use Witchcraft
 
   alias Dapp.UseCase.Args
   alias Dapp.UseCase.Dto
 
   @doc "Get a user profile"
-  @impl UseCase
+  @impl Dapp.UseCase
   def execute(ctx, repo) do
     chain do
       user_id <- Args.get(ctx, :user_id)

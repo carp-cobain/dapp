@@ -9,10 +9,7 @@ defmodule Dapp.UseCase do
   defmacro __using__(_opts) do
     quote do
       @behaviour Dapp.UseCase
-
-      alias Dapp.UseCase
       import Quark.Partial
-      use Witchcraft
 
       @doc """
       Allow partial application of use case execution.

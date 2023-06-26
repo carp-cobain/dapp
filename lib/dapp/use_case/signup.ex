@@ -3,12 +3,13 @@ defmodule Dapp.UseCase.Signup do
   Use case for creating a user profile.
   """
   use Dapp.UseCase
+  use Witchcraft
 
   alias Dapp.UseCase.Args
   alias Dapp.UseCase.Dto
 
   @doc "Create a user profile."
-  @impl UseCase
+  @impl Dapp.UseCase
   def execute(ctx, repo) do
     chain do
       args <- Args.from_nillable(ctx)
