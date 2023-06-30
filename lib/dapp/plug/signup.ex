@@ -28,7 +28,8 @@ defmodule Dapp.Plug.Signup do
     do: %{
       blockchain_address: conn.assigns.blockchain_address,
       name: conn.body_params["name"],
-      email: conn.body_params["email"]
+      email: conn.body_params["email"],
+      code: conn.body_params["code"]
     }
 
   # Catch-all responds with a 404.

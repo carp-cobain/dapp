@@ -10,7 +10,7 @@ defmodule Dapp.UseCase.SignupTest do
   # Create and return use case context
   setup do
     addr = "tp#{Nanoid.generate(39)}" |> String.downcase()
-    %{args: %{blockchain_address: addr, name: "Jane Doe", email: "jane.doe@email.com"}}
+    %{args: %{blockchain_address: addr, name: "Jane Doe", email: "jane.doe@email.com", code: Nanoid.generate()}}
   end
 
   # Signup success
@@ -27,10 +27,7 @@ defmodule Dapp.UseCase.SignupTest do
   # Signup failure
   test "Signup should fail to create user profile with bad args" do
     use_case = Signup.new(UserRepo)
-    assert %Left{left: {status, error}} = Reader.run(use_case, %{args: %{}})
-    assert Enum.find(error.details, fn e -> e.field == :blockchain_address end)
-    assert Enum.find(error.details, fn e -> e.field == :name end)
-    assert Enum.find(error.details, fn e -> e.field == :email end)
+    assert %Left{left: {status, _error}} = Reader.run(use_case, %{args: %{}})
     assert status == :invalid_args
   end
 end

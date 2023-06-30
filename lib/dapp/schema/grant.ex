@@ -9,13 +9,14 @@ defmodule Dapp.Schema.Grant do
   schema "grants" do
     belongs_to(:user, User, type: Ecto.Nanoid)
     belongs_to(:role, Role)
+    field(:invite_id, :string)
     timestamps()
   end
 
   @doc "Validate grant changes"
   def changeset(struct, params) do
     struct
-    |> cast(params, [:user_id, :role_id])
+    |> cast(params, [:user_id, :role_id, :invite_id])
     |> validate_required([:user_id, :role_id])
     |> foreign_key_constraint(:user_id)
     |> foreign_key_constraint(:role_id)

@@ -11,7 +11,7 @@ defmodule Dapp.UseCase.GetProfileTest do
   setup do
     addr = "tp#{Nanoid.generate(39)}" |> String.downcase()
     params = %{blockchain_address: addr, name: "Jane Doe", email: "jane.doe@email.com"}
-    %Right{right: user} = UserRepo.signup(params)
+    %Right{right: user} = UserRepo.mock_signup(params)
     %{args: %{user_id: user.id}, blockchain_address: addr}
   end
 

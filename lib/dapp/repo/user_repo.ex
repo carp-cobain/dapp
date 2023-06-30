@@ -9,24 +9,25 @@ defmodule Dapp.Repo.UserRepo do
 
   alias Dapp.Error
   alias Dapp.Repo
-  alias Dapp.Schema.{Grant, Role, User}
+  alias Dapp.Schema.{Grant, Invite, User}
 
-  # Required role granted upon signup.
-  @signup_role Application.compile_env(:dapp, :signup_role)
-
-  @doc "Create a user with name, email and a grant"
-  def signup(params) do
-    case Repo.get_by(Role, name: @signup_role) do
-      nil -> {:internal_error, Error.new("internal error: required role not found")} |> Left.new()
-      role -> signup(params, role.id, Nanoid.generate())
+  @doc "Look up an invite using id and email address."
+  def invite(id, email) do
+    case Repo.get(Invite, id) do
+      nil -> Error.new("invite not found") |> not_found()
+      invite -> verify_invite(invite, email)
     end
   end
 
+  @doc "Create a user with name, email and a grant"
+  def signup(params, invite), do: signup(params, invite, Nanoid.generate())
+
   # Signup helper
-  defp signup(params, role_id, user_id) do
+  defp signup(params, invite, user_id) do
     Multi.new()
     |> Multi.insert(:user, User.changeset(%User{id: user_id}, params))
-    |> Multi.insert(:grant, Grant.changeset(%Grant{}, %{user_id: user_id, role_id: role_id}))
+    |> Multi.insert(:grant, Grant.changeset(%Grant{}, grant_params(user_id, invite)))
+    |> Multi.update(:invite, Invite.changeset(invite, %{consumed_at: now()}))
     |> Repo.transaction()
     |> case do
       {:ok, result} -> Right.new(result.user)
@@ -90,6 +91,27 @@ defmodule Dapp.Repo.UserRepo do
         )
       )
     end
+  end
+
+  # Verify an invite is for the provided email.
+  defp verify_invite(invite, email) do
+    if invite.email == email && is_nil(invite.consumed_at) do
+      Right.new(invite)
+    else
+      Error.new("invite not found")
+      |> not_found()
+    end
+  end
+
+  # Current timestamp
+  defp now do
+    NaiveDateTime.utc_now()
+    |> NaiveDateTime.truncate(:second)
+  end
+
+  # Build grant param map for insert
+  defp grant_params(user_id, invite) do
+    %{user_id: user_id, role_id: invite.role_id, invite_id: invite.id}
   end
 
   # Error helper for bad requests

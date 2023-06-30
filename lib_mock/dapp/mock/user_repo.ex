@@ -6,18 +6,33 @@ defmodule Dapp.Mock.UserRepo do
   use Witchcraft
 
   alias Dapp.Error
-  alias Dapp.Schema.User
+  alias Dapp.Schema.{Invite, User}
 
   alias Dapp.Mock.Db
   use Dapp.Mock.DbState
 
+  # Test only signup
+  def mock_signup(params), do: signup(params, nil)
+
   # Validate and create a user with a name and email.
-  def signup(params) do
+  def signup(params, _invite) do
     validate(params) >>>
       fn user ->
         Db.upsert(user.id, user) |> exec() |> put_state()
         Right.new(user)
       end
+  end
+
+  # Just return an invite
+  def invite(code, email) do
+    %Invite{
+      id: code,
+      email: email,
+      role_id: 1,
+      inserted_at: now(),
+      updated_at: now()
+    }
+    |> Right.new()
   end
 
   # Get a user by id.

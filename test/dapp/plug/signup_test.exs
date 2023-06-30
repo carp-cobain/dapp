@@ -3,7 +3,7 @@ defmodule Dapp.Plug.SignupTest do
   use Plug.Test
 
   alias Dapp.Repo
-  alias Dapp.Schema.Role
+  alias Dapp.Schema.{Invite, Role}
   alias Ecto.Adapters.SQL.Sandbox
 
   alias Dapp.Plug.Signup, as: SignupPlug
@@ -17,19 +17,29 @@ defmodule Dapp.Plug.SignupTest do
     # which is rolled back after test execution.
     :ok = Sandbox.checkout(Dapp.Repo)
 
-    # Insert role if not found
-    if is_nil(Repo.get_by(Role, name: @signup_role)) do
-      Repo.insert!(%Role{name: @signup_role})
-    end
+    # Insert invite
+    code = Nanoid.generate()
+    email = "user-#{Nanoid.generate(6)}@domain.com"
+    role = setup_role()
+    Repo.insert!(%Invite{id: code, email: email, role_id: role.id})
 
     # Test context
     %{
       body: %{
         name: "User #{Nanoid.generate(6)}",
-        email: "user-#{Nanoid.generate(6)}@domain.com"
+        email: email,
+        code: code
       },
       header: "tp#{Nanoid.generate(39)}" |> String.downcase()
     }
+  end
+
+  # Get or insert a role
+  defp setup_role do
+    case Repo.get_by(Role, name: @signup_role) do
+      nil -> Repo.insert!(%Role{name: @signup_role})
+      role -> role
+    end
   end
 
   # Successful signup

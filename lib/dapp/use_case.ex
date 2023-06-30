@@ -1,6 +1,8 @@
 defmodule Dapp.UseCase do
   @moduledoc """
-  Define use case behaviour.
+  Use case execution is defined as a function that takes a context (map) and a second
+  parameter, often a repository for DB interaction. Execution must return an error
+  wrapped in `Either.Left`, or a success DTO wrapped in `Either.Right`.
   """
   @callback execute(map(), any()) :: Algae.Either.t()
 

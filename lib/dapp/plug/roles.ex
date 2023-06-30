@@ -5,11 +5,12 @@ defmodule Dapp.Plug.Roles do
   use Plug.Router
 
   alias Dapp.Plug.{Handler, Resp}
-  alias Dapp.Rbac.{Access, Auth}
+  alias Dapp.Rbac.{Access, Auth, Header}
   alias Dapp.Repo.RoleRepo
   alias Dapp.UseCase.GetRoles
 
   plug(:match)
+  plug(Header)
   plug(Auth)
   plug(Access, roles: ["Admin"])
   plug(:dispatch)
