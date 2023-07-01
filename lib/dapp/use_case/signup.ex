@@ -1,6 +1,6 @@
 defmodule Dapp.UseCase.Signup do
   @moduledoc """
-  Use case for creating a user profile.
+  Use case for creating a user profile from an invite.
   """
   use Dapp.UseCase
 
@@ -11,8 +11,10 @@ defmodule Dapp.UseCase.Signup do
   @impl Dapp.UseCase
   def execute(ctx, repo) do
     chain do
-      args <- Args.from_nillable(ctx)
-      user <- repo.signup(args)
+      params <- Args.from_nillable(ctx)
+      {code, email} <- Args.take(ctx, [:code, :email])
+      invite <- repo.invite(code, email)
+      user <- repo.signup(params, invite)
       Dto.profile(user)
     end
   end

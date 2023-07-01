@@ -22,28 +22,46 @@ defmodule Dapp.UseCase.Args do
   end
 
   @doc "Get a required arg value from a context."
-  def get(ctx, key) do
+  def get(ctx, key, default \\ nil) do
     from_nillable(ctx) >>>
-      fn args -> get_arg(args, key) end
+      fn args ->
+        get_arg(args, key, default)
+      end
   end
 
   # Try get arg value, return in Either.
-  defp get_arg(args, key) do
-    case Map.get(args, key) do
+  defp get_arg(args, key, default \\ nil) do
+    case Map.get(args, key) || default do
       nil -> Error.new("use case arg is required", key) |> failure()
       value -> success(value)
     end
   end
 
+  # Guard for nil keys
+  def take(_ctx, keys) when is_nil(keys) do
+    Error.new("nil keys")
+    |> failure()
+  end
+
+  # Guard for empty keys
+  def take(_ctx, []) do
+    Error.new("empty keys")
+    |> failure()
+  end
+
   @doc "Get a tuple of required arg values"
   def take(ctx, keys) do
     from_nillable(ctx) >>>
-      fn args -> take_args(args, keys) end
+      fn args ->
+        take_args(args, keys)
+      end
   end
 
   # Take helper
   defp take_args(args, keys) do
-    keys ~> (&get_arg(args, &1)) |> sequence() >>>
+    keys
+    ~> fn key -> get_arg(args, key) end
+    |> sequence() >>>
       fn list ->
         left_fold(list, {}, &Tuple.append/2)
         |> success()

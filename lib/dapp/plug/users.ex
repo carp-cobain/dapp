@@ -5,11 +5,12 @@ defmodule Dapp.Plug.Users do
   use Plug.Router
 
   alias Dapp.Plug.{Handler, Resp}
-  alias Dapp.Rbac.{Access, Auth}
+  alias Dapp.Rbac.{Access, Auth, Header}
   alias Dapp.Repo.UserRepo
   alias Dapp.UseCase.GetProfile
 
   plug(:match)
+  plug(Header)
   plug(Auth)
   plug(Access)
   plug(Plug.Parsers, parsers: [:json], json_decoder: Jason)

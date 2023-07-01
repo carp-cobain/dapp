@@ -8,7 +8,7 @@ defmodule Dapp.Rbac.Auth do
   alias Dapp.Rbac.Header
   alias Dapp.Repo.UserRepo
 
-  alias Algae.Either.Right
+  alias Algae.Either.{Left, Right}
   use Witchcraft
 
   @doc false
@@ -24,7 +24,9 @@ defmodule Dapp.Rbac.Auth do
 
   # Get an authorized user from the db using a request header.
   defp auth_user(conn) do
-    Header.auth_header(conn)
-    |> UserRepo.get_by_address()
+    case Header.auth_header(conn) do
+      {_, address} -> UserRepo.get_by_address(address)
+      _ -> Left.new(:bad_request)
+    end
   end
 end

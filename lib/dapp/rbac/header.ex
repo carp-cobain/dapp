@@ -15,14 +15,30 @@ defmodule Dapp.Rbac.Header do
   @doc "Assigns blockchain address header if found."
   def call(conn, _opts) do
     case auth_header(conn) do
-      nil -> Resp.bad_request(conn)
-      address -> assign(conn, :blockchain_address, address)
+      {typ, addr} ->
+        conn
+        |> assign(:blockchain_address_type, typ)
+        |> assign(:blockchain_address, addr)
+
+      _ ->
+        Resp.bad_request(conn)
     end
   end
 
-  # Get group header if provided. Otherwise, get user header.
+  @doc "Get group header if provided. Otherwise, get user header."
   def auth_header(conn) do
-    get_header(conn, @group_header) || get_header(conn, @user_header)
+    case get_header(conn, @group_header) do
+      nil -> user_header(conn)
+      address -> {:group, address}
+    end
+  end
+
+  # Get the user header value when group not found.
+  defp user_header(conn) do
+    case get_header(conn, @user_header) do
+      nil -> nil
+      address -> {:individual, address}
+    end
   end
 
   # Get a single header value.

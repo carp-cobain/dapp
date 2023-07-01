@@ -13,6 +13,7 @@ defmodule Dapp.Schema.User do
     field(:blockchain_address, :string)
     field(:email, :string)
     field(:name, :string)
+    field(:verified_at, :naive_datetime)
     timestamps()
   end
 

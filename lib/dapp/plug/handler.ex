@@ -21,7 +21,7 @@ defmodule Dapp.Plug.Handler do
   # Build input context for running a use case
   defp context(conn, args) do
     # Add more to context here if required - feature flags for example.
-    Map.merge(conn.assigns, %{args: args})
+    Map.merge(conn.assigns, %{args: args, toggles: []})
   end
 
   # Debug context for each request.
@@ -40,7 +40,10 @@ defmodule Dapp.Plug.Handler do
 
   # Handle either error case.
   defp reply(%Left{left: {status, error}}, conn) do
-    Logger.info("Error executing use case: #{inspect(error)}")
+    if status == :internal_error do
+      Logger.error("Error executing use case: #{inspect(error)}")
+    end
+
     Resp.send_json(conn, %{error: error}, http_status(status))
   end
 

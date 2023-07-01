@@ -31,4 +31,21 @@ defmodule Dapp.Mock.Db do
       return(row)
     end
   end
+
+  # Delete a row by pk.
+  def delete(pk) do
+    monad %State{} do
+      modify(&Map.delete(&1, pk))
+      return(pk)
+    end
+  end
+
+  # Find all rows with a column value.
+  def filter(col, value) do
+    monad %State{} do
+      rows <- State.get(&Map.values/1)
+      let(results = Enum.filter(rows, &(Map.get(&1, col) == value)))
+      return(results)
+    end
+  end
 end
