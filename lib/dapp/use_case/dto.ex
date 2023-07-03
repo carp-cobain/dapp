@@ -2,8 +2,9 @@ defmodule Dapp.UseCase.Dto do
   @moduledoc """
   DTO helper functions for use cases.
   """
-  alias Algae.Either.Right
   alias Dapp.Dto
+
+  alias Algae.Either.Right
 
   @doc "Create a profile DTO from a user schema struct."
   def profile(user) do

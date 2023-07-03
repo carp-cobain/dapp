@@ -20,7 +20,7 @@ defmodule Dapp.Plug.Handler do
 
   # Build input context for running a use case
   defp context(conn, args) do
-    # Add more to context here if required - feature flags for example.
+    # Add more to context here if required - feature toggles for example.
     Map.merge(conn.assigns, %{args: args, toggles: []})
   end
 

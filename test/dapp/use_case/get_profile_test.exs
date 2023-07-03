@@ -1,31 +1,32 @@
 defmodule Dapp.UseCase.GetProfileTest do
   use ExUnit.Case, async: true
 
-  alias Algae.Either.Right
-  alias Algae.Reader
+  alias Algae.Either.{Left, Right}
 
-  alias Dapp.Mock.UserRepo
+  alias Dapp.Mock.{Audit, UserRepo}
   alias Dapp.UseCase.GetProfile
+
+  @opts [repo: UserRepo, audit: Audit]
 
   # Create user and return use case context
   setup do
     addr = "tp#{Nanoid.generate(39)}" |> String.downcase()
     params = %{blockchain_address: addr, name: "Jane Doe", email: "jane.doe@email.com"}
-    %Right{right: user} = UserRepo.mock_signup(params)
+    %Right{right: user} = UserRepo.create(params)
     %{args: %{user_id: user.id}, blockchain_address: addr}
   end
 
   # GetProfile use case tests
   describe "GetProfile" do
     test "should return an existing user profile", ctx do
-      use_case = GetProfile.new(UserRepo)
-      assert %Right{right: dto} = Reader.run(use_case, ctx)
+      assert %Right{right: dto} = GetProfile.execute(ctx, @opts)
       assert dto.profile.blockchain_address == ctx.blockchain_address
     end
 
-    test "monad reader result should match execute result", ctx do
-      use_case = GetProfile.new(UserRepo)
-      assert Reader.run(use_case, ctx) == GetProfile.execute(ctx, UserRepo)
+    test "should return an error when a user is not found" do
+      ctx = %{args: %{user_id: Nanoid.generate()}}
+      assert %Left{left: {status, _error}} = GetProfile.execute(ctx, @opts)
+      assert status == :not_found
     end
   end
 end

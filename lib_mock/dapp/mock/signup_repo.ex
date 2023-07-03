@@ -1,4 +1,4 @@
-defmodule Dapp.Mock.UserRepo do
+defmodule Dapp.Mock.SignupRepo do
   @moduledoc """
   A fake user repo that allows testing use cases without a DB connection.
   """
@@ -6,13 +6,13 @@ defmodule Dapp.Mock.UserRepo do
   use Witchcraft
 
   alias Dapp.Error
-  alias Dapp.Schema.User
+  alias Dapp.Schema.{Invite, User}
 
   alias Dapp.Mock.Db
   use Dapp.Mock.DbState
 
-  # Test only
-  def create(params) do
+  # Validate and create a user with a name and email.
+  def signup(params, _invite) do
     validate(params) >>>
       fn user ->
         Db.upsert(user.id, user) |> exec() |> put_state()
@@ -20,27 +20,16 @@ defmodule Dapp.Mock.UserRepo do
       end
   end
 
-  # Get a user by id.
-  def get(id) do
-    Db.get(id)
-    |> eval()
-    |> either()
-  end
-
-  # Get a user by blockchain address.
-  def get_by_address(address) do
-    Db.find(:blockchain_address, address)
-    |> eval()
-    |> either()
-  end
-
-  # Wrap user in the either type.
-  defp either(user) do
-    if is_nil(user) do
-      {:not_found, Error.new("user not found")} |> Left.new()
-    else
-      Right.new(user)
-    end
+  # Just return an invite
+  def invite(code, email) do
+    %Invite{
+      id: code,
+      email: email,
+      role_id: 1,
+      inserted_at: now(),
+      updated_at: now()
+    }
+    |> Right.new()
   end
 
   # Current time

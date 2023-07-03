@@ -7,8 +7,7 @@ config :dapp,
 config :dapp,
   network_prefix: "pb",
   user_header: "x-address",
-  group_header: "x-group-policy",
-  signup_role: "Viewer"
+  group_header: "x-group-policy"
 
 # Shows how to configure nanoid size, alphabet.
 config :nanoid,

@@ -9,7 +9,7 @@ defmodule Dapp.Plug.SignupTest do
   alias Dapp.Plug.Signup, as: SignupPlug
 
   # Required role granted upon signup.
-  @signup_role Application.compile_env(:dapp, :signup_role)
+  @signup_role "Viewer"
 
   # Test context
   setup do
@@ -53,7 +53,7 @@ defmodule Dapp.Plug.SignupTest do
     assert res.status == 201
   end
 
-  # Failed signup: no name or email.
+  # Failed signup: no name, email, or invite code.
   test "it fails to create a profile with no body", ctx do
     res =
       conn(:post, "/")

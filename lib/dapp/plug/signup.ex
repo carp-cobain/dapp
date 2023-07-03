@@ -4,9 +4,10 @@ defmodule Dapp.Plug.Signup do
   """
   use Plug.Router
 
+  alias Dapp.Audit
   alias Dapp.Plug.{Handler, Resp}
   alias Dapp.Rbac.Header
-  alias Dapp.Repo.UserRepo
+  alias Dapp.Repo.SignupRepo
   alias Dapp.UseCase.Signup
 
   plug(:match)
@@ -14,11 +15,14 @@ defmodule Dapp.Plug.Signup do
   plug(Plug.Parsers, parsers: [:json], json_decoder: Jason)
   plug(:dispatch)
 
+  # Use case options
+  @opts [repo: SignupRepo, audit: Audit]
+
   # Create a new user with viewer grant.
   post "/" do
     Handler.run(
       conn,
-      Signup.new(UserRepo),
+      Signup.new(@opts),
       args(conn)
     )
   end

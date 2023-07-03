@@ -3,7 +3,7 @@ defmodule Dapp.Repo.UserRepoTest do
 
   alias Algae.Either.{Left, Right}
   alias Dapp.Repo
-  alias Dapp.Repo.UserRepo
+  alias Dapp.Repo.{AccessRepo, UserRepo}
   alias Dapp.Schema.{Grant, Role, User}
   alias Ecto.Adapters.SQL.Sandbox
   alias Nanoid.Configuration, as: NanoidConfig
@@ -28,14 +28,14 @@ defmodule Dapp.Repo.UserRepoTest do
 
     test "should return unauthorized for users without a grant", ctx do
       user = Repo.insert!(%User{blockchain_address: ctx.address})
-      assert UserRepo.access(user.id) == :unauthorized
+      assert AccessRepo.access(user.id) == :unauthorized
     end
 
     test "should return the authorized role for users with a grant", ctx do
       role = Repo.insert!(%Role{name: ctx.role})
       user = Repo.insert!(%User{blockchain_address: ctx.address})
       Repo.insert!(%Grant{user: user, role: role})
-      assert UserRepo.access(user.id) == {:authorized, ctx.role}
+      assert AccessRepo.access(user.id) == {:authorized, ctx.role}
     end
 
     test "it should return an error when a user is not found" do

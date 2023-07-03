@@ -15,9 +15,12 @@ defmodule Dapp.Plug.Roles do
   plug(Access, roles: ["Admin"])
   plug(:dispatch)
 
+  # Use case options
+  @opts [repo: RoleRepo]
+
   # Allow admins to see available roles.
   get "/" do
-    Handler.run(conn, GetRoles.new(RoleRepo))
+    Handler.run(conn, GetRoles.new(@opts))
   end
 
   # Catch-all responds with a 404.
