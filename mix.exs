@@ -16,8 +16,10 @@ defmodule Dapp.MixProject do
           threshold: 80
         ],
         ignore_modules: [
+          Dapp.Mock.Audit,
           Dapp.Mock.Db,
           Dapp.Mock.DbState,
+          Dapp.Mock.RoleRepo,
           Dapp.Mock.UserRepo
         ]
       ]
