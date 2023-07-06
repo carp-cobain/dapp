@@ -2,32 +2,39 @@ defmodule Dapp.UseCase.SignupTest do
   use ExUnit.Case, async: true
 
   alias Algae.Either.{Left, Right}
-  alias Algae.Reader
 
-  alias Dapp.Mock.UserRepo
+  alias Dapp.Mock.{Audit, SignupRepo}
   alias Dapp.UseCase.Signup
+
+  @opts [repo: SignupRepo, audit: Audit]
 
   # Create and return use case context
   setup do
-    addr = "tp#{Nanoid.generate(39)}" |> String.downcase()
-    %{args: %{blockchain_address: addr, name: "Jane Doe", email: "jane.doe@email.com", code: Nanoid.generate()}}
+    %{
+      args: %{
+        blockchain_address: "tp#{Nanoid.generate(39)}" |> String.downcase(),
+        name: "Jane Doe",
+        email: "jane.doe@email.com",
+        code: Nanoid.generate()
+      }
+    }
   end
 
-  # Signup success
-  test "Signup should create user profile", ctx do
-    use_case = Signup.new(UserRepo)
-    assert %Right{right: dto} = Reader.run(use_case, ctx)
-    assert dto.profile.blockchain_address == ctx.args.blockchain_address
-    assert dto.profile.name == ctx.args.name
-    assert dto.profile.email == ctx.args.email
-    assert %Right{right: found} = UserRepo.get_by_address(ctx.args.blockchain_address)
-    assert found.id == dto.profile.id
-  end
+  # Signup use case tests
+  describe "Signup" do
+    # Signup success
+    test "should create user profile", ctx do
+      assert %Right{right: dto} = Signup.execute(ctx, @opts)
+      assert dto.profile.blockchain_address == ctx.args.blockchain_address
+      assert dto.profile.name == ctx.args.name
+      assert dto.profile.email == ctx.args.email
+    end
 
-  # Signup failure
-  test "Signup should fail to create user profile with bad args" do
-    use_case = Signup.new(UserRepo)
-    assert %Left{left: {status, _error}} = Reader.run(use_case, %{args: %{}})
-    assert status == :invalid_args
+    # Signup failure
+    test "should fail to create user profile with bad args" do
+      ctx = %{args: %{}}
+      assert %Left{left: {status, _error}} = Signup.execute(ctx, @opts)
+      assert status == :invalid_args
+    end
   end
 end

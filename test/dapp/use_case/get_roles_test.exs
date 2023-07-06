@@ -2,7 +2,6 @@ defmodule Dapp.UseCase.GetRolesTest do
   use ExUnit.Case, async: true
 
   alias Algae.Either.Right
-  alias Algae.Reader
 
   alias Dapp.Mock.RoleRepo
   alias Dapp.UseCase.GetRoles
@@ -17,8 +16,7 @@ defmodule Dapp.UseCase.GetRolesTest do
   # GetRoles use case tests
   describe "GetRoles" do
     test "should return all roles", ctx do
-      use_case = GetRoles.new(RoleRepo)
-      assert %Right{right: dto} = Reader.run(use_case, ctx)
+      assert %Right{right: dto} = GetRoles.execute(ctx, repo: RoleRepo)
       assert length(dto.roles) == 2
       assert Enum.find(dto.roles, &(&1.name == "Admin"))
       assert Enum.find(dto.roles, &(&1.name == "Viewer"))

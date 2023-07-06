@@ -30,7 +30,7 @@ admin = Repo.insert!(
     blockchain_address: "tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kska", 
     name: "Alice Admin",
     email: "alice@gmail.com",
-      verified_at: now 
+    verified_at: now 
   }
 )
 # Grants
@@ -50,6 +50,7 @@ Repo.insert!(
 # Invites
 Repo.insert!(
   %Invite {
+    id: "TzyircqKjfgAtHNpjiiLI",
     email: "jane.doe@email.com",
     role: role_viewer
   }

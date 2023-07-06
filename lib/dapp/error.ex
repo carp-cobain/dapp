@@ -4,7 +4,7 @@ defmodule Dapp.Error do
 
   alias __MODULE__
 
-  @doc "Error sum types"
+  @doc "Error product type"
   defdata do
     message :: String.t()
     field :: atom() \\ nil
@@ -29,21 +29,19 @@ defmodule Dapp.Error do
     Enum.map(
       Map.get(cs, :errors) || [],
       fn {f, d} ->
-        get_field_detail(f, d)
+        reduce_error(f, d)
       end
     )
   end
 
   # Get error field and detail.
-  defp get_field_detail(field, {message, values}) do
-    detail =
-      Enum.reduce(values, message, fn {k, v}, acc ->
-        String.replace(acc, "%{#{k}}", to_string(v))
-      end)
-
-    Error.new(detail, field)
+  defp reduce_error(field, {message, values}) do
+    Enum.reduce(values, message, fn {k, v}, acc ->
+      String.replace(acc, "%{#{k}}", to_string(v))
+    end)
+    |> Error.new(field)
   end
 
   # Get error detail.
-  defp get_field_detail(field, message), do: Error.new(message, field)
+  defp reduce_error(field, message), do: Error.new(message, field)
 end
