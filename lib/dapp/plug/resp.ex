@@ -20,6 +20,13 @@ defmodule Dapp.Plug.Resp do
     |> halt
   end
 
+  @doc "Send a generic internal server error response."
+  def internal_error(conn) do
+    conn
+    |> send_json(error("internal error"), 500)
+    |> halt
+  end
+
   @doc "Encode data to JSON and send as a HTTP response."
   def send_json(conn, data, status \\ 200) do
     conn
