@@ -16,6 +16,10 @@ defmodule Dapp.Plug.Handler do
     |> tap(&debug_context/1)
     |> then(fn ctx -> Reader.run(use_case, ctx) end)
     |> reply(conn)
+  rescue
+    e ->
+      Logger.error(Exception.format(:error, e, __STACKTRACE__))
+      Resp.internal_error(conn)
   end
 
   # Build input context for running a use case
