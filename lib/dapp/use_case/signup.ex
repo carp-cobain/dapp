@@ -2,11 +2,10 @@ defmodule Dapp.UseCase.Signup do
   @moduledoc """
   Use case for creating a user profile from an invite.
   """
-  use Dapp.{Auditable, UseCase}
   alias Dapp.UseCase.{Args, Dto}
+  use Dapp.UseCase
 
   @doc "Create a user profile."
-  @impl Dapp.UseCase
   def execute(ctx, repo: repo, audit: audit) do
     signup(ctx, repo) >>>
       fn user ->
