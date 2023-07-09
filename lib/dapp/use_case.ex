@@ -1,16 +1,17 @@
 defmodule Dapp.UseCase do
   @moduledoc """
-  Use case execution is defined as a function that takes a context (map) and a options,
-  often containing a repository for DB interaction. Execution must return an error
-  wrapped in `Either.Left`, or a success DTO wrapped in `Either.Right`.
+  Use case execution is defined as a function that takes two arguments - a
+  context (map) and options, often containing a repository for DB interaction.
+  Execution must return an error wrapped in `Either.Left`, or a success DTO
+  wrapped in `Either.Right`.
   """
-  @callback execute(map(), any()) :: Algae.Either.t()
-
+  @doc false
   defmacro __using__(_opts) do
     quote do
-      @behaviour Dapp.UseCase
+      @before_compile Dapp.UseCase
 
       alias Algae.Reader
+      use Dapp.Auditable
       use Witchcraft
 
       @doc "Wrap use case execution in a reader monad."
@@ -20,6 +21,13 @@ defmodule Dapp.UseCase do
           return(execute(ctx, opts))
         end
       end
+    end
+  end
+
+  @doc false
+  defmacro __before_compile__(env) do
+    unless Module.defines?(env.module, {:execute, 2}) do
+      raise "execute not defined in module #{inspect(env.module)} using Dapp.UseCase"
     end
   end
 end
