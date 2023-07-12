@@ -8,11 +8,13 @@ defmodule Dapp.UseCase do
   @doc false
   defmacro __using__(_opts) do
     quote do
-      @before_compile Dapp.UseCase
-
+      alias Algae.Either.{Left, Right}
       alias Algae.Reader
+      alias Dapp.Error
       use Dapp.Auditable
       use Witchcraft
+
+      @before_compile Dapp.UseCase
 
       @doc "Wrap use case execution in a reader monad."
       def new(opts) do
@@ -20,6 +22,14 @@ defmodule Dapp.UseCase do
           ctx <- Reader.ask()
           return(execute(ctx, opts))
         end
+      end
+
+      @doc false
+      defp return(value), do: Right.new(value)
+
+      @doc false
+      defp fail(message, status \\ :internal_error) do
+        {status, Error.new(message)} |> Left.new()
       end
     end
   end

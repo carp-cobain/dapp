@@ -4,7 +4,7 @@ defmodule Dapp.Schema.UserTest do
 
   # Test context
   setup do
-    valid_addr = "tp#{Nanoid.generate(39)}" |> String.downcase()
+    valid_addr = TestUtil.fake_address()
     bad_prefix = "zz#{Nanoid.generate(39)}" |> String.downcase()
     too_long = "tp#{Nanoid.generate(99)}" |> String.downcase()
 

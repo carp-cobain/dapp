@@ -10,7 +10,7 @@ defmodule Dapp.UseCase.GetProfileTest do
 
   # Create user and return use case context
   setup do
-    addr = "tp#{Nanoid.generate(39)}" |> String.downcase()
+    addr = TestUtil.fake_address()
     params = %{blockchain_address: addr, name: "Jane Doe", email: "jane.doe@email.com"}
     %Right{right: user} = UserRepo.create(params)
     %{args: %{user_id: user.id}, blockchain_address: addr}

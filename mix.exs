@@ -48,7 +48,7 @@ defmodule Dapp.MixProject do
   end
 
   # Add mocks to path in test
-  defp elixirc_paths(:test), do: ["lib", "lib_mock"]
+  defp elixirc_paths(:test), do: ["lib", "test/lib"]
   defp elixirc_paths(_), do: ["lib"]
 
   # Helpful mix aliases

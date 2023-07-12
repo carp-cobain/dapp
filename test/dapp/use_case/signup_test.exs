@@ -12,7 +12,7 @@ defmodule Dapp.UseCase.SignupTest do
   setup do
     %{
       args: %{
-        blockchain_address: "tp#{Nanoid.generate(39)}" |> String.downcase(),
+        blockchain_address: TestUtil.fake_address(),
         name: "Jane Doe",
         email: "jane.doe@email.com",
         code: Nanoid.generate()

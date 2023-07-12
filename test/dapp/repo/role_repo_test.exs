@@ -1,27 +1,15 @@
 defmodule Dapp.Repo.RoleRepoTest do
   use ExUnit.Case, async: true
 
-  alias Ecto.Adapters.SQL.Sandbox
-
-  alias Dapp.Repo
   alias Dapp.Repo.RoleRepo
-  alias Dapp.Schema.Role
+  alias Ecto.Adapters.SQL.Sandbox
 
   # Test context
   setup do
-    # When using a sandbox, each test runs in an isolated, independent transaction
-    # which is rolled back after test execution.
     :ok = Sandbox.checkout(Dapp.Repo)
-    ensure_role("Admin")
-    ensure_role("Viewer")
+    TestUtil.ensure_role("Admin")
+    TestUtil.ensure_role("Viewer")
     :ok
-  end
-
-  # Make sure a role exists in the DB.
-  defp ensure_role(name) do
-    if is_nil(Repo.get_by(Role, name: name)) do
-      Repo.insert!(%Role{name: name})
-    end
   end
 
   describe "RoleRepo" do
