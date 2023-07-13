@@ -2,25 +2,15 @@ defmodule Dapp.Schema.AuditTest do
   use ExUnit.Case, async: true
 
   alias Dapp.Schema.Audit
-  alias Dapp.UseCase.Signup
 
   # Test context
   setup do
-    who = "tp#{Nanoid.generate(39)}" |> String.downcase()
-    user = "user=#{Nanoid.generate()}"
-
     %{
-      who: who,
-      what: user,
-      where: Signup.audit_name(),
-      when: now()
+      who: TestUtil.fake_address(),
+      what: "user=#{Nanoid.generate()}",
+      where: "AuditTest",
+      when: DateTime.utc_now() |> DateTime.truncate(:second)
     }
-  end
-
-  # Current timestamp
-  defp now do
-    DateTime.utc_now()
-    |> DateTime.truncate(:second)
   end
 
   # Test audit changeset validations

@@ -10,16 +10,16 @@ defmodule Dapp.UseCase.Signup do
     signup(ctx, repo) >>>
       fn user ->
         audit.log(ctx, audit_name(), "user=#{user.id}")
-        Dto.profile(user)
+        return(Dto.profile(user))
       end
   end
 
   # Signup chain
   defp signup(ctx, repo) do
     chain do
-      args <- Args.from_nillable(ctx)
       {code, email} <- Args.take(ctx, [:code, :email])
       invite <- repo.invite(code, email)
+      args <- Args.from_nillable(ctx)
       repo.signup(args, invite)
     end
   end

@@ -2,9 +2,8 @@ defmodule Dapp.UseCase.Args do
   @moduledoc """
   Use case arguments helper functions.
   """
-  alias Dapp.Error
-
   alias Algae.Either.{Left, Right}
+  alias Dapp.Error
   use Witchcraft
 
   # Handle nil context with error.

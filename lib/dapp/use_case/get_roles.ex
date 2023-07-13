@@ -7,6 +7,8 @@ defmodule Dapp.UseCase.GetRoles do
 
   @doc "Get all roles."
   def execute(_ctx, repo: repo) do
-    repo.get_roles() |> Dto.roles()
+    repo.get_roles()
+    |> Dto.roles()
+    |> return()
   end
 end

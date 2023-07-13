@@ -5,45 +5,32 @@ defmodule Dapp.Repo.AccessRepoTest do
 
   alias Dapp.Repo
   alias Dapp.Repo.AccessRepo
-  alias Dapp.Schema.{Grant, Role, User}
+  alias Dapp.Schema.User
 
   # Test context
   setup do
-    # When using a sandbox, each test runs in an isolated, independent transaction
-    # which is rolled back after test execution.
     :ok = Sandbox.checkout(Dapp.Repo)
-    addr = "tp#{Nanoid.generate(39)}" |> String.downcase()
+    addr = TestUtil.fake_address()
     user = Repo.insert!(%User{blockchain_address: addr})
-    role = ensure_role()
-    Repo.insert!(%Grant{user: user, role: role})
-    %{user_id: user.id, role: role.name}
-  end
 
-  # Ensure a test role is written to the db
-  defp ensure_role do
-    case Repo.get_by(Role, name: "Viewer") do
-      nil -> Repo.insert!(%Role{name: "Viewer"})
-      role -> role
-    end
+    Map.merge(
+      TestUtil.setup_user(),
+      %{user_without_grant: user}
+    )
   end
 
   # Test user repo
   describe "AccessRepo" do
     test "should authorize a user with a grant", ctx do
-      assert AccessRepo.access(ctx.user_id) == {:authorized, ctx.role}
+      assert AccessRepo.access(ctx.user.id) == {:authorized, ctx.role_name}
     end
 
-    test "should NOT authorize an existing user without a grant" do
-      addr = "tp#{Nanoid.generate(39)}" |> String.downcase()
-      user = Repo.insert!(%User{blockchain_address: addr})
-      assert AccessRepo.access(user.id) == :unauthorized
+    test "should NOT authorize a user without a grant", ctx do
+      assert AccessRepo.access(ctx.user_without_grant.id) == :unauthorized
     end
 
     test "should NOT authorize a non-existing user" do
       assert AccessRepo.access(Nanoid.generate()) == :unauthorized
-    end
-
-    test "should NOT authorize a nil user_id" do
       assert AccessRepo.access(nil) == :unauthorized
     end
   end

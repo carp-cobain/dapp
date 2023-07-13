@@ -2,12 +2,8 @@ defmodule Dapp.Repo.SignupRepoTest do
   use ExUnit.Case, async: true
 
   alias Algae.Either.{Left, Right}
-  alias Dapp.Repo
   alias Dapp.Repo.SignupRepo
-  alias Dapp.Schema.{Invite, Role}
   alias Ecto.Adapters.SQL.Sandbox
-
-  @signup_role "Viewer"
 
   # Test context
   setup do
@@ -16,27 +12,17 @@ defmodule Dapp.Repo.SignupRepoTest do
     :ok = Sandbox.checkout(Dapp.Repo)
 
     # Test context
-    code = Nanoid.generate()
-    email = "user-#{Nanoid.generate(6)}@domain.com"
-    role = setup_role()
+    invite = TestUtil.setup_invite()
 
     %{
       params: %{
-        blockchain_address: "tp#{Nanoid.generate(39)}" |> String.downcase(),
+        blockchain_address: TestUtil.fake_address(),
         name: "User #{Nanoid.generate(6)}",
-        email: email,
-        code: code
+        code: invite.id,
+        email: invite.email
       },
-      invite: Repo.insert!(%Invite{id: code, email: email, role_id: role.id})
+      invite: invite
     }
-  end
-
-  # Get or insert a role
-  defp setup_role do
-    case Repo.get_by(Role, name: @signup_role) do
-      nil -> Repo.insert!(%Role{name: @signup_role})
-      role -> role
-    end
   end
 
   # Test signup repo
