@@ -67,6 +67,16 @@ defmodule Dapp.UseCase.Args do
       end
   end
 
+  @doc "Extract key-value params from a context."
+  def params(ctx, keys) do
+    take(ctx, keys) >>>
+      fn vals ->
+        List.zip([keys, vals])
+        |> Map.new()
+        |> success()
+      end
+  end
+
   # Wrap value in right.
   defp success(value), do: Right.new(value)
 

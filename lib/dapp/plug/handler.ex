@@ -29,9 +29,7 @@ defmodule Dapp.Plug.Handler do
   end
 
   # Debug context for each request.
-  defp debug_context(ctx) do
-    Logger.debug("Request context = #{inspect(ctx)}")
-  end
+  defp debug_context(ctx), do: Logger.debug("Request context = #{inspect(ctx)}")
 
   # Handle either success case.
   defp reply(%Right{right: dto}, conn) do
@@ -56,6 +54,8 @@ defmodule Dapp.Plug.Handler do
     case status do
       :invalid_args -> 400
       :not_found -> 404
+      :todo -> 501
+      :unavailable -> 503
       _ -> 500
     end
   end

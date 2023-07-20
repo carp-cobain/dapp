@@ -2,6 +2,8 @@ defmodule Dapp.Repo.UserRepo do
   @moduledoc """
   User repository for the dApp.
   """
+  use Dapp.Repo.ErrorWrap
+
   alias Algae.Either.{Left, Right}
 
   alias Dapp.{Error, Repo}
@@ -42,13 +44,4 @@ defmodule Dapp.Repo.UserRepo do
       user -> Right.new(user)
     end
   end
-
-  # Error helper for bad requests
-  defp invalid_args(error), do: wrap_error(error, :invalid_args)
-
-  # Error helper for not found
-  defp not_found(error), do: wrap_error(error, :not_found)
-
-  # Error helper
-  defp wrap_error(error, status), do: {status, error} |> Left.new()
 end

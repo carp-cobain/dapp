@@ -1,6 +1,6 @@
 defmodule Dapp.Plug.Signup do
   @moduledoc """
-  Maps user endpoints to use cases.
+  Maps signup endpoint to use case.
   """
   use Plug.Router
 
@@ -18,7 +18,7 @@ defmodule Dapp.Plug.Signup do
   # Use case options
   @opts [repo: SignupRepo, audit: Audit]
 
-  # Create a new user with viewer grant.
+  # Create a new user from an invite.
   post "/" do
     Handler.run(
       conn,

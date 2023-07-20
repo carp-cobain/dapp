@@ -16,6 +16,7 @@ defmodule Dapp.UseCase.ArgsTest do
       assert Right.new(ctx.args.id) == Args.get(ctx, :id)
       assert Right.new("jane@email.com") == Args.get(ctx, :email, "jane@email.com")
       assert Right.new({"Jane", 100}) == Args.take(ctx, [:name, :balance])
+      assert Right.new(%{name: "Jane", balance: 100}) == Args.params(ctx, [:name, :balance])
     end
 
     test "should return an error on nil context" do
