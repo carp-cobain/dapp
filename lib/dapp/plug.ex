@@ -23,8 +23,8 @@ defmodule Dapp.Plug do
   # Forward to users router.
   forward("/dapp/v1/users", to: Dapp.Plug.Users)
 
-  # Status route.
-  get "/status" do
+  # Health checks.
+  get "/health/*glob" do
     Resp.send_json(conn, %{status: "up"})
   end
 

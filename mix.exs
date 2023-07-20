@@ -20,7 +20,9 @@ defmodule Dapp.MixProject do
           Dapp.Mock.Db,
           Dapp.Mock.DbState,
           Dapp.Mock.RoleRepo,
-          Dapp.Mock.UserRepo
+          Dapp.Mock.SignupRepo,
+          Dapp.Mock.UserRepo,
+          TestUtil
         ]
       ]
     ]

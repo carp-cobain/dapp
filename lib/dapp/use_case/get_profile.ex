@@ -10,7 +10,7 @@ defmodule Dapp.UseCase.GetProfile do
     get_user(ctx, repo) >>>
       fn user ->
         audit.log(ctx, audit_name(), "user=#{user.id}")
-        return(Dto.profile(user))
+        pure(Dto.profile(user))
       end
   end
 

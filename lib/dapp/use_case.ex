@@ -10,7 +10,6 @@ defmodule Dapp.UseCase do
     quote do
       alias Algae.Either.{Left, Right}
       alias Algae.Reader
-      alias Dapp.Error
       use Dapp.Auditable
       use Witchcraft
 
@@ -25,11 +24,11 @@ defmodule Dapp.UseCase do
       end
 
       @doc false
-      defp return(value), do: Right.new(value)
+      defp pure(value), do: Right.new(value)
 
       @doc false
-      defp fail(message, status \\ :internal_error) do
-        {status, Error.new(message)} |> Left.new()
+      defp fail(error, status \\ :internal_error) do
+        {status, error} |> Left.new()
       end
     end
   end

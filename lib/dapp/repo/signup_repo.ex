@@ -2,6 +2,8 @@ defmodule Dapp.Repo.SignupRepo do
   @moduledoc """
   Onboarding repository for the dApp.
   """
+  use Dapp.Repo.ErrorWrap
+
   alias Algae.Either.{Left, Right}
 
   alias Dapp.{Error, Repo}
@@ -18,10 +20,7 @@ defmodule Dapp.Repo.SignupRepo do
   end
 
   @doc "Create a user with name, email and a grant"
-  def signup(params, invite), do: signup(params, invite, Nanoid.generate())
-
-  # Signup helper
-  defp signup(params, invite, user_id) do
+  def signup(params, invite, user_id \\ Nanoid.generate()) do
     Multi.new()
     |> Multi.insert(:user, User.changeset(%User{id: user_id}, params))
     |> Multi.insert(:grant, Grant.changeset(%Grant{}, grant_params(user_id, invite)))
@@ -50,16 +49,10 @@ defmodule Dapp.Repo.SignupRepo do
   end
 
   # Build grant param map for insert
-  defp grant_params(user_id, invite) do
-    %{user_id: user_id, role_id: invite.role_id, invite_id: invite.id}
-  end
-
-  # Error helper for bad requests
-  defp invalid_args(error), do: wrap_error(error, :invalid_args)
-
-  # Error helper for not found
-  defp not_found(error), do: wrap_error(error, :not_found)
-
-  # Error helper
-  defp wrap_error(error, status), do: {status, error} |> Left.new()
+  defp grant_params(user_id, invite),
+    do: %{
+      user_id: user_id,
+      role_id: invite.role_id,
+      invite_id: invite.id
+    }
 end
