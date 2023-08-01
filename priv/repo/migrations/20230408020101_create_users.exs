@@ -7,7 +7,6 @@ defmodule Dapp.Repo.Migrations.CreateUsers do
       add :blockchain_address, :string, null: false
       add :name, :string
       add :email, :string
-      add :verified_at, :timestamp
       timestamps()
     end
     create unique_index(:users, [:blockchain_address])

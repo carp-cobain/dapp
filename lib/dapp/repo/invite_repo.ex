@@ -1,18 +1,29 @@
-defmodule Dapp.Repo.SignupRepo do
+defmodule Dapp.Repo.InviteRepo do
   @moduledoc """
   Onboarding repository for the dApp.
   """
-  use Dapp.Repo.ErrorWrap
+  use Dapp.Error
 
-  alias Algae.Either.{Left, Right}
+  alias Algae.Either.Right
 
   alias Dapp.{Error, Repo}
   alias Dapp.Schema.{Grant, Invite, User}
 
   alias Ecto.Multi
 
+  @doc "Create an invite."
+  def create_invite(params) do
+    %Invite{}
+    |> Invite.changeset(params)
+    |> Repo.insert()
+    |> case do
+      {:ok, invite} -> Right.new(invite)
+      {:error, cs} -> Error.extract(cs) |> invalid_args()
+    end
+  end
+
   @doc "Look up an invite using id and email address."
-  def invite(id, email) do
+  def get_invite(id, email) do
     case Repo.get(Invite, id) do
       nil -> Error.new("invite not found") |> not_found()
       invite -> verify_invite(invite, email)

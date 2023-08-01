@@ -1,4 +1,4 @@
-defmodule Dapp.Mock.SignupRepo do
+defmodule Dapp.Mock.InviteRepo do
   @moduledoc """
   A fake user repo that allows testing use cases without a DB connection.
   """
@@ -21,7 +21,7 @@ defmodule Dapp.Mock.SignupRepo do
   end
 
   # Just return an invite
-  def invite(code, email) do
+  def get_invite(code, email) do
     ts = now()
 
     %Invite{

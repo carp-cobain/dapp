@@ -44,4 +44,14 @@ defmodule Dapp.Error do
 
   # Get error detail.
   defp reduce_error(field, message), do: Error.new(message, field)
+
+  # Common error helper functions
+  defmacro __using__(_opts) do
+    quote do
+      alias Algae.Either.Left
+      defp invalid_args(error), do: wrap_error(error, :invalid_args)
+      defp not_found(error), do: wrap_error(error, :not_found)
+      defp wrap_error(error, status), do: {status, error} |> Left.new()
+    end
+  end
 end

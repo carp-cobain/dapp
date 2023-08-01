@@ -3,6 +3,7 @@ defmodule Dapp.Repo.AccessRepoTest do
 
   alias Ecto.Adapters.SQL.Sandbox
 
+  alias Algae.Maybe.{Just, Nothing}
   alias Dapp.Repo
   alias Dapp.Repo.AccessRepo
   alias Dapp.Schema.User
@@ -22,16 +23,16 @@ defmodule Dapp.Repo.AccessRepoTest do
   # Test user repo
   describe "AccessRepo" do
     test "should authorize a user with a grant", ctx do
-      assert AccessRepo.access(ctx.user.id) == {:authorized, ctx.role_name}
+      assert AccessRepo.access(ctx.user.id) == %Just{just: ctx.role_name}
     end
 
     test "should NOT authorize a user without a grant", ctx do
-      assert AccessRepo.access(ctx.user_without_grant.id) == :unauthorized
+      assert AccessRepo.access(ctx.user_without_grant.id) == %Nothing{}
     end
 
     test "should NOT authorize a non-existing user" do
-      assert AccessRepo.access(Nanoid.generate()) == :unauthorized
-      assert AccessRepo.access(nil) == :unauthorized
+      assert AccessRepo.access(Nanoid.generate()) == %Nothing{}
+      assert AccessRepo.access(nil) == %Nothing{}
     end
   end
 end

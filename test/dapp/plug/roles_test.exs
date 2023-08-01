@@ -11,7 +11,7 @@ defmodule Dapp.Plug.RolesTest do
     # When using a sandbox, each test runs in an isolated, independent transaction
     # which is rolled back after test execution.
     :ok = Sandbox.checkout(Dapp.Repo)
-    TestUtil.setup_user("Admin")
+    TestUtil.setup_user("Root")
   end
 
   # Authorized admin request for roles

@@ -1,8 +1,9 @@
-defmodule Dapp.UseCase.GetProfile do
+defmodule Dapp.UseCase.User.GetProfile do
   @moduledoc """
   Use case for getting a user profile.
   """
-  alias Dapp.UseCase.{Args, Dto}
+  alias Dapp.UseCase.Args
+  alias Dapp.UseCase.User.Dto
   use Dapp.UseCase
 
   @doc "Get a user profile"

@@ -4,7 +4,7 @@ defmodule TestUtil do
   alias Dapp.Repo
   alias Dapp.Schema.{Grant, Invite, Role, User}
 
-  @viewer "Viewer"
+  @user "User"
 
   # Create a random blockchain address.
   def fake_address do
@@ -20,7 +20,7 @@ defmodule TestUtil do
   end
 
   # Create a random user.
-  def setup_user(role_name \\ @viewer) do
+  def setup_user(role_name \\ @user) do
     addr = fake_address()
     user = Repo.insert!(%User{blockchain_address: addr})
     Repo.insert!(%Grant{user: user, role: ensure_role(role_name)})
@@ -28,7 +28,7 @@ defmodule TestUtil do
   end
 
   # Get or create a role by name.
-  def ensure_role(name \\ @viewer) do
+  def ensure_role(name \\ @user) do
     case Repo.get_by(Role, name: name) do
       nil -> Repo.insert!(%Role{name: name})
       role -> role

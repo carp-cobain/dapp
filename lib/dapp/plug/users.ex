@@ -8,7 +8,7 @@ defmodule Dapp.Plug.Users do
   alias Dapp.Plug.{Handler, Resp}
   alias Dapp.Rbac.{Access, Auth, Header}
   alias Dapp.Repo.UserRepo
-  alias Dapp.UseCase.GetProfile
+  alias Dapp.UseCase.User.GetProfile
 
   plug(:match)
   plug(Header)
@@ -17,9 +17,6 @@ defmodule Dapp.Plug.Users do
   plug(Plug.Parsers, parsers: [:json], json_decoder: Jason)
   plug(:dispatch)
 
-  # Use case options
-  @opts [repo: UserRepo, audit: Audit]
-
   # Allow all authorized users to see their profile.
   get "/profile" do
     get_profile(conn, %{user_id: conn.assigns.user.id})
@@ -27,7 +24,7 @@ defmodule Dapp.Plug.Users do
 
   # Allow admins to see anyone's profile.
   get "/:user_id/profile" do
-    Access.admin(conn, fn ->
+    Access.root(conn, fn ->
       get_profile(conn, %{user_id: user_id})
     end)
   end
@@ -36,7 +33,7 @@ defmodule Dapp.Plug.Users do
   defp get_profile(conn, args) do
     Handler.run(
       conn,
-      GetProfile.new(@opts),
+      GetProfile.new(repo: UserRepo, audit: Audit),
       args
     )
   end
