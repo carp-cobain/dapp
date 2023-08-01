@@ -15,7 +15,7 @@ defmodule Dapp.Plug.UsersTest do
   end
 
   # Authorized request
-  test "Users plug returns a user profile for viewer", ctx do
+  test "Users plug returns a user profile", ctx do
     opts = UsersPlug.init([])
     req = conn(:get, "/profile") |> put_req_header("x-address", ctx.user.blockchain_address)
     res = UsersPlug.call(req, opts)
@@ -23,7 +23,7 @@ defmodule Dapp.Plug.UsersTest do
   end
 
   # Unauthorized request
-  test "Users plug returns bad request for viewer calling an admin route", ctx do
+  test "Users plug returns bad request for user calling an admin route", ctx do
     opts = UsersPlug.init([])
     fake_id = Nanoid.generate()
     req = conn(:get, "/#{fake_id}/profile") |> put_req_header("x-address", ctx.user.blockchain_address)

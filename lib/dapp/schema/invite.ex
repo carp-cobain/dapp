@@ -21,5 +21,6 @@ defmodule Dapp.Schema.Invite do
     |> validate_required([:email, :role_id])
     |> validate_length(:email, min: 3, max: 255)
     |> foreign_key_constraint(:role_id)
+    |> unique_constraint(:email)
   end
 end

@@ -7,8 +7,8 @@ defmodule Dapp.Repo.RoleRepoTest do
   # Test context
   setup do
     :ok = Sandbox.checkout(Dapp.Repo)
-    TestUtil.ensure_role("Admin")
-    TestUtil.ensure_role("Viewer")
+    TestUtil.ensure_role("Root")
+    TestUtil.ensure_role("User")
     :ok
   end
 

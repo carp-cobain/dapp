@@ -2,9 +2,9 @@ defmodule Dapp.Repo.UserRepo do
   @moduledoc """
   User repository for the dApp.
   """
-  use Dapp.Repo.ErrorWrap
+  use Dapp.Error
 
-  alias Algae.Either.{Left, Right}
+  alias Algae.Either.Right
 
   alias Dapp.{Error, Repo}
   alias Dapp.Schema.User

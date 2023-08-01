@@ -1,10 +1,10 @@
-defmodule Dapp.UseCase.GetProfileTest do
+defmodule Dapp.UseCase.User.GetProfileTest do
   use ExUnit.Case, async: true
 
   alias Algae.Either.{Left, Right}
 
   alias Dapp.Mock.{Audit, UserRepo}
-  alias Dapp.UseCase.GetProfile
+  alias Dapp.UseCase.User.GetProfile
 
   @opts [repo: UserRepo, audit: Audit]
 

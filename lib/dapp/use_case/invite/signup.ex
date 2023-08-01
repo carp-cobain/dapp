@@ -1,8 +1,9 @@
-defmodule Dapp.UseCase.Signup do
+defmodule Dapp.UseCase.Invite.Signup do
   @moduledoc """
   Use case for creating a user profile from an invite.
   """
-  alias Dapp.UseCase.{Args, Dto}
+  alias Dapp.UseCase.Args
+  alias Dapp.UseCase.Invite.Dto
   use Dapp.UseCase
 
   @doc "Create a user profile."
@@ -14,11 +15,11 @@ defmodule Dapp.UseCase.Signup do
       end
   end
 
-  # Signup chain
+  # Lookup invite and create user profile.
   defp signup(ctx, repo) do
     chain do
-      {code, email} <- Args.take(ctx, [:code, :email])
-      invite <- repo.invite(code, email)
+      {code, email} <- Args.take(ctx, [:invite_code, :email])
+      invite <- repo.get_invite(code, email)
       params <- Args.params(ctx, [:blockchain_address, :name, :email])
       repo.signup(params, invite)
     end

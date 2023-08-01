@@ -2,6 +2,7 @@ defmodule Dapp.Repo.AccessRepo do
   @moduledoc """
   User access repository for the dApp.
   """
+  alias Algae.Maybe
   alias Dapp.Repo
   import Ecto.Query
 
@@ -9,10 +10,7 @@ defmodule Dapp.Repo.AccessRepo do
   def access(user_id) do
     (query_role(user_id) || %{})
     |> Map.get(:role)
-    |> case do
-      nil -> :unauthorized
-      role -> {:authorized, role}
-    end
+    |> Maybe.from_nillable()
   end
 
   # Query for a user's role.

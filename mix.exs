@@ -19,8 +19,8 @@ defmodule Dapp.MixProject do
           Dapp.Mock.Audit,
           Dapp.Mock.Db,
           Dapp.Mock.DbState,
+          Dapp.Mock.InviteRepo,
           Dapp.Mock.RoleRepo,
-          Dapp.Mock.SignupRepo,
           Dapp.Mock.UserRepo,
           TestUtil
         ]

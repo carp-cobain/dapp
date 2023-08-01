@@ -20,6 +20,13 @@ defmodule Dapp.Plug.Resp do
     |> halt
   end
 
+  @doc "Send a bad request w/ unverified message."
+  def unverified(conn) do
+    conn
+    |> send_json(error("not verified"), 400)
+    |> halt
+  end
+
   @doc "Send a generic internal server error response."
   def internal_error(conn) do
     conn

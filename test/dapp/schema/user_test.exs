@@ -9,7 +9,11 @@ defmodule Dapp.Schema.UserTest do
     too_long = "tp#{Nanoid.generate(99)}" |> String.downcase()
 
     %{
-      valid_params: %{blockchain_address: valid_addr, name: "Jon Doe", email: "jon.doe@gmail.com"},
+      valid_params: %{
+        blockchain_address: valid_addr,
+        name: "Jon Doe",
+        email: "jon.doe@gmail.com"
+      },
       valid_address: %{blockchain_address: valid_addr},
       bad_prefix: %{blockchain_address: bad_prefix},
       too_short: %{blockchain_address: "tp123skt"},

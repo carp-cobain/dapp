@@ -8,8 +8,8 @@ alias Dapp.Repo
 alias Dapp.Schema.{Grant, Invite, Role, User}
 
 # Always insert roles
-role_admin = Repo.insert!(%Role{name: "Admin"})
-role_viewer = Repo.insert!(%Role{name: "Viewer"})
+role_root = Repo.insert!(%Role{name: "Root"})
+role_user = Repo.insert!(%Role{name: "User"})
 
 # Insert env-specific seed data
 if Mix.env() == :dev do
@@ -17,33 +17,31 @@ if Mix.env() == :dev do
 now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
 
 # Users
-viewer = Repo.insert!(
+bob = Repo.insert!(
   %User{
-    blockchain_address: "tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskv", 
-      name: "Victor Viewer",
-      email: "victor@gmail.com",
-      verified_at: now 
+    blockchain_address: "tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskb", 
+      name: "Bob",
+      email: "bob@gmail.com"
     }
   )
-admin = Repo.insert!(
+alice = Repo.insert!(
   %User{
     blockchain_address: "tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kska", 
-    name: "Alice Admin",
-    email: "alice@gmail.com",
-    verified_at: now 
+    name: "Alice",
+    email: "alice@gmail.com"
   }
 )
 # Grants
 Repo.insert!(
   %Grant {
-    user: viewer,
-    role: role_viewer
+    user: bob,
+    role: role_user
   }
 )
 Repo.insert!(
   %Grant {
-    user: admin,
-    role: role_admin
+    user: alice,
+    role: role_root
   }
 )
 
@@ -52,7 +50,7 @@ Repo.insert!(
   %Invite {
     id: "TzyircqKjfgAtHNpjiiLI",
     email: "jane.doe@email.com",
-    role: role_viewer
+    role: role_user
   }
 )
 
