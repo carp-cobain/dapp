@@ -4,9 +4,9 @@ defmodule Dapp.Plug.Roles do
   """
   use Plug.Router
 
+  alias Dapp.Data.Repo.RoleRepo
   alias Dapp.Plug.{Handler, Resp}
   alias Dapp.Rbac.{Access, Auth, Header}
-  alias Dapp.Repo.RoleRepo
   alias Dapp.UseCase.Role.GetRoles
 
   plug(:match)

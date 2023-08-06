@@ -4,10 +4,9 @@ defmodule Dapp.Plug.Signup do
   """
   use Plug.Router
 
-  alias Dapp.Audit
+  alias Dapp.Data.Repo.{AuditRepo, InviteRepo}
   alias Dapp.Plug.{Handler, Resp}
   alias Dapp.Rbac.Header
-  alias Dapp.Repo.InviteRepo
   alias Dapp.UseCase.Invite.Signup
 
   plug(:match)
@@ -19,7 +18,7 @@ defmodule Dapp.Plug.Signup do
   post "/" do
     Handler.run(
       conn,
-      Signup.new(repo: InviteRepo, audit: Audit),
+      Signup.new(repo: InviteRepo, audit: AuditRepo),
       signup_args(conn)
     )
   end

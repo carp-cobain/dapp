@@ -3,8 +3,8 @@ defmodule Dapp.Rbac.Access do
   Controls access to protected routes.
   """
   alias Algae.Maybe.{Just, Nothing}
+  alias Dapp.Data.Repo.UserRepo
   alias Dapp.Plug.Resp
-  alias Dapp.Repo.AccessRepo, as: Repo
   import Plug.Conn
 
   # When not provided explicitly, allow access to users with these roles.
@@ -24,14 +24,14 @@ defmodule Dapp.Rbac.Access do
     if Map.has_key?(conn.assigns, :user) do
       check_user_access(conn, opts)
     else
-      Resp.bad_request(conn)
+      Resp.forbidden(conn)
     end
   end
 
   # Assign role or halt request.
   defp check_user_access(conn, opts) do
-    case Repo.access(conn.assigns.user.id) do
-      %Nothing{} -> Resp.bad_request(conn)
+    case UserRepo.get_role(conn.assigns.user.id) do
+      %Nothing{} -> Resp.forbidden(conn)
       %Just{just: role} -> verify_role(conn, opts, role)
     end
   end
@@ -41,7 +41,7 @@ defmodule Dapp.Rbac.Access do
     if role in opts[:roles] do
       conn |> assign(:role, role)
     else
-      Resp.bad_request(conn)
+      Resp.forbidden(conn)
     end
   end
 
@@ -50,7 +50,7 @@ defmodule Dapp.Rbac.Access do
     if Map.get(conn.assigns, :role) in roles do
       route.()
     else
-      Resp.bad_request(conn)
+      Resp.forbidden(conn)
     end
   end
 

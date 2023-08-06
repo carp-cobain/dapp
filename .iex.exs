@@ -1,6 +1,6 @@
 alias Dapp.Repo
-alias Dapp.Schema.Audit
-alias Dapp.Schema.Grant
-alias Dapp.Schema.Invite
-alias Dapp.Schema.Role
-alias Dapp.Schema.User
+alias Dapp.Data.Schema.Audit
+alias Dapp.Data.Schema.Grant
+alias Dapp.Data.Schema.Invite
+alias Dapp.Data.Schema.Role
+alias Dapp.Data.Schema.User
