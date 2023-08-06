@@ -2,7 +2,7 @@ defmodule Dapp.UseCase.Role.GetRoles do
   @moduledoc """
   Use case for getting all roles.
   """
-  alias Dapp.UseCase.Role.Dto
+  alias Dapp.UseCase.Dto
   use Dapp.UseCase
 
   @doc "Get all roles."

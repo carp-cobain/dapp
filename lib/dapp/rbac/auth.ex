@@ -4,9 +4,9 @@ defmodule Dapp.Rbac.Auth do
   """
   import Plug.Conn
 
+  alias Dapp.Data.Repo.UserRepo
   alias Dapp.Plug.Resp
   alias Dapp.Rbac.Header
-  alias Dapp.Repo.UserRepo
 
   alias Algae.Either.{Left, Right}
   use Witchcraft
@@ -18,7 +18,7 @@ defmodule Dapp.Rbac.Auth do
   def call(conn, _opts) do
     case auth_user(conn) do
       %Right{right: user} -> assign(conn, :user, user)
-      _ -> Resp.bad_request(conn)
+      _ -> Resp.unauthorized(conn)
     end
   end
 

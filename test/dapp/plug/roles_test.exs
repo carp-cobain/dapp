@@ -4,12 +4,11 @@ defmodule Dapp.Plug.RolesTest do
 
   alias Ecto.Adapters.SQL.Sandbox
 
+  # Plug being tested
   alias Dapp.Plug.Roles, as: RolesPlug
 
   # Set up sandbox and test context.
   setup do
-    # When using a sandbox, each test runs in an isolated, independent transaction
-    # which is rolled back after test execution.
     :ok = Sandbox.checkout(Dapp.Repo)
     TestUtil.setup_user("Root")
   end
@@ -22,12 +21,12 @@ defmodule Dapp.Plug.RolesTest do
     assert res.status == 200
   end
 
-  test "Roles plug returns a bad request for an non-admin" do
+  test "Roles plug returns a 4xx for an non-admin" do
+    ctx = TestUtil.mock_user()
     opts = RolesPlug.init([])
-    address = "tp#{Nanoid.generate(39)}" |> String.downcase()
-    req = conn(:get, "/") |> put_req_header("x-address", address)
+    req = conn(:get, "/") |> put_req_header("x-address", ctx.user.blockchain_address)
     res = RolesPlug.call(req, opts)
-    assert res.status == 400
+    assert res.status == 401
   end
 
   test "Roles plug returns a 404 for an unknown route", ctx do

@@ -4,16 +4,17 @@ defmodule Dapp.Plug.InvitesTest do
 
   alias Ecto.Adapters.SQL.Sandbox
 
+  # Plug being tested
   alias Dapp.Plug.Invites, as: InvitesPlug
 
-  # Set up sandbox and test context.
+  # Set up test context.
   setup do
     # When using a sandbox, each test runs in an isolated, independent transaction
     # which is rolled back after test execution.
     :ok = Sandbox.checkout(Dapp.Repo)
     ctx = TestUtil.setup_user("Root")
-    role = TestUtil.ensure_role("User")
-    body = %{email: "jane.doe2@email.com", role_id: role.id}
+    role = TestUtil.ensure_role()
+    body = %{email: TestUtil.fake_email(), role_id: role.id}
     %{user: ctx.user, body: body}
   end
 

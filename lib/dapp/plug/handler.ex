@@ -10,7 +10,7 @@ defmodule Dapp.Plug.Handler do
   # For returning 201
   @post "POST"
 
-  @doc "Run a use case as a reader monad."
+  @doc "Run a use case and send a response."
   def run(conn, use_case, args \\ %{}) do
     context(conn, args)
     |> tap(&debug_context/1)

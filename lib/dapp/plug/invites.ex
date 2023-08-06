@@ -4,10 +4,9 @@ defmodule Dapp.Plug.Invites do
   """
   use Plug.Router
 
-  alias Dapp.Audit
+  alias Dapp.Data.Repo.{AuditRepo, InviteRepo}
   alias Dapp.Plug.{Handler, Resp}
   alias Dapp.Rbac.{Access, Auth, Header}
-  alias Dapp.Repo.InviteRepo
   alias Dapp.UseCase.Invite.CreateInvite
 
   plug(:match)
@@ -17,11 +16,11 @@ defmodule Dapp.Plug.Invites do
   plug(Plug.Parsers, parsers: [:json], json_decoder: Jason)
   plug(:dispatch)
 
-  # Allow admins to create user invites.
+  # Allow admins to create invites.
   post "/" do
     Handler.run(
       conn,
-      CreateInvite.new(repo: InviteRepo, audit: Audit),
+      CreateInvite.new(repo: InviteRepo, audit: AuditRepo),
       args(conn)
     )
   end

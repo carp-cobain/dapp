@@ -2,20 +2,32 @@ defmodule Dapp.UseCase.Invite.SignupTest do
   use ExUnit.Case, async: true
 
   alias Algae.Either.{Left, Right}
+  alias Algae.Reader
 
-  alias Dapp.Mock.{Audit, InviteRepo}
+  import Hammox
+
+  # Use case being tested
   alias Dapp.UseCase.Invite.Signup
 
-  @opts [repo: InviteRepo, audit: Audit]
+  # Use case keyword options
+  @opts [repo: InvitesMock, audit: AuditsMock]
+
+  # Verify mocks on exit
+  setup_all :verify_on_exit!
 
   # Create and return use case context
   setup do
+    TestUtil.mock_audits()
+
+    addr = TestUtil.fake_address()
+    invite = TestUtil.mock_invite(addr)
+
     %{
       args: %{
-        blockchain_address: TestUtil.fake_address(),
+        blockchain_address: addr,
         name: "Jane Doe",
-        email: "jane.doe@email.com",
-        invite_code: Nanoid.generate()
+        email: invite.email,
+        invite_code: invite.id
       }
     }
   end
@@ -24,14 +36,15 @@ defmodule Dapp.UseCase.Invite.SignupTest do
   describe "Signup" do
     # Signup success
     test "should create a user profile", ctx do
-      assert %Right{right: dto} = Signup.execute(ctx, @opts)
+      assert %Right{right: dto} = Signup.new(@opts) |> Reader.run(ctx)
+      assert dto.profile.blockchain_address == ctx.args.blockchain_address
       assert dto.profile.email == ctx.args.email
     end
 
     # Signup failure
-    test "should fail to create user profile with bad args" do
+    test "should fail to create user profile with empty args" do
       ctx = %{args: %{}}
-      assert %Left{left: {status, _error}} = Signup.execute(ctx, @opts)
+      assert %Left{left: {status, _error}} = Signup.new(@opts) |> Reader.run(ctx)
       assert status == :invalid_args
     end
   end

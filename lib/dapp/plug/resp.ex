@@ -16,14 +16,21 @@ defmodule Dapp.Plug.Resp do
   @doc "Send a bad request and halt further request processing."
   def bad_request(conn) do
     conn
-    |> send_json(error("not found"), 400)
+    |> send_json(error("bad request"), 400)
     |> halt
   end
 
-  @doc "Send a bad request w/ unverified message."
-  def unverified(conn) do
+  @doc "Send a 401 and halt further request processing."
+  def unauthorized(conn) do
     conn
-    |> send_json(error("not verified"), 400)
+    |> send_json(error("unauthorized"), 401)
+    |> halt
+  end
+
+  @doc "Send a 403 and halt further request processing."
+  def forbidden(conn) do
+    conn
+    |> send_json(error("forbidden"), 403)
     |> halt
   end
 

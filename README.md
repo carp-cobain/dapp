@@ -28,36 +28,23 @@ Drop into an interactive shell + start the application.
 iex -S mix
 ```
 
-## Authorized Access
+## Example Requests
 
-An authorized user can see thier profile.
+### Create Invite (admin)
 
-```sh
-curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskv" http://localhost:8888/dapp/v1/users/profile
+```shell
+curl -s -XPOST -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kska" -H "content-type: application/json" -d '{"email": "jane.doe@gmail.com", "role_id": 2}' http://localhost:8888/dapp/v1/invites | jq
 ```
 
-An authorized admin can see any user's profile.
+### Signup
 
-```sh
-curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kska" http://localhost:8888/dapp/v1/users/{user_id}/profile
+```shell
+curl -s -XPOST -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskc" -H "content-type: application/json" -d '{"name": "Jane Doe", "email": "jane.doe@gmail.com", "code": "FIXME"}' http://localhost:8888/dapp/v1/signup | jq
 ```
 
-## Unauthorized Access
+### Get Profile
 
-User unauthorized to access other user's profiles.
-
-```sh
-curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskv" http://localhost:8888/dapp/v1/users/{user_id}/profile
+```shell
+curl -s -XGET  -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskc" http://localhost:8888/dapp/v1/users/profile | jq
 ```
 
-Unauthorized users (no DB entry) have no profile (must call signup route first).
-
-```sh
-curl -is -XGET -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskt" http://localhost:8888/dapp/v1/users/profile
-```
-
-Unknown user is unauthorized
-
-```sh
-curl -is -XGET http://localhost:8888/dapp/v1/users/profile
-```

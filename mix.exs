@@ -45,12 +45,13 @@ defmodule Dapp.MixProject do
       {:jason, "~> 1.4"},
       {:ecto_identifier, "~> 0.2.0"},
       {:algae, "~> 1.3.1"},
+      {:hammox, "~> 0.7", only: :test},
       {:credo, "~> 1.7.0", only: [:dev, :test], runtime: false}
     ]
   end
 
   # Add mocks to path in test
-  defp elixirc_paths(:test), do: ["lib", "test/lib"]
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
   defp elixirc_paths(_), do: ["lib"]
 
   # Helpful mix aliases

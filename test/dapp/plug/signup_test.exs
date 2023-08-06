@@ -4,22 +4,21 @@ defmodule Dapp.Plug.SignupTest do
 
   alias Ecto.Adapters.SQL.Sandbox
 
+  # Plug being tested
   alias Dapp.Plug.Signup, as: SignupPlug
 
   # Set up sandbox and test context.
   setup do
-    # When using a sandbox, each test runs in an isolated, independent transaction
-    # which is rolled back after test execution.
     :ok = Sandbox.checkout(Dapp.Repo)
 
-    # Insert invite
+    addr = TestUtil.fake_address()
     invite = TestUtil.setup_invite()
 
     # Test context
     %{
-      header: TestUtil.fake_address(),
+      header: addr,
       body: %{
-        name: "User #{Nanoid.generate(6)}",
+        name: "Jane Doe",
         code: invite.id,
         email: invite.email
       }

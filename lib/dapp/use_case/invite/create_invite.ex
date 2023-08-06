@@ -2,15 +2,14 @@ defmodule Dapp.UseCase.Invite.CreateInvite do
   @moduledoc """
   Use case for creating an invite
   """
-  alias Dapp.UseCase.Args
-  alias Dapp.UseCase.Invite.Dto
+  alias Dapp.UseCase.{Args, Dto}
   use Dapp.UseCase
 
   @doc "Create an invite."
   def execute(ctx, repo: repo, audit: audit) do
     create_invite(ctx, repo) >>>
       fn invite ->
-        audit.log(ctx, audit_name(), "invite=#{invite.id}")
+        :ok = audit.log(ctx, audit_name(), "invite=#{invite.id}")
         pure(Dto.invite(invite))
       end
   end
