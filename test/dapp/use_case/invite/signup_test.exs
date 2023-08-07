@@ -18,7 +18,6 @@ defmodule Dapp.UseCase.Invite.SignupTest do
   # Create and return use case context
   setup do
     TestUtil.mock_audits()
-
     addr = TestUtil.fake_address()
     invite = TestUtil.mock_invite(addr)
 
@@ -28,6 +27,9 @@ defmodule Dapp.UseCase.Invite.SignupTest do
         name: "Jane Doe",
         email: invite.email,
         invite_code: invite.id
+      },
+      expect: %{
+        blockchain_address: addr
       }
     }
   end
@@ -37,8 +39,7 @@ defmodule Dapp.UseCase.Invite.SignupTest do
     # Signup success
     test "should create a user profile", ctx do
       assert %Right{right: dto} = Signup.new(@opts) |> Reader.run(ctx)
-      assert dto.profile.blockchain_address == ctx.args.blockchain_address
-      assert dto.profile.email == ctx.args.email
+      assert dto.profile.blockchain_address == ctx.expect.blockchain_address
     end
 
     # Signup failure

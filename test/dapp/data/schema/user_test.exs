@@ -12,7 +12,8 @@ defmodule Dapp.Data.Schema.UserTest do
       valid_params: %{
         blockchain_address: valid_addr,
         name: "Jon Doe",
-        email: "jon.doe@gmail.com"
+        email: "jon.doe@gmail.com",
+        role_id: 1
       },
       valid_address: %{blockchain_address: valid_addr},
       bad_prefix: %{blockchain_address: bad_prefix},

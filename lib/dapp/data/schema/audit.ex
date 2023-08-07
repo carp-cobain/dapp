@@ -5,6 +5,7 @@ defmodule Dapp.Data.Schema.Audit do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @primary_key {:id, :string, autogenerate: {Ecto.Nanoid, :autogenerate, []}}
   schema "audits" do
     field(:who, :string)
     field(:what, :string)

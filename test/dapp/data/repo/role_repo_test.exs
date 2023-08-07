@@ -6,14 +6,13 @@ defmodule Dapp.Data.Repo.RoleRepoTest do
 
   # Test context
   setup do
-    :ok = Sandbox.checkout(Dapp.Repo)
-    TestUtil.ensure_role("Root")
-    TestUtil.ensure_role("User")
-    :ok
+    Sandbox.checkout(Dapp.Repo)
   end
 
+  # Query all roles.
   describe "RoleRepo" do
     test "should return all stored roles" do
+      Enum.each(TestUtil.fake_roles(), &TestUtil.ensure_role(&1.name))
       roles = RoleRepo.get_roles()
       assert length(roles) == 2
     end

@@ -5,6 +5,8 @@ defmodule Dapp.Data.Schema.User do
   import Ecto.Changeset
   use Ecto.Schema
 
+  alias Dapp.Data.Schema.Role
+
   # Read blockchain network prefix from config.
   @network_prefix Application.compile_env(:dapp, :network_prefix)
 
@@ -13,17 +15,19 @@ defmodule Dapp.Data.Schema.User do
     field(:blockchain_address, :string)
     field(:email, :string)
     field(:name, :string)
+    belongs_to(:role, Role)
     timestamps()
   end
 
   @doc "Validate user changes"
   def changeset(struct, params) do
     struct
-    |> cast(params, [:blockchain_address, :email, :name])
-    |> validate_required([:blockchain_address, :email, :name])
+    |> cast(params, [:blockchain_address, :email, :name, :role_id])
+    |> validate_required([:blockchain_address, :email, :name, :role_id])
     |> validate_length(:blockchain_address, min: 41, max: 61)
     |> validate_length(:email, min: 3, max: 255)
     |> validate_length(:name, min: 1, max: 255)
+    |> foreign_key_constraint(:role_id)
     |> unique_constraint(:blockchain_address)
     |> validate_address_prefix()
   end

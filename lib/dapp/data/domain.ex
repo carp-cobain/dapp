@@ -12,21 +12,21 @@ defprotocol Dapp.Data.Domain do
 end
 
 defimpl Dapp.Data.Domain, for: UserSchema do
-  @doc "Create a DTO from a user schema struct."
+  @doc "Create a domain object from a user schema struct."
   def from_schema(user) do
     User.new(user.id, user.blockchain_address, user.name, user.email)
   end
 end
 
 defimpl Dapp.Data.Domain, for: RoleSchema do
-  @doc "Create a DTO from a role schema struct."
+  @doc "Create a domain object from a role schema struct."
   def from_schema(role) do
     Role.new(role.id, role.name)
   end
 end
 
 defimpl Dapp.Data.Domain, for: InviteSchema do
-  @doc "Create a DTO from a invite schema struct."
+  @doc "Create a domain object from a invite schema struct."
   def from_schema(invite) do
     Invite.new(invite.id, invite.email)
   end
