@@ -2,9 +2,8 @@ defmodule TestUtil do
   @moduledoc false
 
   alias Algae.Either.{Left, Right}
-  alias Algae.Maybe
 
-  alias Dapp.Data.Schema.{Grant, Invite, Role, User}
+  alias Dapp.Data.Schema.{Invite, Role, User}
   alias Dapp.Repo
 
   import Hammox
@@ -40,22 +39,22 @@ defmodule TestUtil do
       id: Nanoid.generate(),
       blockchain_address: addr,
       email: fake_email(),
-      name: "User #{Nanoid.generate(6)}"
+      name: "User #{Nanoid.generate(6)}",
+      role_id: 1
     }
   end
 
   # Setup a user with mock data access API.
-  def mock_user(role \\ @user) do
-    user = fake_user()
+  def mock_user(addr \\ fake_address()) do
+    user = fake_user(addr)
 
     UsersMock
-    |> expect(:get, fn id -> if id == user.id, do: Right.new(user), else: Left.new({:not_found, nil}) end)
-    |> expect(:get_role, fn id -> if id == user.id, do: Maybe.new(role), else: Maybe.new() end)
-    |> expect(:get_by_address, fn addr ->
+    |> expect(:get_user, fn id -> if id == user.id, do: Right.new(user), else: Left.new({:not_found, nil}) end)
+    |> expect(:get_user_by_address, fn addr ->
       if addr == user.blockchain_address, do: Right.new(user), else: Left.new({:not_found, nil})
     end)
 
-    %{user: user, role: role}
+    %{user: user}
   end
 
   # Set up an invite with data access mocks.
@@ -81,9 +80,9 @@ defmodule TestUtil do
   # Create a random user in the db.
   def setup_user(role_name \\ @user) do
     addr = fake_address()
-    user = Repo.insert!(%User{blockchain_address: addr})
-    Repo.insert!(%Grant{user: user, role: ensure_role(role_name)})
-    %{user: user, role_name: role_name}
+    role = ensure_role(role_name)
+    user = Repo.insert!(%User{blockchain_address: addr, role_id: role.id})
+    %{user: user}
   end
 
   # Ensure a role with the given name exists in the db.

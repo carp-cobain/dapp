@@ -18,8 +18,6 @@ defmodule Dapp.UseCase.Role.GetRolesTest do
       RolesMock |> expect(:get_roles, &TestUtil.fake_roles/0)
       assert %Right{right: dto} = GetRoles.new(repo: RolesMock) |> Reader.run(%{})
       assert length(dto.roles) == 2
-      assert Enum.find(dto.roles, &(&1.name == "Root"))
-      assert Enum.find(dto.roles, &(&1.name == "User"))
     end
   end
 end

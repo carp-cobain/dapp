@@ -8,7 +8,7 @@ defmodule Dapp.UseCase.User.GetProfile do
   @doc "Get a user profile"
   def execute(ctx, repo: repo, audit: audit) do
     Args.get(ctx, :user_id) >>>
-      fn user_id -> repo.get(user_id) end >>>
+      fn user_id -> repo.get_user(user_id) end >>>
       fn user ->
         :ok = audit.log(ctx, audit_name(), "user=#{user.id}")
         pure(Dto.profile(user))

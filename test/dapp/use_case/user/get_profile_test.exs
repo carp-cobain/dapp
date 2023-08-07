@@ -18,14 +18,18 @@ defmodule Dapp.UseCase.User.GetProfileTest do
   setup do
     TestUtil.mock_audits()
     ctx = TestUtil.mock_user()
-    %{args: %{user_id: ctx.user.id}, blockchain_address: ctx.user.blockchain_address}
+
+    %{
+      args: %{user_id: ctx.user.id},
+      expect: %{blockchain_address: ctx.user.blockchain_address}
+    }
   end
 
   # GetProfile use case tests
   describe "GetProfile" do
     test "should return an existing user profile", ctx do
       assert %Right{right: dto} = GetProfile.new(@opts) |> Reader.run(ctx)
-      assert dto.profile.blockchain_address == ctx.blockchain_address
+      assert dto.profile.blockchain_address == ctx.expect.blockchain_address
     end
 
     test "should return an error when a user is not found" do

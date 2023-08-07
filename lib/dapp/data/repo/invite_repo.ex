@@ -8,7 +8,7 @@ defmodule Dapp.Data.Repo.InviteRepo do
   alias Algae.Either.Right
 
   alias Dapp.{Error, Repo}
-  alias Dapp.Data.Schema.{Grant, Invite, User}
+  alias Dapp.Data.Schema.{Invite, User}
 
   alias Ecto.Multi
 
@@ -36,8 +36,7 @@ defmodule Dapp.Data.Repo.InviteRepo do
     user_id = Nanoid.generate()
 
     Multi.new()
-    |> Multi.insert(:user, User.changeset(%User{id: user_id}, params))
-    |> Multi.insert(:grant, Grant.changeset(%Grant{}, grant_params(user_id, invite)))
+    |> Multi.insert(:user, User.changeset(%User{id: user_id, role_id: invite.role_id}, params))
     |> Multi.update(:invite, Invite.changeset(invite, %{consumed_at: now()}))
     |> Repo.transaction()
     |> case do
@@ -54,14 +53,6 @@ defmodule Dapp.Data.Repo.InviteRepo do
       Error.new("invite not found") |> not_found()
     end
   end
-
-  # Build grant param map for insert
-  defp grant_params(user_id, invite),
-    do: %{
-      user_id: user_id,
-      role_id: invite.role_id,
-      invite_id: invite.id
-    }
 
   # Current timestamp
   defp now, do: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)

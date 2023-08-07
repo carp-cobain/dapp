@@ -25,7 +25,7 @@ defmodule Dapp.Rbac.Auth do
   # Get an authorized user from the db using a request header.
   defp auth_user(conn) do
     case Header.auth_header(conn) do
-      {_, address} -> UserRepo.get_by_address(address)
+      {_, address} -> UserRepo.get_user_by_address(address)
       _ -> Left.new(:bad_request)
     end
   end
