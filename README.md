@@ -4,7 +4,11 @@ A dApp template with role-based access control (RBAC) and use case auditing.
 
 ## Setup
 
-First, install the [asdf version manager]. Then, add the [asdf erlang] and [asdf elixir] plugins.
+First, install the [asdf version manager](https://asdf-vm.com/guide/getting-started.html).
+Then, add the [asdf erlang](https://github.com/asdf-vm/asdf-erlang)
+and [asdf elixir](https://github.com/asdf-vm/asdf-elixir)
+plugins. 
+
 See `.tool-versions` for version details.
 
 Once the above are installed, run the following command.
@@ -60,8 +64,3 @@ curl -s -XPOST -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskc" -H "con
 ```shell
 curl -s -XGET  -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskc" http://localhost:8888/dapp/v1/users/profile | jq
 ```
-
-[asdf version manager](https://asdf-vm.com/guide/getting-started.html)
-[asdf erlang](https://github.com/asdf-vm/asdf-erlang)
-[asdf elixir](https://github.com/asdf-vm/asdf-elixir)
-
