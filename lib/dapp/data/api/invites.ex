@@ -1,6 +1,6 @@
 defmodule Dapp.Data.Api.Invites do
   @moduledoc """
-  Database access API for invites.
+  Data API for invites.
   """
   alias Algae.Either
 

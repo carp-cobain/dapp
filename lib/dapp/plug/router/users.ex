@@ -1,26 +1,25 @@
-defmodule Dapp.Plug.Users do
+defmodule Dapp.Plug.Router.Users do
   @moduledoc """
   Maps user endpoints to use cases.
   """
+  use Dapp.Data.Repos
   use Plug.Router
 
-  alias Dapp.Data.Repo.{AuditRepo, UserRepo}
   alias Dapp.Plug.{Handler, Resp}
-  alias Dapp.Rbac.{Access, Auth, Header}
+  alias Dapp.Plug.Rbac.{Auth, Header}
+
   alias Dapp.UseCase.User.GetProfile
 
   plug(:match)
   plug(Header)
   plug(Auth)
-  plug(Access)
-  plug(Plug.Parsers, parsers: [:json], json_decoder: Jason)
   plug(:dispatch)
 
   # Allow authorized users to see their profile.
   get "/profile" do
     Handler.run(
       conn,
-      GetProfile.new(repo: UserRepo, audit: AuditRepo),
+      GetProfile.new(repo: user_repo(), audit: audit_repo()),
       %{user_id: conn.assigns.user.id}
     )
   end

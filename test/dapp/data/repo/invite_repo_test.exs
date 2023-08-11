@@ -1,17 +1,15 @@
-defmodule Dapp.Data.Repo.SignupRepoTest do
+defmodule Dapp.Data.Repo.InviteRepoTest do
   use ExUnit.Case, async: true
 
   alias Algae.Either.{Left, Right}
-  alias Dapp.Data.Repo.InviteRepo
   alias Ecto.Adapters.SQL.Sandbox
 
-  # Test context
-  setup do
-    # When using a sandbox, each test runs in an isolated, independent transaction
-    # which is rolled back after test execution.
-    :ok = Sandbox.checkout(Dapp.Repo)
+  # Repo being tested
+  alias Dapp.Data.Repo.InviteRepo
 
-    # Test context
+  # Setup test context
+  setup do
+    :ok = Sandbox.checkout(Dapp.Repo)
     invite = TestUtil.setup_invite()
 
     %{

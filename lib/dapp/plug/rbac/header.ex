@@ -1,4 +1,4 @@
-defmodule Dapp.Rbac.Header do
+defmodule Dapp.Plug.Rbac.Header do
   @moduledoc """
   Extracts blockchain address header.
   """

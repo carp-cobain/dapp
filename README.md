@@ -35,7 +35,7 @@ Drop into an interactive shell + start the application.
 iex -S mix
 ```
 
-## Example Requests
+## Invite / Signup Flow
 
 ### Get Roles (admin)
 
@@ -48,7 +48,7 @@ Copy the `role_id` for "User" for creating invite.
 ### Create Invite (admin)
 
 ```shell
-curl -s -XPOST -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kska" -H "content-type: application/json" -d '{"email": "jane.doe@gmail.com", "role_id": FIXME}' http://localhost:8888/dapp/v1/invites | jq
+curl -s -XPOST -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kska" -H "content-type: application/json" -d '{"email": "jane.doe@domain.com", "role_id": FIXME}' http://localhost:8888/dapp/v1/invites | jq
 ```
 
 Copy invite code from response for signup.
@@ -56,7 +56,7 @@ Copy invite code from response for signup.
 ### Signup
 
 ```shell
-curl -s -XPOST -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskc" -H "content-type: application/json" -d '{"name": "Jane Doe", "email": "jane.doe@gmail.com", "code": "FIXME"}' http://localhost:8888/dapp/v1/signup | jq
+curl -s -XPOST -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskc" -H "content-type: application/json" -d '{"name": "Jane Doe", "email": "jane.doe@domain.com", "code": "FIXME"}' http://localhost:8888/dapp/v1/signup | jq
 ```
 
 ### Get Profile

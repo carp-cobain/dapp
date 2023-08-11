@@ -1,12 +1,12 @@
-defmodule Dapp.Rbac.Auth do
+defmodule Dapp.Plug.Rbac.Auth do
   @moduledoc """
   Authorizes requests with a blockchain address header.
   """
   import Plug.Conn
 
   alias Dapp.Data.Repo.UserRepo
+  alias Dapp.Plug.Rbac.Header
   alias Dapp.Plug.Resp
-  alias Dapp.Rbac.Header
 
   alias Algae.Either.{Left, Right}
   use Witchcraft
@@ -25,8 +25,13 @@ defmodule Dapp.Rbac.Auth do
   # Get an authorized user from the db using a request header.
   defp auth_user(conn) do
     case Header.auth_header(conn) do
-      {_, address} -> UserRepo.get_user_by_address(address)
+      {_, address} -> user_repo().get_user_by_address(address)
       _ -> Left.new(:bad_request)
     end
+  end
+
+  # Get configured user repo.
+  defp user_repo do
+    Application.get_env(:dapp, :user_repo, UserRepo)
   end
 end

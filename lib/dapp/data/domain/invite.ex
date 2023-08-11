@@ -4,7 +4,7 @@ defmodule Dapp.Data.Domain.Invite do
 
   @derive Jason.Encoder
   defdata do
-    code :: String.t()
+    invite_code :: String.t()
     email :: String.t()
   end
 end

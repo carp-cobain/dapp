@@ -9,6 +9,7 @@ defmodule Dapp.UseCase.User.GetProfileTest do
   # Use case being tested
   alias Dapp.UseCase.User.GetProfile
 
+  # Pass mock data apis into use case.
   @opts [repo: UsersMock, audit: AuditsMock]
 
   # Verify mocks on exit
@@ -17,11 +18,11 @@ defmodule Dapp.UseCase.User.GetProfileTest do
   # Create user and return use case context
   setup do
     TestUtil.mock_audits()
-    ctx = TestUtil.mock_user()
+    user = TestUtil.mock_user()
 
     %{
-      args: %{user_id: ctx.user.id},
-      expect: %{blockchain_address: ctx.user.blockchain_address}
+      args: %{user_id: user.id},
+      expect: %{blockchain_address: user.blockchain_address}
     }
   end
 

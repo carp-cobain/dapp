@@ -1,16 +1,14 @@
-defmodule Dapp.Plug.UsersTest do
+defmodule Dapp.Plug.Router.UsersTest do
   use ExUnit.Case, async: true
   use Plug.Test
 
-  alias Ecto.Adapters.SQL.Sandbox
-
   # Plug being tested
-  alias Dapp.Plug.Users, as: UsersPlug
+  alias Dapp.Plug.Router.Users, as: UsersPlug
 
   # Set up sandbox and test context.
   setup do
-    :ok = Sandbox.checkout(Dapp.Repo)
-    TestUtil.setup_user()
+    TestUtil.mock_audits()
+    %{user: TestUtil.mock_user()}
   end
 
   # Authorized request
