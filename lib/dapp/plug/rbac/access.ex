@@ -1,4 +1,4 @@
-defmodule Dapp.Rbac.Access do
+defmodule Dapp.Plug.Rbac.Access do
   @moduledoc """
   Controls access to protected routes.
   """
@@ -6,7 +6,7 @@ defmodule Dapp.Rbac.Access do
   import Plug.Conn
 
   # When not provided explicitly, allow access to users with these roles.
-  @default_roles ["Root", "User"]
+  @default_roles ["Admin", "User"]
 
   @doc "Handle white-listed roles."
   def init(opts) do
@@ -45,7 +45,7 @@ defmodule Dapp.Rbac.Access do
   end
 
   @doc "Only allow the admin role to access a route."
-  def root(conn, route) do
-    control(conn, ["Root"], route)
+  def admin(conn, route) do
+    control(conn, ["Admin"], route)
   end
 end

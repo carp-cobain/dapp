@@ -1,6 +1,6 @@
 defmodule Dapp.Data.Api.Users do
   @moduledoc """
-  Database access API for users.
+  Data API for users.
   """
   alias Algae.Either
 

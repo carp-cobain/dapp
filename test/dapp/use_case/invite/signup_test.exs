@@ -9,7 +9,7 @@ defmodule Dapp.UseCase.Invite.SignupTest do
   # Use case being tested
   alias Dapp.UseCase.Invite.Signup
 
-  # Use case keyword options
+  # Pass mock data apis into use case.
   @opts [repo: InvitesMock, audit: AuditsMock]
 
   # Verify mocks on exit
@@ -19,7 +19,7 @@ defmodule Dapp.UseCase.Invite.SignupTest do
   setup do
     TestUtil.mock_audits()
     addr = TestUtil.fake_address()
-    invite = TestUtil.mock_invite(addr)
+    invite = TestUtil.mock_invite()
 
     %{
       args: %{
@@ -40,6 +40,13 @@ defmodule Dapp.UseCase.Invite.SignupTest do
     test "should create a user profile", ctx do
       assert %Right{right: dto} = Signup.new(@opts) |> Reader.run(ctx)
       assert dto.profile.blockchain_address == ctx.expect.blockchain_address
+    end
+
+    # Invite not found
+    test "should fail to create user profile when invite is not found" do
+      ctx = %{args: %{invite_code: Nanoid.generate(), email: TestUtil.fake_email()}}
+      assert %Left{left: {status, _error}} = Signup.new(@opts) |> Reader.run(ctx)
+      assert status == :not_found
     end
 
     # Signup failure

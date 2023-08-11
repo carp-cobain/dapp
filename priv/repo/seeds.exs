@@ -8,7 +8,7 @@ alias Dapp.Data.Schema.{Role, User}
 alias Dapp.Repo
 
 # Roles
-root = Repo.insert!(%Role{name: "Root"})
+admin = Repo.insert!(%Role{name: "Admin"})
 user = Repo.insert!(%Role{name: "User"})
 
 # Users
@@ -17,7 +17,7 @@ Repo.insert!(
     blockchain_address: "tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kska", 
     name: "Alice",
     email: "alice@gmail.com",
-    role: root
+    role: admin
   }
 )
 Repo.insert!(

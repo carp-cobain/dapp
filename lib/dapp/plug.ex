@@ -15,16 +15,16 @@ defmodule Dapp.Plug do
   plug(:dispatch)
 
   # Forward to invites router.
-  forward("/dapp/v1/invites", to: Dapp.Plug.Invites)
+  forward("/dapp/v1/invites", to: Dapp.Plug.Router.Invites)
 
   # Forward to roles router.
-  forward("/dapp/v1/roles", to: Dapp.Plug.Roles)
+  forward("/dapp/v1/roles", to: Dapp.Plug.Router.Roles)
 
   # Forward to signup router.
-  forward("/dapp/v1/signup", to: Dapp.Plug.Signup)
+  forward("/dapp/v1/signup", to: Dapp.Plug.Router.Signup)
 
   # Forward to users router.
-  forward("/dapp/v1/users", to: Dapp.Plug.Users)
+  forward("/dapp/v1/users", to: Dapp.Plug.Router.Users)
 
   # Health checks.
   get "/health/*glob" do

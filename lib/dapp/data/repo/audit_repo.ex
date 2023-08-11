@@ -21,7 +21,8 @@ defmodule Dapp.Data.Repo.AuditRepo do
   end
 
   # Determine the who field for an audit.
-  defp get_who(ctx), do: ctx.blockchain_address
+  defp get_who(ctx),
+    do: ctx.blockchain_address
 
   # Current timestamp
   defp now do

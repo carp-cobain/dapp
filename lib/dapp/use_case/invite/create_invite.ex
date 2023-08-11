@@ -14,7 +14,7 @@ defmodule Dapp.UseCase.Invite.CreateInvite do
       end
   end
 
-  # Generate an invite code and insert.
+  # Crete an invite in the db.
   defp create_invite(ctx, repo) do
     chain do
       {email, role_id} <- Args.take(ctx, [:email, :role_id])

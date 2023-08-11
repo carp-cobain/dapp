@@ -1,21 +1,26 @@
-defmodule Dapp.Plug.InvitesTest do
+defmodule Dapp.Plug.Router.InvitesTest do
   use ExUnit.Case, async: true
   use Plug.Test
 
-  alias Ecto.Adapters.SQL.Sandbox
+  # alias Ecto.Adapters.SQL.Sandbox
 
   # Plug being tested
-  alias Dapp.Plug.Invites, as: InvitesPlug
+  alias Dapp.Plug.Router.Invites, as: InvitesPlug
 
   # Set up test context.
   setup do
     # When using a sandbox, each test runs in an isolated, independent transaction
     # which is rolled back after test execution.
-    :ok = Sandbox.checkout(Dapp.Repo)
-    ctx = TestUtil.setup_user("Root")
-    role = TestUtil.ensure_role()
-    body = %{email: TestUtil.fake_email(), role_id: role.id}
-    %{user: ctx.user, body: body}
+    # :ok = Sandbox.checkout(Dapp.Repo)
+
+    TestUtil.mock_audits()
+    invite = TestUtil.mock_invite()
+    user = TestUtil.mock_user("Admin")
+
+    %{
+      user: user,
+      body: %{email: invite.email, role_id: invite.role_id}
+    }
   end
 
   # Valid request

@@ -1,16 +1,16 @@
-defmodule Dapp.Plug.RolesTest do
+defmodule Dapp.Plug.Router.RolesTest do
   use ExUnit.Case, async: true
   use Plug.Test
 
-  alias Ecto.Adapters.SQL.Sandbox
+  import Hammox
 
   # Plug being tested
-  alias Dapp.Plug.Roles, as: RolesPlug
+  alias Dapp.Plug.Router.Roles, as: RolesPlug
 
   # Set up sandbox and test context.
   setup do
-    :ok = Sandbox.checkout(Dapp.Repo)
-    TestUtil.setup_user("Root")
+    RolesMock |> expect(:get_roles, &TestUtil.fake_roles/0)
+    %{user: TestUtil.mock_user("Admin")}
   end
 
   # Authorized admin request for roles
@@ -22,9 +22,9 @@ defmodule Dapp.Plug.RolesTest do
   end
 
   test "Roles plug returns a 4xx for an non-admin" do
-    ctx = TestUtil.mock_user()
+    user = TestUtil.mock_user()
     opts = RolesPlug.init([])
-    req = conn(:get, "/") |> put_req_header("x-address", ctx.user.blockchain_address)
+    req = conn(:get, "/") |> put_req_header("x-address", user.blockchain_address)
     res = RolesPlug.call(req, opts)
     assert res.status == 401
   end

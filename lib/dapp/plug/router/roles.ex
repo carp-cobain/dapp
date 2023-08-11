@@ -1,25 +1,27 @@
-defmodule Dapp.Plug.Roles do
+defmodule Dapp.Plug.Router.Roles do
   @moduledoc """
   Maps role endpoints to use cases.
   """
+  use Dapp.Data.Repos
   use Plug.Router
 
-  alias Dapp.Data.Repo.RoleRepo
   alias Dapp.Plug.{Handler, Resp}
-  alias Dapp.Rbac.{Access, Auth, Header}
+  alias Dapp.Plug.Rbac.{Access, Auth, Header}
+
   alias Dapp.UseCase.Role.GetRoles
 
   plug(:match)
   plug(Header)
   plug(Auth)
-  plug(Access, roles: ["Root"])
+  plug(Access, roles: ["Admin"])
   plug(:dispatch)
-
-  # Use case options
 
   # Allow admins to see available roles.
   get "/" do
-    Handler.run(conn, GetRoles.new(repo: RoleRepo))
+    Handler.run(
+      conn,
+      GetRoles.new(repo: role_repo())
+    )
   end
 
   # Catch-all responds with a 404.

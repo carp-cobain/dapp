@@ -1,25 +1,21 @@
-defmodule Dapp.Plug.SignupTest do
+defmodule Dapp.Plug.Router.SignupTest do
   use ExUnit.Case, async: true
   use Plug.Test
 
-  alias Ecto.Adapters.SQL.Sandbox
-
   # Plug being tested
-  alias Dapp.Plug.Signup, as: SignupPlug
+  alias Dapp.Plug.Router.Signup, as: SignupPlug
 
   # Set up sandbox and test context.
   setup do
-    :ok = Sandbox.checkout(Dapp.Repo)
-
-    addr = TestUtil.fake_address()
-    invite = TestUtil.setup_invite()
+    TestUtil.mock_audits()
+    invite = TestUtil.mock_invite()
 
     # Test context
     %{
-      header: addr,
+      header: TestUtil.fake_address(),
       body: %{
         name: "Jane Doe",
-        code: invite.id,
+        invite_code: invite.id,
         email: invite.email
       }
     }

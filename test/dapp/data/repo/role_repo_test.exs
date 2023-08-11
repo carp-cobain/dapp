@@ -1,15 +1,16 @@
 defmodule Dapp.Data.Repo.RoleRepoTest do
   use ExUnit.Case, async: true
-
-  alias Dapp.Data.Repo.RoleRepo
   alias Ecto.Adapters.SQL.Sandbox
 
-  # Test context
+  # Repo being tested
+  alias Dapp.Data.Repo.RoleRepo
+
+  # Set up SQL sandbox.
   setup do
     Sandbox.checkout(Dapp.Repo)
   end
 
-  # Query all roles.
+  # Test that repo can query roles from the db.
   describe "RoleRepo" do
     test "should return all stored roles" do
       Enum.each(TestUtil.fake_roles(), &TestUtil.ensure_role(&1.name))
