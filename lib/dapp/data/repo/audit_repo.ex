@@ -8,11 +8,10 @@ defmodule Dapp.Data.Repo.AuditRepo do
   require Logger
 
   # Allow disabling audits in config
-  @audit_disabled Application.compile_env(:dapp, :audit_disabled, false)
 
   @doc "Write an audit log."
   def log(ctx, where, what) do
-    unless @audit_disabled do
+    unless Application.get_env(:dapp, :audit_disabled, false) do
       %Audit{who: get_who(ctx), where: where, what: what, when: now()}
       |> insert_audit()
     end

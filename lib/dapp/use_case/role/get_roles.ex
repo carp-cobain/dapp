@@ -2,12 +2,13 @@ defmodule Dapp.UseCase.Role.GetRoles do
   @moduledoc """
   Use case for getting all roles.
   """
-  alias Dapp.UseCase.Dto
   use Dapp.UseCase
+  alias Dapp.UseCase.Dto
 
   @doc "Get all roles."
   def execute(_ctx, repo: repo) do
-    roles = repo.get_roles() |> Dto.roles()
-    pure(roles)
+    repo.get_roles()
+    |> Enum.map(&Dto.from_schema/1)
+    |> pure()
   end
 end

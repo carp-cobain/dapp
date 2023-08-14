@@ -35,7 +35,7 @@ defmodule Dapp.UseCase.Invite.CreateInviteTest do
   describe "CreateInvite" do
     test "should create a new invite", ctx do
       assert %Right{right: dto} = CreateInvite.new(@opts) |> Reader.run(ctx)
-      assert dto.invite.invite_code == ctx.expect.invite_code
+      assert dto.invite_code == ctx.expect.invite_code
     end
 
     test "should fail to create an invite with empty args" do

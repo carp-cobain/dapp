@@ -17,7 +17,9 @@ defmodule Dapp.Data.Repo.UserRepo do
 
   @doc "Get a user by id and wrap in Either."
   def get_user(user_id) do
-    case Repo.preload(Repo.get(User, user_id), :role) do
+    Repo.get(User, user_id)
+    |> Repo.preload(:role)
+    |> case do
       nil -> Error.new("user not found: #{user_id}") |> not_found()
       user -> Right.new(user)
     end
@@ -30,7 +32,9 @@ defmodule Dapp.Data.Repo.UserRepo do
 
   @doc "Query for the user with the given blockchain address."
   def get_user_by_address(address) do
-    case Repo.preload(Repo.get_by(User, blockchain_address: address), :role) do
+    Repo.get_by(User, blockchain_address: address)
+    |> Repo.preload(:role)
+    |> case do
       nil -> Error.new("user not found: #{address}") |> not_found()
       user -> Right.new(user)
     end

@@ -39,7 +39,7 @@ defmodule Dapp.UseCase.Invite.SignupTest do
     # Signup success
     test "should create a user profile", ctx do
       assert %Right{right: dto} = Signup.new(@opts) |> Reader.run(ctx)
-      assert dto.profile.blockchain_address == ctx.expect.blockchain_address
+      assert dto.blockchain_address == ctx.expect.blockchain_address
     end
 
     # Invite not found
