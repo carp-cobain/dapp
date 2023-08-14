@@ -16,8 +16,8 @@ defmodule Dapp.UseCase.Role.GetRolesTest do
   describe "GetRoles" do
     test "should return all roles" do
       RolesMock |> expect(:get_roles, &TestUtil.fake_roles/0)
-      assert %Right{right: dto} = GetRoles.new(repo: RolesMock) |> Reader.run(%{})
-      assert length(dto.roles) == 2
+      assert %Right{right: roles} = GetRoles.new(repo: RolesMock) |> Reader.run(%{})
+      assert length(roles) == 2
     end
   end
 end

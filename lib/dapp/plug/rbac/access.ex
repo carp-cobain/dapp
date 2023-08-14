@@ -20,7 +20,16 @@ defmodule Dapp.Plug.Rbac.Access do
   @doc "Check user access for a request."
   def call(conn, opts) do
     if Map.has_key?(conn.assigns, :user) do
-      verify_role(conn, opts, conn.assigns.user.role.name)
+      verify_user(conn, opts, conn.assigns.user)
+    else
+      Resp.forbidden(conn)
+    end
+  end
+
+  # Verify user role
+  defp verify_user(conn, opts, user) do
+    if Ecto.assoc_loaded?(user.role) do
+      verify_role(conn, opts, user.role.name)
     else
       Resp.forbidden(conn)
     end

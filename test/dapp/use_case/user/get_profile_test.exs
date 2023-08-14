@@ -30,7 +30,7 @@ defmodule Dapp.UseCase.User.GetProfileTest do
   describe "GetProfile" do
     test "should return an existing user profile", ctx do
       assert %Right{right: dto} = GetProfile.new(@opts) |> Reader.run(ctx)
-      assert dto.profile.blockchain_address == ctx.expect.blockchain_address
+      assert dto.blockchain_address == ctx.expect.blockchain_address
     end
 
     test "should return an error when a user is not found" do

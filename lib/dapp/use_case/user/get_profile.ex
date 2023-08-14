@@ -11,7 +11,7 @@ defmodule Dapp.UseCase.User.GetProfile do
       fn user_id -> repo.get_user(user_id) end >>>
       fn user ->
         :ok = audit.log(ctx, audit_name(), "user=#{user.id}")
-        pure(Dto.profile(user))
+        pure(Dto.from_schema(user))
       end
   end
 end

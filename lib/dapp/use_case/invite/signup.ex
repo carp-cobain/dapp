@@ -10,7 +10,7 @@ defmodule Dapp.UseCase.Invite.Signup do
     signup(ctx, repo) >>>
       fn user ->
         :ok = audit.log(ctx, audit_name(), "user=#{user.id}")
-        pure(Dto.profile(user))
+        pure(Dto.from_schema(user))
       end
   end
 
