@@ -5,10 +5,10 @@ defmodule Dapp.Plug.Router.Signup do
   use Dapp.Data.Repos
   use Plug.Router
 
-  alias Dapp.Plug.{Handler, Resp}
+  alias Dapp.Plug.{Controller, Resp}
   alias Dapp.Plug.Rbac.Header
-  alias Dapp.Plug.Req.SignupReq
 
+  alias Dapp.Plug.Request.SignupRequest
   alias Dapp.UseCase.Invite.Signup
 
   plug(:match)
@@ -18,7 +18,7 @@ defmodule Dapp.Plug.Router.Signup do
 
   # Create a new user from an invite.
   post "/" do
-    case SignupReq.validate(conn) do
+    case SignupRequest.validate(conn) do
       {:ok, args} -> signup(conn, args)
       {:error, error} -> Resp.send_json(conn, %{error: error}, 400)
     end
@@ -26,7 +26,7 @@ defmodule Dapp.Plug.Router.Signup do
 
   # Execute the Signup use case.
   defp signup(conn, args) do
-    Handler.run(
+    Controller.run(
       conn,
       Signup.new(repo: invite_repo(), audit: audit_repo()),
       args

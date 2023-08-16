@@ -5,10 +5,10 @@ defmodule Dapp.Plug.Router.Invites do
   use Dapp.Data.Repos
   use Plug.Router
 
-  alias Dapp.Plug.{Handler, Resp}
+  alias Dapp.Plug.{Controller, Resp}
   alias Dapp.Plug.Rbac.{Access, Auth, Header}
-  alias Dapp.Plug.Req.InviteReq
 
+  alias Dapp.Plug.Request.InviteRequest
   alias Dapp.UseCase.Invite.CreateInvite
 
   plug(:match)
@@ -20,7 +20,7 @@ defmodule Dapp.Plug.Router.Invites do
 
   # Allow admins to create invites.
   post "/" do
-    case InviteReq.validate(conn) do
+    case InviteRequest.validate(conn) do
       {:ok, args} -> create_invite(conn, args)
       {:error, error} -> Resp.send_json(conn, %{error: error}, 400)
     end
@@ -28,7 +28,7 @@ defmodule Dapp.Plug.Router.Invites do
 
   # Run use case
   defp create_invite(conn, args) do
-    Handler.run(
+    Controller.run(
       conn,
       CreateInvite.new(repo: invite_repo(), audit: audit_repo()),
       args

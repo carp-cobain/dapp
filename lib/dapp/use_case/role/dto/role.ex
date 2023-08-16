@@ -1,5 +1,7 @@
 defmodule Dapp.UseCase.Role.Dto.Role do
-  @moduledoc "Role data transfer object."
+  @moduledoc """
+  Role data transfer object.
+  """
   import Algae
   alias Dapp.Data.Schema.Role, as: RoleSchema
   alias Dapp.UseCase.Dto

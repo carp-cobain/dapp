@@ -1,6 +1,6 @@
 # Elixir dApp Template
 
-A dApp template with role-based access control (RBAC) and use case auditing.
+A dApp clean architecture template that has role-based access control (RBAC) and use case auditing.
 
 ## Setup
 
@@ -48,19 +48,27 @@ Copy the `role_id` for "User" for creating invite.
 ### Create Invite (admin)
 
 ```shell
-curl -s -XPOST -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kska" -H "content-type: application/json" -d '{"email": "jane.doe@domain.com", "role_id": FIXME}' http://localhost:8888/dapp/v1/invites | jq
+curl -s -XPOST \
+  -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kska" \
+  -H "content-type: application/json" \
+  -d '{"email": "jane.doe@domain.com", "role_id": FIXME}' \
+  http://localhost:8888/dapp/v1/invites | jq
 ```
 
-Copy invite code from response for signup.
+Copy `invite_code` from response for signup.
 
 ### Signup
 
 ```shell
-curl -s -XPOST -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskc" -H "content-type: application/json" -d '{"name": "Jane Doe", "email": "jane.doe@domain.com", "code": "FIXME"}' http://localhost:8888/dapp/v1/signup | jq
+curl -s -XPOST \
+  -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskj" \
+  -H "content-type: application/json" \
+  -d '{"name": "Jane Doe", "email": "jane.doe@domain.com", "invite_code": "FIXME"}' \
+  http://localhost:8888/dapp/v1/signup | jq
 ```
 
 ### Get Profile
 
 ```shell
-curl -s -XGET  -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskc" http://localhost:8888/dapp/v1/users/profile | jq
+curl -s -XGET  -H "x-address: tp18vd8fpwxzck93qlwghaj6arh4p7c5n89x8kskj" http://localhost:8888/dapp/v1/users/profile | jq
 ```

@@ -5,7 +5,7 @@ defmodule Dapp.Plug.Router.Roles do
   use Dapp.Data.Repos
   use Plug.Router
 
-  alias Dapp.Plug.{Handler, Resp}
+  alias Dapp.Plug.{Controller, Resp}
   alias Dapp.Plug.Rbac.{Access, Auth, Header}
 
   alias Dapp.UseCase.Role.GetRoles
@@ -18,7 +18,7 @@ defmodule Dapp.Plug.Router.Roles do
 
   # Allow admins to see available roles.
   get "/" do
-    Handler.run(
+    Controller.run(
       conn,
       GetRoles.new(repo: role_repo())
     )
