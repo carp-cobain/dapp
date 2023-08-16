@@ -5,7 +5,7 @@ defmodule Dapp.Plug.Router.Users do
   use Dapp.Data.Repos
   use Plug.Router
 
-  alias Dapp.Plug.{Handler, Resp}
+  alias Dapp.Plug.{Controller, Resp}
   alias Dapp.Plug.Rbac.{Auth, Header}
 
   alias Dapp.UseCase.User.GetProfile
@@ -17,7 +17,7 @@ defmodule Dapp.Plug.Router.Users do
 
   # Allow authorized users to see their profile.
   get "/profile" do
-    Handler.run(
+    Controller.run(
       conn,
       GetProfile.new(repo: user_repo(), audit: audit_repo()),
       %{user_id: conn.assigns.user.id}

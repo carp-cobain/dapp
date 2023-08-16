@@ -1,5 +1,7 @@
 defmodule Dapp.UseCase.Invite.Dto.Invite do
-  @moduledoc "Invite data transfer object."
+  @moduledoc """
+  Invite data transfer object.
+  """
   import Algae
   alias Dapp.Data.Schema.Invite, as: InviteSchema
   alias Dapp.UseCase.Dto
