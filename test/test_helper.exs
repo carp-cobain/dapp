@@ -2,10 +2,10 @@
 # single connection is used for each test.
 # Ecto.Adapters.SQL.Sandbox.mode(Dapp.Repo, :manual)
 
-Hammox.defmock(AuditsMock, for: Dapp.Data.Api.Audits)
-Hammox.defmock(InvitesMock, for: Dapp.Data.Api.Invites)
-Hammox.defmock(RolesMock, for: Dapp.Data.Api.Roles)
-Hammox.defmock(UsersMock, for: Dapp.Data.Api.Users)
+Hammox.defmock(AuditsMock, for: Dapp.Data.Api.AuditApi)
+Hammox.defmock(InvitesMock, for: Dapp.Data.Api.InviteApi)
+Hammox.defmock(RolesMock, for: Dapp.Data.Api.RoleApi)
+Hammox.defmock(UsersMock, for: Dapp.Data.Api.UserApi)
 
 Application.put_env(:dapp, :audit_repo, AuditsMock)
 Application.put_env(:dapp, :invite_repo, InvitesMock)

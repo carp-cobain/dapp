@@ -2,7 +2,7 @@ defmodule Dapp.Data.Repo.InviteRepo do
   @moduledoc """
   Onboarding repository for the dApp.
   """
-  @behaviour Dapp.Data.Api.Invites
+  @behaviour Dapp.Data.Api.InviteApi
   use Dapp.Error
 
   alias Algae.Either.Right

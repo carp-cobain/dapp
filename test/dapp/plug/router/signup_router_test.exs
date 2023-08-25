@@ -1,9 +1,9 @@
-defmodule Dapp.Plug.Router.SignupTest do
+defmodule Dapp.Plug.Router.SignupRouterTest do
   use ExUnit.Case, async: true
   use Plug.Test
 
   # Plug being tested
-  alias Dapp.Plug.Router.Signup, as: SignupPlug
+  alias Dapp.Plug.Router.SignupRouter
 
   # Set up sandbox and test context.
   setup do
@@ -27,7 +27,7 @@ defmodule Dapp.Plug.Router.SignupTest do
       conn(:post, "/", Jason.encode!(ctx.body))
       |> put_req_header("content-type", "application/json")
       |> put_req_header("x-address", ctx.header)
-      |> SignupPlug.call([])
+      |> SignupRouter.call([])
 
     assert res.status == 201
   end
@@ -38,7 +38,7 @@ defmodule Dapp.Plug.Router.SignupTest do
       conn(:post, "/")
       |> put_req_header("content-type", "application/json")
       |> put_req_header("x-address", ctx.header)
-      |> SignupPlug.call([])
+      |> SignupRouter.call([])
 
     assert res.status == 400
   end
@@ -48,7 +48,7 @@ defmodule Dapp.Plug.Router.SignupTest do
     res =
       conn(:post, "/", Jason.encode!(ctx.body))
       |> put_req_header("content-type", "application/json")
-      |> SignupPlug.call([])
+      |> SignupRouter.call([])
 
     assert res.status == 400
   end

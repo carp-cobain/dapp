@@ -1,4 +1,4 @@
-defmodule Dapp.Data.Api.Roles do
+defmodule Dapp.Data.Api.RoleApi do
   @moduledoc """
   Data API for roles.
   """

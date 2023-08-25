@@ -1,6 +1,6 @@
 defmodule Dapp.Plug do
   @moduledoc """
-  Map top-level routes to internal routers.
+  Map versioned routes to internal routers.
   """
   use Plug.Router
 
@@ -9,16 +9,14 @@ defmodule Dapp.Plug do
   end
 
   alias Dapp.Plug.Resp
-  alias Dapp.Plug.Router.{Invites, Roles, Signup, Users}
+  alias Dapp.Plug.Router
 
   plug(Plug.Logger)
   plug(:match)
   plug(:dispatch)
 
-  forward("/dapp/v1/invites", to: Invites)
-  forward("/dapp/v1/roles", to: Roles)
-  forward("/dapp/v1/signup", to: Signup)
-  forward("/dapp/v1/users", to: Users)
+  # Forward v1 requests to internal router.
+  forward("/dapp/v1", to: Router)
 
   # Health checks.
   get "/health/*glob" do

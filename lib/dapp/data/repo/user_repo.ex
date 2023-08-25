@@ -2,7 +2,7 @@ defmodule Dapp.Data.Repo.UserRepo do
   @moduledoc """
   User repository for the dApp.
   """
-  @behaviour Dapp.Data.Api.Users
+  @behaviour Dapp.Data.Api.UserApi
   use Dapp.Error
 
   alias Algae.Either.Right

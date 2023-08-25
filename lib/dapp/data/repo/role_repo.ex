@@ -2,7 +2,7 @@ defmodule Dapp.Data.Repo.RoleRepo do
   @moduledoc """
   Role repository for the dApp.
   """
-  @behaviour Dapp.Data.Api.Roles
+  @behaviour Dapp.Data.Api.RoleApi
   alias Dapp.Data.Schema.Role
   alias Dapp.Repo
 

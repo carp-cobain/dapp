@@ -21,29 +21,17 @@ defmodule Dapp.Error do
   # Guard for nil changeset.
   def extract(cs) when is_nil(cs), do: %{}
 
-  @doc "Extract errors from an ecto change set."
-  def extract(cs), do: %{details: details(cs)}
+  @doc "Extract error detail from an ecto changeset."
+  def extract(cs), do: %{detail: format_errors(cs)}
 
-  # Extract error details from a changeset.
-  defp details(cs) do
-    Enum.map(
-      Map.get(cs, :errors) || [],
-      fn {f, d} ->
-        reduce_error(f, d)
-      end
-    )
-  end
-
-  # Get error field and detail.
-  defp reduce_error(field, {message, values}) do
-    Enum.reduce(values, message, fn {k, v}, acc ->
-      String.replace(acc, "%{#{k}}", to_string(v))
+  # Get ecto changeset error detail.
+  defp format_errors(cs) do
+    Ecto.Changeset.traverse_errors(cs, fn {message, opts} ->
+      Regex.replace(~r"%{(\w+)}", message, fn _, key ->
+        opts |> Keyword.get(String.to_existing_atom(key), key) |> to_string()
+      end)
     end)
-    |> Error.new(field)
   end
-
-  # Get error detail.
-  defp reduce_error(field, message), do: Error.new(message, field)
 
   # Common error helper functions
   defmacro __using__(_opts) do
