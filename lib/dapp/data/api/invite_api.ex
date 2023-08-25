@@ -1,4 +1,4 @@
-defmodule Dapp.Data.Api.Invites do
+defmodule Dapp.Data.Api.InviteApi do
   @moduledoc """
   Data API for invites.
   """

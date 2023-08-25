@@ -1,4 +1,4 @@
-defmodule Dapp.Data.Api.Users do
+defmodule Dapp.Data.Api.UserApi do
   @moduledoc """
   Data API for users.
   """

@@ -2,7 +2,7 @@ defmodule Dapp.Data.Repo.AuditRepo do
   @moduledoc """
   Database audit logger for dApp.
   """
-  @behaviour Dapp.Data.Api.Audits
+  @behaviour Dapp.Data.Api.AuditApi
   alias Dapp.Data.Schema.Audit
   alias Dapp.Repo
   require Logger

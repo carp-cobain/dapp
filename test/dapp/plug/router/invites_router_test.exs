@@ -1,11 +1,11 @@
-defmodule Dapp.Plug.Router.InvitesTest do
+defmodule Dapp.Plug.Router.InvitesRouterTest do
   use ExUnit.Case, async: true
   use Plug.Test
 
   # alias Ecto.Adapters.SQL.Sandbox
 
   # Plug being tested
-  alias Dapp.Plug.Router.Invites, as: InvitesPlug
+  alias Dapp.Plug.Router.InvitesRouter
 
   # Set up test context.
   setup do
@@ -29,7 +29,7 @@ defmodule Dapp.Plug.Router.InvitesTest do
       conn(:post, "/", Jason.encode!(ctx.body))
       |> put_req_header("content-type", "application/json")
       |> put_req_header("x-address", ctx.user.blockchain_address)
-      |> InvitesPlug.call([])
+      |> InvitesRouter.call([])
 
     assert res.status == 201
   end
@@ -40,16 +40,16 @@ defmodule Dapp.Plug.Router.InvitesTest do
       conn(:post, "/")
       |> put_req_header("content-type", "application/json")
       |> put_req_header("x-address", ctx.user.blockchain_address)
-      |> InvitesPlug.call([])
+      |> InvitesRouter.call([])
 
     assert res.status == 400
   end
 
   # Route not found
   test "Invites plug returns a 404 for unknown routes", ctx do
-    opts = InvitesPlug.init([])
+    opts = InvitesRouter.init([])
     req = conn(:get, "/nonesuch") |> put_req_header("x-address", ctx.user.blockchain_address)
-    res = InvitesPlug.call(req, opts)
+    res = InvitesRouter.call(req, opts)
     assert res.status == 404
   end
 end

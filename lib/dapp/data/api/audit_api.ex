@@ -1,4 +1,4 @@
-defmodule Dapp.Data.Api.Audits do
+defmodule Dapp.Data.Api.AuditApi do
   @moduledoc """
   Audit logging API.
   """
